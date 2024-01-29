@@ -4,7 +4,7 @@ import { AxiosResponse } from 'axios';
 import { CreateImageDto } from './dto/image.dto';
 
 @Injectable()
-export class ImageService {
+export class DiaryService {
   private readonly REST_API_KEY = process.env.REST_API_KEY;
   private readonly KAKAO_API_URL =
     'https://api.kakaobrain.com/v2/inference/karlo/t2i';

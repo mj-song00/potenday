@@ -1,15 +1,21 @@
+import { Diary } from 'src/diary/entity/diary.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn() //DB 저장 순서
   id: string;
+
+  @Column() //kakao ID
+  kakaoId: string;
 
   @Column()
   nickname: string;
@@ -17,6 +23,10 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @OneToMany(() => Diary, (diary) => diary.user)
+  diarys: Diary[];
+
+  @ManyToMany(() => Diary, (diary) => diary.likedByUsers)
+  @JoinTable({ name: 'like' }) // 중간 테이블의 이름을 "like"로 지정
+  likeDiary: Diary[];
 }
