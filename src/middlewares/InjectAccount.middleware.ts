@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { User } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 import * as jwt from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from 'src/users/user.enum';
 import { EntityManager } from 'typeorm';
@@ -34,7 +34,7 @@ export class InjectAccountMiddleware implements NestMiddleware {
 
     try {
       const { sub } = jwt.verify(accessToken, JWT_SECRET);
-      const user = await this.entityManager.findOne(User, {
+      const user = await this.entityManager.findOne(UserEntity, {
         where: { id: sub as string },
       });
 

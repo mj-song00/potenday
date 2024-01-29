@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Diary {
@@ -22,9 +22,9 @@ export class Diary {
   @CreateDateColumn() // 일기 생성 날
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.diaries)
-  user: User;
+  @ManyToOne(() => UserEntity, (user) => user.diaries)
+  user: UserEntity;
 
-  @ManyToMany(() => User, (user) => user.likeDiary)
-  likedByUsers: User[];
+  @ManyToMany(() => UserEntity, (user) => user.likeDiary)
+  likedByUsers: UserEntity[];
 }

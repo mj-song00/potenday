@@ -6,37 +6,53 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { SignInKakaoDto } from './dto/create-user.dto';
+import { Roles } from 'src/decorators/roles.decorator';
+import { ROLE } from './user.enum';
+import { User } from 'src/decorators/user.decorators';
+import { UserEntity } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @Post('sign-in/kakao')
+  async signInKaKao(
+    @Body('code') code: string,
+    @Body('redirectUri') redirectUri: string,
+  ) {
+    const signInKakaoDto: SignInKakaoDto = {
+      code,
+      redirectUri,
+    };
+    const { accessToken, refreshToken } = await this.usersService.signInKakao(
+      signInKakaoDto,
+    );
+    return { accessToken, refreshToken };
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get('refresh-token')
+  async refreshToken(@Query('refreshToken') refreshToken: string) {
+    if (!refreshToken) return;
+
+    const { accessToken, refreshToken: newRefreshToken } =
+      await this.usersService.refreshToken(refreshToken);
+
+    return { accessToken, refreshToken };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @Delete('delete/:id')
+  @Roles(ROLE.USER)
+  deleteUser(@Param('id') id: string) {
+    return this.usersService.deleteUser(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Get('me')
+  @Roles(ROLE.USER)
+  getMe(@User() user: UserEntity) {
+    return this.usersService.getMe(user);
   }
 }

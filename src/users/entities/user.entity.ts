@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn() //DB 저장 순서
   id: string;
 

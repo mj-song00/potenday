@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DiaryModule } from './diary/diary.module';
 import { Diary } from './diary/entity/diary.entity';
-import { User } from './users/entities/user.entity';
+import { UserEntity } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware';
 @Module({
@@ -21,12 +21,12 @@ import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware'
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, Diary],
+      entities: [UserEntity, Diary],
       synchronize: true,
     }),
     DiaryModule,
     UsersModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [AppController],
   providers: [AppService],
