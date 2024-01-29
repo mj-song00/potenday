@@ -17,14 +17,14 @@ export class User {
   @Column() //kakao ID
   kakaoId: string;
 
-  @Column()
+  @Column() //kakao nickname
   nickname: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @OneToMany(() => Diary, (diary) => diary.user)
-  diarys: Diary[];
+  diaries: Diary[];
 
   @ManyToMany(() => Diary, (diary) => diary.likedByUsers)
   @JoinTable({ name: 'like' }) // 중간 테이블의 이름을 "like"로 지정

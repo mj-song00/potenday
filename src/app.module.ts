@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -7,7 +7,7 @@ import { DiaryModule } from './diary/diary.module';
 import { Diary } from './diary/entity/diary.entity';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
-
+import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,8 +26,13 @@ import { UsersModule } from './users/users.module';
     }),
     DiaryModule,
     UsersModule,
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(InjectAccountMiddleware).forRoutes('*');
+  }
+}

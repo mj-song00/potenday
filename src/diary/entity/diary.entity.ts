@@ -22,7 +22,7 @@ export class Diary {
   @CreateDateColumn() // 일기 생성 날
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.diarys)
+  @ManyToOne(() => User, (user) => user.diaries)
   user: User;
 
   @ManyToMany(() => User, (user) => user.likeDiary)
