@@ -24,11 +24,12 @@ export class KalroService {
   }
 
   async getImage(input: string, negativePrompt: string) {
+    //QueryString.stringify 삭제
     const url = '/v2/inference/karlo/t2i';
     const data = {
       prompt: input,
       negative_prompt: negativePrompt,
-    }; //QueryString.stringify 삭제
+    };
 
     const headers = { Authorization: `KakaoAK ${this.REST_API_KEY}` };
 

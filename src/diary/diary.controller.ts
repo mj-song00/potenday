@@ -6,6 +6,11 @@ export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   //한글 -> 영어 번역
+  @Post('translation-text')
+  async translation(@Body('input') input: string) {
+    const translatedSentence = await this.diaryService.papagoTranslation(input);
+    return translatedSentence;
+  }
 
   //이미지 생성
   @Post('generate-image')
@@ -26,4 +31,6 @@ export class DiaryController {
       return { error: 'Failed to generate image.' };
     }
   }
+
+  //번역된 문장 및 사진 저장
 }
