@@ -5,6 +5,8 @@ import { DiaryService } from './diary.service';
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
+  //한글 -> 영어 번역
+
   //이미지 생성
   @Post('generate-image')
   async generateImage(@Body('input') input: string) {
