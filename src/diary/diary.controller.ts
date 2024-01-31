@@ -1,18 +1,17 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { DiaryService } from './diary.service';
-import { CreateImageDto } from './dto/image.dto';
 
 @Controller('diary')
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
-  @Get('generate-image')
-  async generateImage(@Body() createImageDto: CreateImageDto) {
-    const negativePrompt = 'dark' + 'gloomy';
+  @Post('generate-image')
+  async generateImage(@Body('input') input: string) {
+    const negativePrompt = `dark, gloomy`;
 
     try {
-      const response = await this.diaryService.generateImage(
-        createImageDto,
+      const response = await this.diaryService.createImage(
+        input,
         negativePrompt,
       );
 

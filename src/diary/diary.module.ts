@@ -1,11 +1,11 @@
 import { DiaryService } from './diary.service';
 import { DiaryController } from './diary.controller';
 import { Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
+import { KalroService } from 'src/service/kalro/karlo.service';
 
 @Module({
   controllers: [DiaryController],
-  providers: [DiaryService],
-  imports: [HttpModule],
+  providers: [DiaryService, KalroService],
+  imports: [],
 })
 export class DiaryModule {}

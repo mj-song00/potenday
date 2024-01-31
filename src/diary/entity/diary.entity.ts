@@ -11,7 +11,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 @Entity()
 export class Diary {
   @PrimaryGeneratedColumn() // DB 저장 순서
-  id: string;
+  id: number;
 
   @Column() // prompt 입력 내용
   contents: string;
@@ -19,7 +19,10 @@ export class Diary {
   @Column() // image 주소
   image: string;
 
-  @CreateDateColumn() // 일기 생성 날
+  @Column() // 일기 날짜
+  date: string;
+
+  @CreateDateColumn() //생성일
   createdAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.diaries)
