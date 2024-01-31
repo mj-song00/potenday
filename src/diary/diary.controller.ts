@@ -5,6 +5,7 @@ import { DiaryService } from './diary.service';
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
+  //이미지 생성
   @Post('generate-image')
   async generateImage(@Body('input') input: string) {
     const negativePrompt = `dark, gloomy`;

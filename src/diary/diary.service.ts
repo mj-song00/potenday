@@ -5,6 +5,7 @@ import { KalroService } from 'src/service/kalro/karlo.service';
 export class DiaryService {
   constructor(private readonly kalroService: KalroService) {}
 
+  //이미지 생성
   async createImage(input: string, negativePrompt: string) {
     if (!input) throw new Error('Bad Request');
 
