@@ -22,6 +22,12 @@ export class Diary {
   @Column() // 일기 날짜
   date: string;
 
+  @Column()
+  emotion: string;
+
+  @Column()
+  weather: string;
+
   @CreateDateColumn() //생성일
   createdAt: Date;
 

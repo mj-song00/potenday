@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { CreateDiaryDto } from './dto/image.dto';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 
 @Controller('diary')
@@ -32,5 +33,15 @@ export class DiaryController {
     }
   }
 
-  //번역된 문장 및 사진 저장
+  //번역문, 사진, 기분, 날짜, 날씨 저장
+  @Post('create-diary')
+  async createDiary(@Body() createDiaryDto: CreateDiaryDto) {
+    return this.diaryService.createDiary(createDiaryDto);
+  }
+
+  // /:id 가져오기
+  @Get('/get-diary/:id')
+  async getDiary(@Param('id') id: string) {
+    return this.diaryService.findOne(+id);
+  }
 }

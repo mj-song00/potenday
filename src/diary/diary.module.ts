@@ -1,12 +1,14 @@
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiaryService } from './diary.service';
 import { DiaryController } from './diary.controller';
 import { Module } from '@nestjs/common';
 import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
+import { Diary } from './entity/diary.entity';
 
 @Module({
   controllers: [DiaryController],
   providers: [DiaryService, KalroService, PapagoService],
-  imports: [],
+  imports: [TypeOrmModule.forFeature([Diary])],
 })
 export class DiaryModule {}
