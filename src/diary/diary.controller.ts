@@ -1,6 +1,8 @@
 import { CreateDiaryDto } from './dto/image.dto';
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { DiaryService } from './diary.service';
+import { Roles } from 'src/decorators/roles.decorator';
+import { ROLE } from 'src/users/user.enum';
 
 @Controller('diary')
 export class DiaryController {
@@ -8,6 +10,7 @@ export class DiaryController {
 
   //한글 -> 영어 번역
   @Post('translation-text')
+  @Roles(ROLE.USER)
   async translation(@Body('input') input: string) {
     const translatedSentence = await this.diaryService.papagoTranslation(input);
     return translatedSentence;
@@ -15,6 +18,7 @@ export class DiaryController {
 
   //이미지 생성
   @Post('generate-image')
+  @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
     const negativePrompt = `dark, gloomy`;
 
@@ -35,12 +39,14 @@ export class DiaryController {
 
   //번역문, 사진, 기분, 날짜, 날씨 저장
   @Post('create-diary')
+  @Roles(ROLE.USER)
   async createDiary(@Body() createDiaryDto: CreateDiaryDto) {
     return this.diaryService.createDiary(createDiaryDto);
   }
 
   // /:id 가져오기
   @Get('/get-diary/:id')
+  @Roles(ROLE.USER)
   async getDiary(@Param('id') id: string) {
     return this.diaryService.findOne(+id);
   }
