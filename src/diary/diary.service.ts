@@ -48,7 +48,7 @@ export class DiaryService {
       isWrite,
       user,
     });
-    console.log(createDiary);
+
     const diary = await this.diaryRepository.save(createDiary);
     return { result: 'success' };
   }
@@ -56,6 +56,16 @@ export class DiaryService {
   //다이어리 가져오기
   async findOne(id: number) {
     const diary = await this.diaryRepository.findOne({ where: { id } });
+    return diary;
+  }
+
+  // 공개된 다이어리 가져오기
+  async findPublicDiary() {
+    const diary = await this.diaryRepository.find({
+      where: {
+        isPublic: true,
+      },
+    });
     return diary;
   }
 

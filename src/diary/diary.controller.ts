@@ -64,6 +64,13 @@ export class DiaryController {
     return this.diaryService.findOne(+id);
   }
 
+  //공개된 diary 불러오기
+  @Get('/public')
+  @Roles(ROLE.USER)
+  async getPublicDiary() {
+    return this.diaryService.findPublicDiary();
+  }
+
   //일기 수정
   @Patch('/edit-diary/:id')
   @Roles(ROLE.USER)
