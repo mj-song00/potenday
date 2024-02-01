@@ -1,5 +1,13 @@
 import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from 'src/users/user.enum';
@@ -62,4 +70,9 @@ export class DiaryController {
   }
 
   // 일기 삭제
+  @Delete('/delete-diary/:id')
+  @Roles(ROLE.USER)
+  async deleteDiary(@Param('id') id: string) {
+    return this.diaryService.deleteDiary(+id);
+  }
 }

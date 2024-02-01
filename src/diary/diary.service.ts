@@ -66,4 +66,11 @@ export class DiaryService {
     });
     return { result: 'sucess' };
   }
+
+  //일기 삭제
+
+  async deleteDiary(id: number) {
+    const diary = await this.diaryRepository.delete(id);
+    return { result: 'diary delete success' };
+  }
 }
