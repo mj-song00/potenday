@@ -9,20 +9,20 @@ import * as jwt from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from 'src/users/user.enum';
 import { EntityManager } from 'typeorm';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-
 @Injectable()
 export class InjectAccountMiddleware implements NestMiddleware {
   constructor(private readonly entityManager: EntityManager) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
+    const JWT_SECRET = process.env.JWT_SECRET;
+
     if (req.baseUrl.includes('refresh-token')) return next();
     if (req.baseUrl.includes('delete')) return next();
 
     const accessToken = req.headers.authorization?.split('Bearer ')[1];
+
     if (!accessToken || accessToken === null || accessToken === 'null')
       return next();
-
     const { role, type } = jwt.decode(accessToken) as {
       role: ROLE;
       type: TOKEN_TYPE;

@@ -11,6 +11,8 @@ import {
 import { DiaryService } from './diary.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from 'src/users/user.enum';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { User } from 'src/decorators/user.decorators';
 
 @Controller('diary')
 export class DiaryController {
@@ -28,11 +30,11 @@ export class DiaryController {
   @Post('generate-image')
   @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
-    const negativePrompt = `dark, gloomy`;
-
+    const negativePrompt = `dark, gloomy, without text`;
+    const context = `${input}, by crayon`;
     try {
       const response = await this.diaryService.createImage(
-        input,
+        context,
         negativePrompt,
       );
 
@@ -48,8 +50,11 @@ export class DiaryController {
   //번역문, 사진, 기분, 날짜, 날씨 저장
   @Post('create-diary')
   @Roles(ROLE.USER)
-  async createDiary(@Body() createDiaryDto: CreateDiaryDto) {
-    return this.diaryService.createDiary(createDiaryDto);
+  async createDiary(
+    @Body() createDiaryDto: CreateDiaryDto,
+    @User() user: UserEntity,
+  ) {
+    return this.diaryService.createDiary(createDiaryDto, user);
   }
 
   // /:id 가져오기

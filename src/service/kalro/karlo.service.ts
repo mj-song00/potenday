@@ -16,18 +16,18 @@ export class KalroService {
     });
   }
 
-  async createImage(input: string, negativePrompt: string) {
-    if (!input) throw new Error('noPrompt');
-    const image = await this.getImage(input, negativePrompt);
+  async createImage(context: string, negativePrompt: string) {
+    if (!context) throw new Error('noPrompt');
+    const image = await this.getImage(context, negativePrompt);
 
     return image;
   }
 
-  async getImage(input: string, negativePrompt: string) {
+  async getImage(context: string, negativePrompt: string) {
     //QueryString.stringify 삭제
     const url = '/v2/inference/karlo/t2i';
     const data = {
-      prompt: input,
+      prompt: context,
       negative_prompt: negativePrompt,
     };
 

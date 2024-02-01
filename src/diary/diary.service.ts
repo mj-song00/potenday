@@ -5,6 +5,7 @@ import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Diary } from './entity/diary.entity';
 import { Repository } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class DiaryService {
@@ -24,16 +25,17 @@ export class DiaryService {
   }
 
   //이미지 생성
-  async createImage(input: string, negativePrompt: string) {
-    if (!input) throw new Error('Bad Request');
+  async createImage(context: string, negativePrompt: string) {
+    if (!context) throw new Error('Bad Request');
 
-    const image = await this.kalroService.createImage(input, negativePrompt);
+    const image = await this.kalroService.createImage(context, negativePrompt);
     return image;
   }
 
   // 이미지, 번역문, 기분, 날짜, 날씨 저장
-  async createDiary(createDiaryDto: CreateDiaryDto) {
-    const { text, imageUrl, date, emotion, weather } = createDiaryDto;
+  async createDiary(createDiaryDto: CreateDiaryDto, user: UserEntity) {
+    const { text, imageUrl, date, emotion, weather, isWrite, isPublic } =
+      createDiaryDto;
     if (!text || !imageUrl) throw new Error('Bad Request');
 
     const createDiary = this.diaryRepository.create({
@@ -42,8 +44,11 @@ export class DiaryService {
       date,
       emotion,
       weather,
+      isPublic,
+      isWrite,
+      user,
     });
-
+    console.log(createDiary);
     const diary = await this.diaryRepository.save(createDiary);
     return { result: 'success' };
   }
@@ -56,13 +61,16 @@ export class DiaryService {
 
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
-    const { text, imageUrl, date, emotion, weather } = updateDiaryDto;
+    const { text, imageUrl, date, emotion, weather, isPublic, isWrite } =
+      updateDiaryDto;
     const updateDiary = await this.diaryRepository.update(id, {
       contents: text,
       image: imageUrl,
       date,
       emotion,
       weather,
+      isWrite,
+      isPublic,
     });
     return { result: 'sucess' };
   }
