@@ -22,13 +22,19 @@ export class Diary {
   @Column() // 일기 날짜
   date: string;
 
-  @Column()
+  @Column() //감정
   emotion: string;
 
-  @Column()
+  @Column() // 날씨
   weather: string;
 
-  @CreateDateColumn() //생성일
+  @Column({ default: false }) // 일기 작성여부 확인. 기본값 false
+  isWrite: boolean;
+
+  @Column({ default: false }) // 일기 공개여부 확인 -> false는 나만 보기
+  isPublic: boolean;
+
+  @CreateDateColumn() // 게시글 생성일
   createdAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.diaries)
