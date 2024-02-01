@@ -1,4 +1,4 @@
-import { CreateDiaryDto } from './dto/image.dto';
+import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
 import { Injectable } from '@nestjs/common';
 import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
@@ -52,5 +52,18 @@ export class DiaryService {
   async findOne(id: number) {
     const diary = await this.diaryRepository.findOne({ where: { id } });
     return diary;
+  }
+
+  //일기 수정
+  async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
+    const { text, imageUrl, date, emotion, weather } = updateDiaryDto;
+    const updateDiary = await this.diaryRepository.update(id, {
+      contents: text,
+      image: imageUrl,
+      date,
+      emotion,
+      weather,
+    });
+    return { result: 'sucess' };
   }
 }

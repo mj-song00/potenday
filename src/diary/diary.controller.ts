@@ -1,5 +1,5 @@
-import { CreateDiaryDto } from './dto/image.dto';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from 'src/users/user.enum';
@@ -50,4 +50,16 @@ export class DiaryController {
   async getDiary(@Param('id') id: string) {
     return this.diaryService.findOne(+id);
   }
+
+  //일기 수정
+  @Patch('/edit-diary/:id')
+  @Roles(ROLE.USER)
+  async editDiary(
+    @Param('id') id: string,
+    @Body() updateDiaryDto: UpdateDiaryDto,
+  ) {
+    return this.diaryService.editDiary(+id, updateDiaryDto);
+  }
+
+  // 일기 삭제
 }
