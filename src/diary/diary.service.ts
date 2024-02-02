@@ -4,7 +4,7 @@ import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Diary } from './entity/diary.entity';
-import { Repository } from 'typeorm';
+import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -53,20 +53,20 @@ export class DiaryService {
     return { result: 'success' };
   }
 
-  //다이어리 가져오기
+  //개별 다이어리 가져오기
   async findOne(id: number) {
     const diary = await this.diaryRepository.findOne({ where: { id } });
     return diary;
   }
 
-  // 공개된 다이어리 가져오기
-  async findPublicDiary() {
-    const diary = await this.diaryRepository.find({
-      where: {
-        isPublic: true,
-      },
+  // type에 따른 다이어리 가져오기
+  async findDiariesByType(
+    isPublic: boolean | FindOperator<boolean>,
+  ): Promise<Diary[]> {
+    const diaries = await this.diaryRepository.find({
+      where: { isPublic },
     });
-    return diary;
+    return diaries;
   }
 
   //일기 수정

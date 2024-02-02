@@ -1,5 +1,7 @@
+import { FindOperator } from 'typeorm';
 import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -30,7 +33,7 @@ export class DiaryController {
   @Post('generate-image')
   @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
-    const negativePrompt = `dark, gloomy, without text`;
+    const negativePrompt = `text, dirty, scared, ugly`;
     const context = `${input}, by crayon`;
     try {
       const response = await this.diaryService.createImage(
@@ -57,18 +60,23 @@ export class DiaryController {
     return this.diaryService.createDiary(createDiaryDto, user);
   }
 
-  // /:id 가져오기
+  // 개별 다이어리 가져오기
   @Get('/get-diary/:id')
   @Roles(ROLE.USER)
   async getDiary(@Param('id') id: string) {
     return this.diaryService.findOne(+id);
   }
 
-  //공개된 diary 불러오기
-  @Get('/public')
+  // type에 따른 다이어리 가져오기 헐 유저가 다르면?? 그걸 생각 못햇네
+  @Get('/get-diaries')
   @Roles(ROLE.USER)
-  async getPublicDiary() {
-    return this.diaryService.findPublicDiary();
+  async getDiaries(@Query('type') type: '0' | '1') {
+    if (type !== '0' && type !== '1') {
+      throw new BadRequestException('Invalid diary type');
+    }
+    const isPublic: boolean | FindOperator<boolean> = type === '1';
+
+    return this.diaryService.findDiariesByType(isPublic);
   }
 
   //일기 수정

@@ -24,6 +24,7 @@ export class PapagoService {
     if (!input) throw new Error('Parameta Does not exsist');
 
     const translatedIntoEnglish = await this.translator(input);
+    console.log(translatedIntoEnglish);
     return translatedIntoEnglish;
   }
 
