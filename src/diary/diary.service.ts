@@ -19,7 +19,7 @@ export class DiaryService {
   //파파고 번역
   async papagoTranslation(input: string) {
     if (!input) throw new Error('Bad Request');
-    console.log('here');
+
     const text = await this.papagoService.translation(input);
     return text;
   }
