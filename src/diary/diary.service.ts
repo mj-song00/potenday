@@ -38,7 +38,7 @@ export class DiaryService {
       createDiaryDto;
     if (!text || !imageUrl) throw new Error('Bad Request');
 
-    const createDiary = this.diaryRepository.create({
+    const createDiary = await this.diaryRepository.create({
       title,
       contents: text,
       image: imageUrl,

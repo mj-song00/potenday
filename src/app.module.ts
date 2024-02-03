@@ -8,6 +8,7 @@ import { Diary } from './entity/diary.entity';
 import { UserEntity } from './entity/user.entity';
 import { UsersModule } from './users/users.module';
 import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware';
+import { Like } from './entity/like.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,7 +22,7 @@ import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware'
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UserEntity, Diary],
+      entities: [UserEntity, Diary, Like],
       synchronize: true,
     }),
     DiaryModule,

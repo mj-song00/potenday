@@ -1,4 +1,4 @@
-import { User } from 'src/users/entities/user.entity'; // 실제 사용자 엔터티의 경로로 변경
+import { User } from 'src/entity/user.entity'; // 실제 사용자 엔터티의 경로로 변경
 
 declare module 'express' {
   interface Request {

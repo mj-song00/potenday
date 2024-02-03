@@ -2,11 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserEntity } from 'src/entity/user.entity';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class Diary {
@@ -42,7 +41,4 @@ export class Diary {
 
   @ManyToOne(() => UserEntity, (user) => user.diaries)
   user: UserEntity;
-
-  @ManyToMany(() => UserEntity, (user) => user.likeDiary)
-  likedByUsers: UserEntity[];
 }

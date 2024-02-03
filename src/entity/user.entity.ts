@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Like } from './like.entity';
 
 @Entity()
 export class UserEntity {
@@ -29,10 +30,9 @@ export class UserEntity {
   @CreateDateColumn()
   createdAt: Date;
 
+  @OneToMany((type) => Like, (like) => like.user)
+  likes: Like[];
+
   @OneToMany(() => Diary, (diary) => diary.user)
   diaries: Diary[];
-
-  @ManyToMany(() => Diary, (diary) => diary.likedByUsers)
-  @JoinTable({ name: 'like' }) // 중간 테이블의 이름을 "like"로 지정
-  likeDiary: Diary[];
 }

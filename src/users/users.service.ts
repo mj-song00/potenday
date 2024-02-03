@@ -132,7 +132,7 @@ export class UsersService {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.diaries', 'diary')
       .where('user.kakaoId = kakaoId', { kakaoId })
-      .getMany();
+      .getOne();
 
     return info;
   }
