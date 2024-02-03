@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InfoDto, SignInKakaoDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
@@ -137,7 +137,23 @@ export class UsersService {
     return info;
   }
 
-  async getKakao(user: UserEntity) {
+  async getKakaoNickname(user: UserEntity) {
     return user.nickname;
+  }
+
+  async checkNickname(nickname: string, user: UserEntity) {
+    const userWithNickname = await this.userRepository.findOne({
+      where: { nickname },
+    });
+
+    if (userWithNickname) {
+      throw new BadRequestException('duplication');
+    } else {
+      const checkedNickname = await this.userRepository.update(
+        { id: user.id },
+        { nickname: nickname }, // nickname이 업데이트하려는 값인 경우
+      );
+    }
+    return { result: 'sucess' };
   }
 }

@@ -69,10 +69,10 @@ export class UsersController {
     return this.usersService.getMe(user);
   }
 
-  //카카오 닉네임 불러오기
-  // @Get('/kakaoId')
-  // @Roles(ROLE.USER)
-  // getKaKao(@User() user: UserEntity) {
-  //   return this.usersService.getKakao(user);
-  // }
+  //닉네임 중복확인
+  @Patch('/:nickname')
+  @Roles(ROLE.USER)
+  getNickname(@Param('nickname') nickname: string, @User() user: UserEntity) {
+    return this.usersService.checkNickname(nickname, user);
+  }
 }
