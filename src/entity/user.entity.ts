@@ -3,8 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -30,7 +28,7 @@ export class UserEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany((type) => Like, (like) => like.user)
+  @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
 
   @OneToMany(() => Diary, (diary) => diary.user)
