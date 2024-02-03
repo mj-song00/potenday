@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../entity/user.entity';
 import { Repository } from 'typeorm';
 import { KakaoService } from 'src/service/kakao/kakao.service';
 import { JwtPayload, sign } from 'jsonwebtoken';

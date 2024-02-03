@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/entity/user.entity';
 import * as jwt from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from 'src/users/user.enum';
 import { EntityManager } from 'typeorm';

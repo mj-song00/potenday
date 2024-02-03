@@ -14,7 +14,7 @@ import { UpdateInfoDto, SignInKakaoDto } from './dto/create-user.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from './user.enum';
 import { User } from 'src/decorators/user.decorators';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../entity/user.entity';
 import { info } from 'console';
 
 @Controller('users')

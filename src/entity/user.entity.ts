@@ -1,4 +1,4 @@
-import { Diary } from 'src/diary/entity/diary.entity';
+import { Diary } from 'src/entity/diary.entity';
 import {
   Column,
   CreateDateColumn,

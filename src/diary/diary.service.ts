@@ -3,9 +3,9 @@ import { Injectable } from '@nestjs/common';
 import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Diary } from './entity/diary.entity';
+import { Diary } from '../entity/diary.entity';
 import { FindOperator, Repository } from 'typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/entity/user.entity';
 
 @Injectable()
 export class DiaryService {
@@ -95,4 +95,6 @@ export class DiaryService {
     const diary = await this.diaryRepository.delete(id);
     return { result: 'diary delete success' };
   }
+
+  // 좋아요
 }

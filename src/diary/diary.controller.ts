@@ -14,7 +14,7 @@ import {
 import { DiaryService } from './diary.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from 'src/users/user.enum';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/entity/user.entity';
 import { User } from 'src/decorators/user.decorators';
 
 @Controller('diary')
@@ -67,7 +67,6 @@ export class DiaryController {
     return this.diaryService.findOne(+id);
   }
 
-  // type에 따른 다이어리 가져오기
   // type 1인 diary가 public
   @Get('/get-diaries/:type')
   @Roles(ROLE.USER)
@@ -95,4 +94,6 @@ export class DiaryController {
   async deleteDiary(@Param('id') id: string) {
     return this.diaryService.deleteDiary(+id);
   }
+
+  // 좋아요 기능 설정
 }

@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DiaryModule } from './diary/diary.module';
-import { Diary } from './diary/entity/diary.entity';
-import { UserEntity } from './users/entities/user.entity';
+import { Diary } from './entity/diary.entity';
+import { UserEntity } from './entity/user.entity';
 import { UsersModule } from './users/users.module';
 import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware';
 @Module({
