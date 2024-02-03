@@ -19,6 +19,7 @@ import { UserEntity } from './entities/user.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  //카카오 로그인
   @Post('sign-in/kakao')
   async signInKaKao(
     @Body('code') code: string,
@@ -34,6 +35,7 @@ export class UsersController {
     return { accessToken, refreshToken };
   }
 
+  //리프레시 토큰
   @Get('refresh-token')
   async refreshToken(@Query('refreshToken') refreshToken: string) {
     if (!refreshToken) return;
@@ -44,12 +46,14 @@ export class UsersController {
     return { accessToken, refreshToken };
   }
 
+  //유저 삭제
   @Delete('delete/:id')
   @Roles(ROLE.USER)
   deleteUser(@Param('id') id: string) {
     return this.usersService.deleteUser(id);
   }
 
+  //유저 정보 불러오기
   @Get('me')
   @Roles(ROLE.USER)
   getMe(@User() user: UserEntity) {

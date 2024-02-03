@@ -20,6 +20,12 @@ export class UserEntity {
   @Column() //kakao nickname
   nickname: string;
 
+  @Column() // 성별
+  gender: string;
+
+  @Column()
+  birth: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
