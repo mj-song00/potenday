@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
   Query,
+  ConsoleLogger,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { SignInKakaoDto } from './dto/create-user.dto';
+import { InfoDto, SignInKakaoDto } from './dto/create-user.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from './user.enum';
 import { User } from 'src/decorators/user.decorators';
 import { UserEntity } from './entities/user.entity';
+import { info } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -46,6 +48,13 @@ export class UsersController {
     return { accessToken, refreshToken };
   }
 
+  //유저 추가 정보
+  @Post('addInfo')
+  @Roles(ROLE.USER)
+  async addInfo(@Body() infoDto: InfoDto, @User() user: UserEntity) {
+    return this.usersService.addInfo(infoDto, user);
+  }
+
   //유저 삭제
   @Delete('delete/:id')
   @Roles(ROLE.USER)
@@ -59,4 +68,11 @@ export class UsersController {
   getMe(@User() user: UserEntity) {
     return this.usersService.getMe(user);
   }
+
+  //카카오 닉네임 불러오기
+  // @Get('/kakaoId')
+  // @Roles(ROLE.USER)
+  // getKaKao(@User() user: UserEntity) {
+  //   return this.usersService.getKakao(user);
+  // }
 }

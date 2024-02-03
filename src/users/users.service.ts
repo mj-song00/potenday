@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SignInKakaoDto } from './dto/create-user.dto';
+import { InfoDto, SignInKakaoDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { KakaoService } from 'src/service/kakao/kakao.service';
@@ -110,6 +110,15 @@ export class UsersService {
     }
   }
 
+  async addInfo(infoDto: InfoDto, user: UserEntity) {
+    const { gender, birth } = infoDto;
+    const updateInfo = await this.userRepository.update(
+      { id: user.id },
+      { gender, birth },
+    );
+    return { result: 'sucess' };
+  }
+
   async deleteUser(id: string) {
     await this.kakaoService.unlink(id);
     const user = await this.userRepository.delete({ id });
@@ -126,5 +135,9 @@ export class UsersService {
       .getMany();
 
     return info;
+  }
+
+  async getKakao(user: UserEntity) {
+    return user.nickname;
   }
 }

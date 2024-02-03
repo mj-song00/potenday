@@ -23,7 +23,7 @@ export class UserEntity {
   @Column() // 성별
   gender: string;
 
-  @Column()
+  @Column() // 탄생년
   birth: string;
 
   @CreateDateColumn()

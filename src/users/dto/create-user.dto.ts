@@ -6,11 +6,6 @@ export class SignInKakaoDto {
 }
 
 export class InfoDto {
-  @IsString()
-  @IsNotEmpty()
   gender: string;
-
-  @IsString()
-  @IsNotEmpty()
   birth: string;
 }
