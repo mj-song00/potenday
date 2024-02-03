@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Diary } from './diary.entity';
 
 @Entity()
 export class Like {
@@ -21,6 +22,9 @@ export class Like {
   @UpdateDateColumn()
   updateAt: Date;
 
-  @ManyToOne((type) => UserEntity, (user) => user.likes)
+  @ManyToOne(() => UserEntity, (user) => user.likes)
   user: UserEntity;
+
+  @ManyToOne(() => Diary, (diary) => diary.user)
+  diary: Diary;
 }
