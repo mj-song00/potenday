@@ -67,15 +67,15 @@ export class DiaryController {
     return this.diaryService.findOne(+id);
   }
 
-  // type에 따른 다이어리 가져오기 헐 유저가 다르면?? 그걸 생각 못햇네
-  @Get('/get-diaries')
+  // type에 따른 다이어리 가져오기
+  // type 1인 diary가 publick
+  @Get('/get-diaries/:type')
   @Roles(ROLE.USER)
-  async getDiaries(@Query('type') type: '0' | '1') {
+  async getDiaries(@Param('type') type: '0' | '1') {
     if (type !== '0' && type !== '1') {
       throw new BadRequestException('Invalid diary type');
     }
     const isPublic: boolean | FindOperator<boolean> = type === '1';
-
     return this.diaryService.findDiariesByType(isPublic);
   }
 
