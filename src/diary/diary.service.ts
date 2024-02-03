@@ -64,10 +64,13 @@ export class DiaryService {
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
   ): Promise<Diary[]> {
-    const diaries = await this.diaryRepository.find({
-      where: { isPublic },
-    });
-    return diaries;
+    if (isPublic) {
+      // 모든 사용자의 공개 다이어리를 가져오는 로직
+      return await this.diaryRepository.find({ where: { isPublic: true } });
+    } else {
+      // 이 부분은 삭제하여 공개 다이어리가 아닌 경우는 가져오지 않도록 합니다.
+      return [];
+    }
   }
 
   //일기 수정
