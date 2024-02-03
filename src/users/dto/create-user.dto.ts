@@ -5,7 +5,7 @@ export class SignInKakaoDto {
   redirectUri: string;
 }
 
-export class InfoDto {
+export class UpdateInfoDto {
   gender: string;
   birth: string;
 }

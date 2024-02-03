@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InfoDto, SignInKakaoDto } from './dto/create-user.dto';
+import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { KakaoService } from 'src/service/kakao/kakao.service';
@@ -110,7 +110,7 @@ export class UsersService {
     }
   }
 
-  async addInfo(infoDto: InfoDto, user: UserEntity) {
+  async addInfo(infoDto: UpdateInfoDto, user: UserEntity) {
     const { gender, birth } = infoDto;
     const updateInfo = await this.userRepository.update(
       { id: user.id },

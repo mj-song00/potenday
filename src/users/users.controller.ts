@@ -10,7 +10,7 @@ import {
   ConsoleLogger,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { InfoDto, SignInKakaoDto } from './dto/create-user.dto';
+import { UpdateInfoDto, SignInKakaoDto } from './dto/create-user.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from './user.enum';
 import { User } from 'src/decorators/user.decorators';
@@ -49,9 +49,9 @@ export class UsersController {
   }
 
   //유저 추가 정보
-  @Post('addInfo')
+  @Patch('addInfo')
   @Roles(ROLE.USER)
-  async addInfo(@Body() infoDto: InfoDto, @User() user: UserEntity) {
+  async addInfo(@Body() infoDto: UpdateInfoDto, @User() user: UserEntity) {
     return this.usersService.addInfo(infoDto, user);
   }
 
