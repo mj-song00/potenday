@@ -34,11 +34,12 @@ export class DiaryService {
 
   // 이미지, 번역문, 기분, 날짜, 날씨 저장
   async createDiary(createDiaryDto: CreateDiaryDto, user: UserEntity) {
-    const { text, imageUrl, date, emotion, weather, isWrite, isPublic } =
+    const { title, text, imageUrl, date, emotion, weather, isWrite, isPublic } =
       createDiaryDto;
     if (!text || !imageUrl) throw new Error('Bad Request');
 
     const createDiary = this.diaryRepository.create({
+      title,
       contents: text,
       image: imageUrl,
       date,

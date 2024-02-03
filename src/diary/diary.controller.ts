@@ -68,7 +68,7 @@ export class DiaryController {
   }
 
   // type에 따른 다이어리 가져오기
-  // type 1인 diary가 publick
+  // type 1인 diary가 public
   @Get('/get-diaries/:type')
   @Roles(ROLE.USER)
   async getDiaries(@Param('type') type: '0' | '1') {
