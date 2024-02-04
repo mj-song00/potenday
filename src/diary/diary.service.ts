@@ -56,7 +56,14 @@ export class DiaryService {
 
   //개별 다이어리 가져오기
   async findOne(id: number) {
-    const diary = await this.diaryRepository.findOne({ where: { id } });
+    const diary = await this.diaryRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        user: true,
+      },
+    });
     return diary;
   }
 
@@ -66,11 +73,24 @@ export class DiaryService {
   ): Promise<Diary[]> {
     if (isPublic) {
       // 모든 사용자의 공개 다이어리를 가져오는 로직
-      return await this.diaryRepository.find({ where: { isPublic: true } });
+      return await this.diaryRepository.find({
+        where: { isPublic: true },
+        relations: { user: true },
+      });
     } else {
       // 이 부분은 삭제하여 공개 다이어리가 아닌 경우는 가져오지 않도록 한다.
       return [];
     }
+  }
+
+  async getDiaries(user: UserEntity) {
+    const diaries = await this.diaryRepository.find({
+      where: { id: Number(user.id) },
+      relations: {
+        user: true,
+      },
+    });
+    return diaries;
   }
 
   //일기 수정

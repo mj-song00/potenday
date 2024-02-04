@@ -15,7 +15,6 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from './user.enum';
 import { User } from 'src/decorators/user.decorators';
 import { UserEntity } from '../entity/user.entity';
-import { info } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -62,7 +61,7 @@ export class UsersController {
     return this.usersService.deleteUser(id);
   }
 
-  //유저 정보 불러오기
+  //유저 정보 불러오기(profile)
   @Get('me')
   @Roles(ROLE.USER)
   getMe(@User() user: UserEntity) {
@@ -80,7 +79,6 @@ export class UsersController {
   @Get()
   @Roles(ROLE.USER)
   checkNickname(@User() user: UserEntity) {
-    console.log(user);
     return this.usersService.getKakaoNickname(user);
   }
 }
