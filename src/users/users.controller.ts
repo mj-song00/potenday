@@ -75,4 +75,11 @@ export class UsersController {
   getNickname(@Param('nickname') nickname: string, @User() user: UserEntity) {
     return this.usersService.checkNickname(nickname, user);
   }
+
+  // 임시
+  @Get()
+  checkNickname(@User() user: UserEntity) {
+    console.log(user);
+    return this.usersService.getKakaoNickname(user);
+  }
 }

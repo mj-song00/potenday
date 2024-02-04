@@ -36,4 +36,10 @@ export class LikeService {
       }
     }
   }
+
+  async getByLike() {
+    const diarise = await this.diaryLikeRepository
+      .createQueryBuilder('like')
+      .select();
+  }
 }
