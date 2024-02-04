@@ -9,7 +9,7 @@ import { LikeService } from './like.service';
 export class likeController {
   constructor(private likeService: LikeService) {}
 
-  @Roles(ROLE.USER)
+  //  @Roles(ROLE.USER)
   @Post('/diary/:diaryId/like')
   like(@Param('diaryId') diaryId: string, @User() user: UserEntity) {
     return this.likeService.getDiaryLike(+diaryId, user);

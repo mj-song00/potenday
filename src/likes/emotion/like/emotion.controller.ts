@@ -6,7 +6,7 @@ import { UserEntity } from 'src/entity/user.entity';
 import { EmotionService } from './emotion.service';
 
 @Controller('emotion')
-export class likeController {
+export class EmotionController {
   constructor(private emotionService: EmotionService) {}
 
   //다이어리 감정에 공감하기

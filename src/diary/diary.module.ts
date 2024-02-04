@@ -10,5 +10,6 @@ import { Diary } from '../entity/diary.entity';
   controllers: [DiaryController],
   providers: [DiaryService, KalroService, PapagoService],
   imports: [TypeOrmModule.forFeature([Diary])],
+  exports: [TypeOrmModule], //추가
 })
 export class DiaryModule {}

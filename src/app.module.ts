@@ -8,6 +8,8 @@ import { Diary } from './entity/diary.entity';
 import { UserEntity } from './entity/user.entity';
 import { UsersModule } from './users/users.module';
 import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware';
+import { EmotionModule } from './likes/emotion/like/emotion.module';
+import { LikeModule } from './likes/like/like.module';
 //import { EmotionLike } from './entity/emotion.like.entity';
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware'
     DiaryModule,
     UsersModule,
     TypeOrmModule.forFeature([UserEntity]),
+    EmotionModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
