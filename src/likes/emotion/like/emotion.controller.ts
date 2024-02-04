@@ -9,8 +9,9 @@ import { EmotionService } from './emotion.service';
 export class likeController {
   constructor(private emotionService: EmotionService) {}
 
+  //다이어리 감정에 공감하기
   @Roles(ROLE.USER)
-  @Post('/:diaryId/:emotion/like')
+  @Post('/:diaryId/:emotion')
   fineEmotion(
     @Param('diaryId') diaryId: string,
     @Param('emotion') emotion: string,
