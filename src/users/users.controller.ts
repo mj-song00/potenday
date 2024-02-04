@@ -78,6 +78,7 @@ export class UsersController {
 
   // 임시
   @Get()
+  @Roles(ROLE.USER)
   checkNickname(@User() user: UserEntity) {
     console.log(user);
     return this.usersService.getKakaoNickname(user);
