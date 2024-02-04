@@ -23,6 +23,9 @@ export class Fine extends BaseEntity {
   @Column()
   diaryId: number;
 
+  @Column()
+  emotion: string;
+
   @UpdateDateColumn()
   updateAt: Date;
 
