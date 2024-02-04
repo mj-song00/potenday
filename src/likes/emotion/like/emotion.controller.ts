@@ -29,4 +29,11 @@ export class likeController {
   ) {
     return this.emotionService.getEmotion(+diaryId, emotion);
   }
+
+  //다이어리 감정 불러오기
+  @Roles(ROLE.USER)
+  @Get('/:diaryId')
+  getEmotions(@Param('diaryId') diaryId: string) {
+    return this.emotionService.getEmotions(+diaryId);
+  }
 }
