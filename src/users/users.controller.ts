@@ -76,7 +76,7 @@ export class UsersController {
     return this.usersService.checkNickname(nickname, user);
   }
 
-  // 임시
+  // 유저 닉네임 불러오기
   @Get()
   @Roles(ROLE.USER)
   checkNickname(@User() user: UserEntity) {
