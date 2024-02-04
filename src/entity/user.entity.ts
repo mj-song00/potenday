@@ -36,5 +36,5 @@ export class UserEntity {
   diaries: Diary[];
 
   @OneToMany(() => Emotion, (emotion) => emotion.user)
-  fines: Emotion[];
+  emotion: Emotion[];
 }

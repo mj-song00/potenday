@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Like } from './like.entity';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -41,4 +43,7 @@ export class Diary {
 
   @ManyToOne(() => UserEntity, (user) => user.diaries)
   user: UserEntity;
+
+  @OneToMany(() => Like, (like) => like.diary)
+  likes: Like[];
 }

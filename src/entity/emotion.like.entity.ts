@@ -13,7 +13,7 @@ import { UserEntity } from './user.entity';
 //일기 감정
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
-export class Emotion extends BaseEntity {
+export class Emotion {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,6 +29,6 @@ export class Emotion extends BaseEntity {
   @UpdateDateColumn()
   updateAt: Date;
 
-  @ManyToOne((type) => UserEntity, (user) => user.likes)
+  @ManyToOne(() => UserEntity, (user) => user.emotion)
   user: UserEntity;
 }

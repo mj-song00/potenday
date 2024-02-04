@@ -25,6 +25,6 @@ export class Like {
   @ManyToOne(() => UserEntity, (user) => user.likes)
   user: UserEntity;
 
-  @ManyToOne(() => Diary, (diary) => diary.user)
+  @ManyToOne(() => Diary, (diary) => diary.likes)
   diary: Diary;
 }
