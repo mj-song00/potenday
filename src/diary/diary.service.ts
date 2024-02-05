@@ -1,9 +1,9 @@
+import { Diary } from './../entity/diary.entity';
 import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
 import { Injectable } from '@nestjs/common';
 import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Diary } from '../entity/diary.entity';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 
@@ -88,7 +88,6 @@ export class DiaryService {
   async getDiaries(user: UserEntity) {
     const diaries = await this.userReposity.find({
       where: { id: user.id },
-      // relations: ['UserEntity'],
     });
     console.log(diaries);
     return diaries;
