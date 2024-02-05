@@ -1,3 +1,4 @@
+import { UserEntity } from './../entity/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DiaryService } from './diary.service';
 import { DiaryController } from './diary.controller';
@@ -9,7 +10,7 @@ import { Diary } from '../entity/diary.entity';
 @Module({
   controllers: [DiaryController],
   providers: [DiaryService, KalroService, PapagoService],
-  imports: [TypeOrmModule.forFeature([Diary])],
+  imports: [TypeOrmModule.forFeature([Diary, UserEntity])],
   exports: [TypeOrmModule], //추가
 })
 export class DiaryModule {}

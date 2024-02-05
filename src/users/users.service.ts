@@ -7,7 +7,6 @@ import { KakaoService } from 'src/service/kakao/kakao.service';
 import { JwtPayload, sign } from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from './user.enum';
 import * as jwt from 'jsonwebtoken';
-import { Diary } from 'src/entity/diary.entity';
 
 @Injectable()
 export class UsersService {

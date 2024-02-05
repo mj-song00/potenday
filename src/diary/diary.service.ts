@@ -14,6 +14,8 @@ export class DiaryService {
     private diaryRepository: Repository<Diary>,
     private readonly kalroService: KalroService,
     private readonly papagoService: PapagoService,
+    @InjectRepository(UserEntity)
+    private userReposity: Repository<UserEntity>,
   ) {}
 
   //파파고 번역
@@ -84,12 +86,9 @@ export class DiaryService {
   }
 
   async getDiaries(user: UserEntity) {
-    console.log(user.id);
-    const diaries = await this.diaryRepository.find({
-      where: { id: Number(user.id) },
-      relations: {
-        user: true,
-      },
+    const diaries = await this.userReposity.find({
+      where: { id: user.id },
+      relations: ['UserEntity'],
     });
     console.log(diaries);
     return diaries;
