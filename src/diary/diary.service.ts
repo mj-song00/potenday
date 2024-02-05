@@ -86,8 +86,9 @@ export class DiaryService {
   }
 
   async getDiaries(user: UserEntity) {
-    const diaries = await this.userReposity.find({
-      where: { id: user.id },
+    const diaries = await this.diaryRepository.find({
+      where: { id: Number(user.id) },
+      relations: { user: true },
     });
     console.log(diaries);
     return diaries;
