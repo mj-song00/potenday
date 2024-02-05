@@ -110,10 +110,10 @@ export class DiaryService {
 
   //다이어리만 가져오기
   async findDiaries(user: UserEntity) {
-    const userId = user.id;
-    const diaries = await this.diaryRepository.find({
-      where: { user },
-    });
+    const diaries = await this.diaryRepository
+      .createQueryBuilder('diary')
+      .where('diary.userId = :userId', { userId: user.id })
+      .getMany();
     return diaries;
   }
 
