@@ -84,7 +84,8 @@ export class DiaryService {
   }
 
   async getDiaries(user: UserEntity) {
-    console.log(user);
+    console.log('userId의 타입:' + typeof user.id);
+    console.log('Number로 감싸진 userId타입' + typeof Number(user.id));
     const diaries = await this.diaryRepository.find({
       where: { id: Number(user.id) },
       relations: {
