@@ -156,11 +156,11 @@ export class UsersService {
   }
 
   //다이어리 가져오기
-  async getMyDiaries(user: UserEntity) {
-    const diaries = await this.userRepository.find({
-      where: { id: user.id },
-      relations: { diaries: true },
-    });
-    return diaries;
-  }
+  // async getMyDiaries(user: UserEntity) {
+  //   const diaries = await this.userRepository.find({
+  //     where: { id: user.id },
+  //     relations: { diaries: true },
+  //   });
+  //   return diaries;
+  // }
 }

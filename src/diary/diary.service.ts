@@ -108,5 +108,14 @@ export class DiaryService {
     return { result: 'diary delete success' };
   }
 
+  //다이어리만 가져오기
+  async findDiaries(user: UserEntity) {
+    const id = user.kakaoId;
+    const diaries = await this.diaryRepository.find({
+      where: { id: Number(id) },
+    });
+    return diaries;
+  }
+
   // 좋아요
 }

@@ -83,9 +83,9 @@ export class UsersController {
   }
 
   //다이어리 불러오기
-  @Get('/diaries')
-  @Roles(ROLE.USER)
-  myDiaries(@User() user: UserEntity) {
-    return this.usersService.getMyDiaries(user);
-  }
+  // @Get('/diaries')
+  // @Roles(ROLE.USER)
+  // myDiaries(@User() user: UserEntity) {
+  //   return this.usersService.getMyDiaries(user);
+  // }
 }

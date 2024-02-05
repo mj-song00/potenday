@@ -95,5 +95,12 @@ export class DiaryController {
     return this.diaryService.deleteDiary(+id);
   }
 
+  //일기만 불러오기
+  @Get('diaries')
+  @Roles(ROLE.USER)
+  async diaries(@User() user: UserEntity) {
+    return this.diaryService.findDiaries(user);
+  }
+
   // 좋아요 기능 설정
 }
