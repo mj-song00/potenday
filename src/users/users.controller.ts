@@ -82,6 +82,7 @@ export class UsersController {
     return this.usersService.getKakaoNickname(user);
   }
 
+  //다이어리 불러오기
   @Get('/diaries')
   @Roles(ROLE.USER)
   myDiaries(@User() user: UserEntity) {
