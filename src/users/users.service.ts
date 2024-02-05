@@ -1,3 +1,4 @@
+import { Diary } from './../entity/diary.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
@@ -152,5 +153,14 @@ export class UsersService {
       );
     }
     return { result: 'sucess' };
+  }
+
+  //다이어리 가져오기
+  async getMyDiaries(user: UserEntity) {
+    const diaries = await this.userRepository.find({
+      where: { id: user.id },
+      relations: { diaries: true },
+    });
+    return diaries;
   }
 }

@@ -78,12 +78,6 @@ export class DiaryController {
     return this.diaryService.findDiariesByType(isPublic);
   }
 
-  @Get('')
-  @Roles(ROLE.USER)
-  async Diaries(@User() user: UserEntity) {
-    return this.diaryService.getDiaries(user);
-  }
-
   //일기 수정
   @Patch('/edit-diary/:id')
   @Roles(ROLE.USER)

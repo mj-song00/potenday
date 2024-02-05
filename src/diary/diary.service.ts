@@ -85,15 +85,6 @@ export class DiaryService {
     }
   }
 
-  async getDiaries(user: UserEntity) {
-    const diaries = await this.diaryRepository.find({
-      where: { id: Number(user.id) },
-      relations: { user: true },
-    });
-    console.log(diaries);
-    return diaries;
-  }
-
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
     const { text, imageUrl, date, emotion, weather, isPublic, isWrite } =

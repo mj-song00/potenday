@@ -81,4 +81,10 @@ export class UsersController {
   checkNickname(@User() user: UserEntity) {
     return this.usersService.getKakaoNickname(user);
   }
+
+  @Get('/diaries')
+  @Roles(ROLE.USER)
+  myDiaries(@User() user: UserEntity) {
+    return this.usersService.getMyDiaries(user);
+  }
 }
