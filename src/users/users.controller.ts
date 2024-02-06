@@ -82,10 +82,10 @@ export class UsersController {
     return this.usersService.getKakaoNickname(user);
   }
 
-  //다이어리 불러오기
-  // @Get('/diaries')
-  // @Roles(ROLE.USER)
-  // myDiaries(@User() user: UserEntity) {
-  //   return this.usersService.getMyDiaries(user);
-  // }
+  //로그아웃
+  @Post('/logout')
+  @Roles(ROLE.USER)
+  userLogout(@User() user: UserEntity) {
+    return this.usersService.logout(user);
+  }
 }
