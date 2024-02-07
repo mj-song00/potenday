@@ -21,16 +21,14 @@ export class UsersService {
     const { code, redirectUri } = signInKakaoDto;
     if (!code || !redirectUri) throw new Error('Bad Request');
 
-    const { kakaoId, nickname } = await this.kakaoService.signIn(
-      signInKakaoDto,
-    );
+    const { kakaoId, image } = await this.kakaoService.signIn(signInKakaoDto);
 
     let user = await this.userRepository.findOne({
       where: { kakaoId },
     });
     let isSignUp = false;
     if (!user) {
-      user = await this.createUser(kakaoId, nickname);
+      user = await this.createUser(kakaoId, image);
       isSignUp = true;
     }
 
@@ -40,8 +38,8 @@ export class UsersService {
     return { accessToken, refreshToken, isSignUp };
   }
 
-  async createUser(kakaoId: string, nickname: string) {
-    const user = this.userRepository.create({ kakaoId, nickname });
+  async createUser(kakaoId: string, image: string) {
+    const user = this.userRepository.create({ kakaoId, image });
     const response = await this.userRepository.save(user);
     return response;
   }
@@ -154,13 +152,10 @@ export class UsersService {
     }
     return { result: 'sucess' };
   }
+  async logout(user: UserEntity) {
+    const { kakaoId } = user;
 
-  //다이어리 가져오기
-  // async getMyDiaries(user: UserEntity) {
-  //   const diaries = await this.userRepository.find({
-  //     where: { id: user.id },
-  //     relations: { diaries: true },
-  //   });
-  //   return diaries;
-  // }
+    const logout = await this.kakaoService.unlink(kakaoId);
+    logout !== user.kakaoId ? new BadRequestException() : { result: 'success' };
+  }
 }
