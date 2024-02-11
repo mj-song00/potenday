@@ -9,13 +9,15 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from 'src/users/user.enum';
 import { UserEntity } from 'src/entity/user.entity';
 import { User } from 'src/decorators/user.decorators';
+import { ExpressAdapter, FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('diary')
 export class DiaryController {
@@ -34,7 +36,7 @@ export class DiaryController {
   @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
     const negativePrompt = `text, dirty, scared, ugly`;
-    const context = `${input}, by crayon`;
+    const context = `${input}, by crayon, child`;
     try {
       const response = await this.diaryService.createImage(
         context,
@@ -52,12 +54,14 @@ export class DiaryController {
 
   //번역문, 사진, 기분, 날짜, 날씨 저장
   @Post('create-diary')
-  @Roles(ROLE.USER)
+  //@Roles(ROLE.USER)
+  @UseInterceptors(FileInterceptor('file'))
   async createDiary(
     @Body() createDiaryDto: CreateDiaryDto,
     @User() user: UserEntity,
+    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.diaryService.createDiary(createDiaryDto, user);
+    return this.diaryService.createDiary(createDiaryDto, user, file);
   }
 
   // 개별 다이어리 가져오기

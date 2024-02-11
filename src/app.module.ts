@@ -12,6 +12,8 @@ import { EmotionModule } from './likes/emotion/like/emotion.module';
 import { LikeModule } from './likes/like/like.module';
 import { Emotion } from './entity/emotion.like.entity';
 import { Like } from './entity/like.entity';
+import { ImageModule } from './image/image.module';
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,6 +35,10 @@ import { Like } from './entity/like.entity';
     TypeOrmModule.forFeature([UserEntity]),
     EmotionModule,
     LikeModule,
+    ImageModule,
+    MulterModule.register({
+      dest: './uploads',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
