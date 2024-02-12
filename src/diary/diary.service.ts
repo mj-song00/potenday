@@ -7,14 +7,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
+import { Image } from 'src/entity/image.entity';
 
 @Injectable()
 export class DiaryService {
   constructor(
     @InjectRepository(Diary)
     private diaryRepository: Repository<Diary>,
-    @InjectRepository(UserEntity)
-    private userReposity: Repository<UserEntity>,
+    @InjectRepository(Image)
+    private imageRepository: Repository<Image>,
     private readonly kalroService: KalroService,
     private readonly papagoService: PapagoService,
     private readonly imageService: ImageService,
@@ -41,31 +42,63 @@ export class DiaryService {
   async createDiary(
     createDiaryDto: CreateDiaryDto,
     user: UserEntity,
-    input: Express.Multer.File,
+    file: Express.Multer.File,
   ) {
-    const { title, text, date, emotion, weather, isWrite, isPublic } =
+    const { input, title, text, date, emotion, weather, isWrite, isPublic } =
       createDiaryDto;
     if (!text) throw new Error('Bad Request');
 
-    //이미지 생성
-    const image = await this.imageService.createImage(input);
+    //url to file
+    const imageFile = await this.convertURLtoFile(input);
 
-    // const createDiary = await this.diaryRepository.create({
-    //   title,
-    //   contents: text,
-    //   date,
-    //   emotion,
-    //   weather,
-    //   isPublic,
-    //   isWrite,
-    //   user,
-    // });
-    // console.log(createDiary);
-    // const diary = await this.diaryRepository.save(createDiary);
-    // return { result: 'success' };
+    //이미지 저장
+    const imageUrl = await this.imageService.createImage(imageFile);
+
+    const createDiary = await this.diaryRepository.create({
+      title,
+      contents: text,
+      date,
+      emotion,
+      weather,
+      isPublic,
+      isWrite,
+      user,
+      imageUrl: imageUrl.url,
+    });
+
+    const diary = await this.diaryRepository.save(createDiary);
+    return { result: 'success' };
   }
 
-  //url to file
+  //url 파일 변환
+  async convertURLtoFile(input: string): Promise<Express.Multer.File> {
+    const response = await fetch(input);
+    const data = await response.blob();
+    const ext = input.split('.').pop(); // url 구조에 맞게 수정할 것
+    const filename = input.split('/').pop(); // url 구조에 맞게 수정할 것
+
+    // Blob을 ArrayBuffer로 변환
+    const arrayBuffer = await new Response(data).arrayBuffer();
+
+    // ArrayBuffer를 Buffer로 변환
+    const buffer = Buffer.from(arrayBuffer);
+
+    // 가상의 추가 속성들 생성
+    const file: Express.Multer.File = {
+      fieldname: 'file', // 필드 이름
+      originalname: filename, // 파일의 원래 이름
+      encoding: '', // 인코딩
+      mimetype: `image/${ext}`, // MIME 타입
+      buffer: buffer, // 파일 데이터
+      size: buffer.length, // 파일 크기
+      stream: null, // 가상의 stream 속성
+      destination: null, // 가상의 destination 속성
+      filename: null, // 가상의 filename 속성
+      path: null, // 가상의 path 속성
+    };
+
+    return file;
+  }
 
   //개별 다이어리 가져오기
   async findOne(id: number) {

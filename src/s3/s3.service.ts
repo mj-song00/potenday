@@ -1,51 +1,52 @@
-import {
-  S3Client,
-  PutObjectCommandInput,
-  PutObjectCommand,
-  PutObjectCommandOutput,
-} from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ReadStream } from 'fs';
-
-const {
-  ACCESS_KEY_ID,
-  SECRET_ACCESS_KEY,
-  CLOUD_FRONT_URL,
-  BUCKET_NAME,
-  REGION,
-} = process.env;
-
+import { BUCKET_NAME, REGION } from 'src/config/s3.config';
+import * as AWS from 'aws-sdk';
 @Injectable()
 export class S3Service {
+  private readonly S3: AWS.S3;
+
+  constructor(private configService: ConfigService) {
+    this.S3 = new AWS.S3({
+      endpoint: 'https://kr.object.ncloudstorage.com',
+      region: 'kr-standard',
+      credentials: {
+        accessKeyId: this.configService.get<string>('ACCESS_KEY_ID'),
+        secretAccessKey: this.configService.get<string>('SECRET_ACCESS_KEY'),
+      },
+    });
+  }
+
   public region = REGION;
   public bucket = BUCKET_NAME;
-  private client = new S3Client({
-    region: REGION,
-    credentials: {
-      accessKeyId: ACCESS_KEY_ID,
-      secretAccessKey: SECRET_ACCESS_KEY,
-    },
-  });
 
   async upload(
     key: string,
     file: Buffer | ReadStream,
     contentType: string,
   ): Promise<boolean> {
-    const input: PutObjectCommandInput = {
-      Key: key,
-      Bucket: this.bucket,
-      Body: file,
-      ContentType: contentType,
-    };
-    const command = new PutObjectCommand(input);
-    const result: PutObjectCommandOutput = await this.client.send(command);
+    try {
+      const params: AWS.S3.PutObjectRequest = {
+        Bucket: this.bucket,
+        Key: key,
+        Body: file,
+        ContentType: contentType,
+        ACL: 'public-read',
+      };
 
-    return result.$metadata.httpStatusCode === 200;
+      const result: AWS.S3.PutObjectOutput = await this.S3.upload(
+        params,
+      ).promise();
+      return true;
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      return false;
+    }
   }
 
   private get baseURL() {
-    return CLOUD_FRONT_URL;
+    return this.configService.get<string>('CLOUD_URL');
   }
 
   public getFileURLByKey(key: string): string {

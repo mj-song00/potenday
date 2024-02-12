@@ -2,13 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Image } from './image.entity';
 import { Like } from './like.entity';
 import { UserEntity } from './user.entity';
 
@@ -38,6 +35,9 @@ export class Diary {
   @Column({ type: 'tinyint', default: 0 }) // 일기 공개여부 확인 ->0은 나만 보기
   isPublic: boolean;
 
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @CreateDateColumn() // 게시글 생성일
   createdAt: Date;
 
@@ -46,8 +46,4 @@ export class Diary {
 
   @OneToMany(() => Like, (like) => like.diary)
   likes: Like[];
-
-  @OneToOne(() => Image)
-  @JoinTable()
-  image: Image;
 }
