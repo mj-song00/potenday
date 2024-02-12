@@ -55,13 +55,13 @@ export class DiaryController {
   //번역문, 사진, 기분, 날짜, 날씨 저장
   @Post('create-diary')
   //@Roles(ROLE.USER)
-  @UseInterceptors(FileInterceptor('file'))
+  // @UseInterceptors(FileInterceptor('file'))
   async createDiary(
     @Body() createDiaryDto: CreateDiaryDto,
     @User() user: UserEntity,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.diaryService.createDiary(createDiaryDto, user, file);
+    return this.diaryService.createDiary(createDiaryDto, user);
   }
 
   // 개별 다이어리 가져오기

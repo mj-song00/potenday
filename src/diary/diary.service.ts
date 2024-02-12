@@ -6,7 +6,7 @@ import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
-import { v4 as uuidv4 } from 'uuid';
+
 import * as fs from 'fs';
 import * as path from 'path';
 @Injectable()
@@ -40,65 +40,26 @@ export class DiaryService {
   async createDiary(
     createDiaryDto: CreateDiaryDto,
     user: UserEntity,
-    file: Express.Multer.File,
+    //file: Express.Multer.File,
   ) {
-    const imageName = uuidv4();
-    // + path.extname(file.filename); // 파일명에 UUID 추가
+    //이미지 생성
+    const { title, text, date, emotion, weather, isWrite, isPublic } =
+      createDiaryDto;
+    if (!text) throw new Error('Bad Request');
 
-    // const uploadFolder = 'uploads';
-    // const currentDate = new Date();
-    // const year = String(currentDate.getFullYear());
-    // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    // const day = String(currentDate.getDate()).padStart(2, '0');
-    // const imagePath = path.join(
-    //   __dirname,
-    //   '..',
-    //   '..',
-    //   uploadFolder,
-    //   year,
-    //   month,
-    //   day,
-    //   imageName,
-    // );
-    // // 디렉토리가 없으면 생성
-    // const imageDir = path.dirname(imagePath);
-    // if (!fs.existsSync(imageDir)) {
-    //   fs.mkdirSync(imageDir, { recursive: true });
-    // }
-    // // 파일 저장
-    // fs.writeFileSync(imagePath, file.buffer);
-
-    const outputPath = `${__dirname}/../../uploads/${imageName}`;
-    const decoded = await this.kalroService.stringToImage(
-      createDiaryDto.base64String,
-      outputPath,
-    );
-
-    console.log(decoded);
-    // // 이미지 URL 생성
-    // const baseUrl = 'http://localhost:3000'; // 현재 도메인
-    // const imageUrl = `${baseUrl}/${uploadFolder}/${year}/${month}/${day}/${imageName}`;
-    // const { title, text, date, emotion, weather, isWrite, isPublic } =
-    //   createDiaryDto;
-    // if (!text) throw new Error('Bad Request');
-    // // const imageName = uuidv4() + file.originalname;
-    // // const imagePath = `${__dirname}/../../uploads/${imageName}`;
-    // // 이미지 경로 반환
-    // //  const imageUrl = `http://localhost:3000/image/${imageName}`;
-    // const createDiary = await this.diaryRepository.create({
-    //   title,
-    //   contents: text,
-    //   image: imagePath,
-    //   date,
-    //   emotion,
-    //   weather,
-    //   isPublic,
-    //   isWrite,
-    //   user,
-    // });
-    // // console.log(createDiary);
-    // const diary = await this.diaryRepository.save(createDiary);
-    // return { result: 'success', imageUrl };
+    const createDiary = await this.diaryRepository.create({
+      title,
+      contents: text,
+      date,
+      emotion,
+      weather,
+      isPublic,
+      isWrite,
+      user,
+    });
+    // console.log(createDiary);
+    const diary = await this.diaryRepository.save(createDiary);
+    return { result: 'success' };
   }
 
   //개별 다이어리 가져오기
@@ -132,11 +93,10 @@ export class DiaryService {
 
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
-    const { text, imageUrl, date, emotion, weather, isPublic, isWrite } =
-      updateDiaryDto;
+    const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
     const updateDiary = await this.diaryRepository.update(id, {
       contents: text,
-      image: imageUrl,
+      //image: imageUrl,
       date,
       emotion,
       weather,

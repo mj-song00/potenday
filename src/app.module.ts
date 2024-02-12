@@ -1,3 +1,4 @@
+import { S3Module } from './s3/s3.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +14,8 @@ import { LikeModule } from './likes/like/like.module';
 import { Emotion } from './entity/emotion.like.entity';
 import { Like } from './entity/like.entity';
 import { ImageModule } from './image/image.module';
-import { MulterModule } from '@nestjs/platform-express';
+import { Image } from './entity/image.entity';
+import { ServiceModule } from './service/service.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -27,7 +29,7 @@ import { MulterModule } from '@nestjs/platform-express';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UserEntity, Diary, Emotion, Like],
+      entities: [UserEntity, Diary, Emotion, Like, Image],
       synchronize: true,
     }),
     DiaryModule,
@@ -36,9 +38,8 @@ import { MulterModule } from '@nestjs/platform-express';
     EmotionModule,
     LikeModule,
     ImageModule,
-    MulterModule.register({
-      dest: './uploads',
-    }),
+    S3Module,
+    ServiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
