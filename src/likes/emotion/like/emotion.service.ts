@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Emotion } from 'src/entity/emotion.like.entity';
 import { UserEntity } from 'src/entity/user.entity';
@@ -16,7 +16,10 @@ export class EmotionService {
       where: { id: diaryId },
     });
     if (!diary) {
-      throw new Error('존재하지 않는 다이어리입니다.');
+      throw new HttpException(
+        '존재하지 않는 다이어리입니다.',
+        HttpStatus.NOT_FOUND,
+      );
     } else {
       const exist = await this.emotionRepository.find({
         where: { user: { id: user.id }, diaryId, emotion },
@@ -40,16 +43,19 @@ export class EmotionService {
   }
 
   // 다이어리 감정 불러오기
-  async getEmotion(diaryId: number, emotion: string) {
-    const emotionData = this.emotionRepository.find({
-      where: { id: diaryId, emotion },
-    });
-    if (!emotionData) {
-      throw new Error('해당 다이어리와 감정에 대한 데이터가 없습니다.');
-    }
+  // async getEmotion(diaryId: number, emotion: string) {
+  //   const emotionData = this.emotionRepository.find({
+  //     where: { id: diaryId, emotion },
+  //   });
+  //   if (!emotionData) {
+  //     throw new HttpException(
+  //       '해당 다이어리와 감정에 대한 데이터가 없습니다.',
+  //       HttpStatus.NOT_FOUND,
+  //     );
+  //   }
 
-    return emotionData;
-  }
+  //   return emotionData;
+  // }
 
   async getEmotions(diaryId: number) {
     const emotionsData = await this.emotionRepository.find({
@@ -57,9 +63,29 @@ export class EmotionService {
     });
 
     if (emotionsData.length === 0) {
-      throw new Error('해당 다이어리에 대한 감정 데이터가 없습니다.');
+      throw new HttpException(
+        '해당 다이어리와 감정에 대한 데이터가 없습니다.',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     return emotionsData;
+  }
+
+  async getMyLikesByDiary(diaryId: number, user: UserEntity) {
+    const likes = await this.emotionRepository.find({
+      where: {
+        diaryId: diaryId,
+        user: { id: user.id },
+      },
+    });
+
+    if (likes.length > 0) {
+      // 사용자가 다이어리에 공감했다면, 공감 데이터 반환
+      return { liked: true, likes: likes };
+    } else {
+      // 사용자가 다이어리에 공감하지 않았다면, 공감하지 않았음을 나타내는 응답 반환
+      return { liked: false };
+    }
   }
 }

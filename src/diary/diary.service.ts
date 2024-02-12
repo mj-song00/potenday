@@ -56,7 +56,6 @@ export class DiaryService {
     //이미지 저장
     const imageUrl = await this.imageService.createImage(imageFile);
 
-
     const createDiary = await this.diaryRepository.create({
       title,
       contents: text,

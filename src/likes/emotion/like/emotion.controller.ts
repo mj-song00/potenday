@@ -20,17 +20,17 @@ export class EmotionController {
     return this.emotionService.getFineDiary(+diaryId, emotion, user);
   }
 
-  //다이어리별 감정 불러오기
-  @Roles(ROLE.USER)
-  @Get('/:diaryId')
-  getEmotion(
-    @Param('diaryId') diaryId: string,
-    @Param('emotion') emotion: string,
-  ) {
-    return this.emotionService.getEmotion(+diaryId, emotion);
-  }
+  // 다이어리 불러오기
+  // @Roles(ROLE.USER)
+  // @Get('/:diaryId/:emotion')
+  // getEmotion(
+  //   @Param('diaryId') diaryId: string,
+  //   @Param('emotion') emotion: string,
+  // ) {
+  //   return this.emotionService.getEmotion(+diaryId, emotion);
+  // }
 
-  //다이어리 감정 불러오기
+  //다이어리별 전체 감정 불러오기
   @Roles(ROLE.USER)
   @Get('/:diaryId')
   getEmotions(@Param('diaryId') diaryId: string) {
