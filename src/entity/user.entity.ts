@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Emotion } from './emotion.like.entity';
+import { Image } from './image.entity';
 import { Like } from './like.entity';
 
 @Entity()
@@ -36,7 +37,7 @@ export class UserEntity {
   likes: Like[];
 
   @OneToMany(() => Diary, (diary) => diary.user)
-  diaries: Diary[];
+  diary: Diary[];
 
   @OneToMany(() => Emotion, (emotion) => emotion.user)
   emotion: Emotion[];

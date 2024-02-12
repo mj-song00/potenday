@@ -17,7 +17,7 @@ export class Diary {
   @PrimaryGeneratedColumn() // DB 저장 순서
   id: number;
 
-  @Column()
+  @Column() // 제목
   title: string;
 
   @Column() // prompt 입력 내용
@@ -38,10 +38,13 @@ export class Diary {
   @Column({ type: 'tinyint', default: 0 }) // 일기 공개여부 확인 ->0은 나만 보기
   isPublic: boolean;
 
+  @Column({ nullable: true })
+  imageUrl: string;
+
   @CreateDateColumn() // 게시글 생성일
   createdAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.diaries)
+  @ManyToOne(() => UserEntity, (user) => user.diary)
   user: UserEntity;
 
   @OneToMany(() => Like, (like) => like.diary)
