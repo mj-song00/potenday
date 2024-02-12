@@ -7,6 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 
+import * as fs from 'fs';
+import * as path from 'path';
 @Injectable()
 export class DiaryService {
   constructor(
@@ -35,15 +37,19 @@ export class DiaryService {
   }
 
   // 이미지, 번역문, 기분, 날짜, 날씨 저장
-  async createDiary(createDiaryDto: CreateDiaryDto, user: UserEntity) {
-    const { title, text, imageUrl, date, emotion, weather, isWrite, isPublic } =
+  async createDiary(
+    createDiaryDto: CreateDiaryDto,
+    user: UserEntity,
+    //file: Express.Multer.File,
+  ) {
+    //이미지 생성
+    const { title, text, date, emotion, weather, isWrite, isPublic } =
       createDiaryDto;
-    if (!text || !imageUrl) throw new Error('Bad Request');
+    if (!text) throw new Error('Bad Request');
 
     const createDiary = await this.diaryRepository.create({
       title,
       contents: text,
-      image: imageUrl,
       date,
       emotion,
       weather,
@@ -51,7 +57,7 @@ export class DiaryService {
       isWrite,
       user,
     });
-
+    // console.log(createDiary);
     const diary = await this.diaryRepository.save(createDiary);
     return { result: 'success' };
   }
@@ -87,11 +93,10 @@ export class DiaryService {
 
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
-    const { text, imageUrl, date, emotion, weather, isPublic, isWrite } =
-      updateDiaryDto;
+    const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
     const updateDiary = await this.diaryRepository.update(id, {
       contents: text,
-      image: imageUrl,
+      //image: imageUrl,
       date,
       emotion,
       weather,

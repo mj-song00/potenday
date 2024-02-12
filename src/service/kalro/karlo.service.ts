@@ -1,6 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 import { Injectable } from '@nestjs/common';
-
+import * as fs from 'fs';
+import * as base64 from 'base64-js';
+import * as sharp from 'sharp';
+import * as path from 'path';
 @Injectable()
 export class KalroService {
   private readonly api: AxiosInstance;
@@ -29,6 +32,7 @@ export class KalroService {
     const data = {
       prompt: context,
       negative_prompt: negativePrompt,
+      image_format: 'png',
     };
 
     const headers = { Authorization: `KakaoAK ${this.REST_API_KEY}` };

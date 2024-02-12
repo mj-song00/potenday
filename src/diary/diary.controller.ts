@@ -52,7 +52,8 @@ export class DiaryController {
 
   //번역문, 사진, 기분, 날짜, 날씨 저장
   @Post('create-diary')
-  @Roles(ROLE.USER)
+  //@Roles(ROLE.USER)
+  // @UseInterceptors(FileInterceptor('file'))
   async createDiary(
     @Body() createDiaryDto: CreateDiaryDto,
     @User() user: UserEntity,
