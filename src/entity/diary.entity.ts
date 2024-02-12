@@ -41,7 +41,7 @@ export class Diary {
   @CreateDateColumn() // 게시글 생성일
   createdAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.diaries)
+  @ManyToOne(() => UserEntity, (user) => user.diary)
   user: UserEntity;
 
   @OneToMany(() => Like, (like) => like.diary)

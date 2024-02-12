@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 @Entity()
 export class Image {
@@ -18,4 +20,7 @@ export class Image {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => UserEntity, (user) => user.images)
+  user: UserEntity;
 }

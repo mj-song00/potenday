@@ -7,8 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 
-import * as fs from 'fs';
-import * as path from 'path';
 @Injectable()
 export class DiaryService {
   constructor(

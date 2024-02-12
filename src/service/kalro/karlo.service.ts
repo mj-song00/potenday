@@ -1,9 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { Injectable } from '@nestjs/common';
-import * as fs from 'fs';
-import * as base64 from 'base64-js';
-import * as sharp from 'sharp';
-import * as path from 'path';
+
 @Injectable()
 export class KalroService {
   private readonly api: AxiosInstance;
