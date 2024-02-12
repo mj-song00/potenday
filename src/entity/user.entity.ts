@@ -41,7 +41,4 @@ export class UserEntity {
 
   @OneToMany(() => Emotion, (emotion) => emotion.user)
   emotion: Emotion[];
-
-  @OneToMany(() => Image, (image) => image.user)
-  images: Image[];
 }

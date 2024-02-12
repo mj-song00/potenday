@@ -20,7 +20,4 @@ export class Image {
 
   @CreateDateColumn()
   createdAt: Date;
-
-  @ManyToOne(() => UserEntity, (user) => user.images)
-  user: UserEntity;
 }

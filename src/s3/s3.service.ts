@@ -8,22 +8,22 @@ import { Injectable } from '@nestjs/common';
 import { ReadStream } from 'fs';
 
 const {
-  S3_AWSACCESS_KEY_ID,
-  S3_AWS_SECRET_ACCESS_KEY,
+  ACCESS_KEY_ID,
+  SECRET_ACCESS_KEY,
   CLOUD_FRONT_URL,
-  S3_BUCKET_NAME,
-  S3_REGION,
+  BUCKET_NAME,
+  REGION,
 } = process.env;
 
 @Injectable()
 export class S3Service {
-  public region = S3_REGION;
-  public bucket = S3_BUCKET_NAME;
+  public region = REGION;
+  public bucket = BUCKET_NAME;
   private client = new S3Client({
-    region: S3_REGION,
+    region: REGION,
     credentials: {
-      accessKeyId: S3_AWSACCESS_KEY_ID,
-      secretAccessKey: S3_AWS_SECRET_ACCESS_KEY,
+      accessKeyId: ACCESS_KEY_ID,
+      secretAccessKey: SECRET_ACCESS_KEY,
     },
   });
 

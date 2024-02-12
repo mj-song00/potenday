@@ -17,7 +17,7 @@ export class Diary {
   @PrimaryGeneratedColumn() // DB 저장 순서
   id: number;
 
-  @Column()
+  @Column() // 제목
   title: string;
 
   @Column() // prompt 입력 내용

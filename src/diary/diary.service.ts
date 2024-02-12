@@ -6,16 +6,18 @@ import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class DiaryService {
   constructor(
     @InjectRepository(Diary)
     private diaryRepository: Repository<Diary>,
-    private readonly kalroService: KalroService,
-    private readonly papagoService: PapagoService,
     @InjectRepository(UserEntity)
     private userReposity: Repository<UserEntity>,
+    private readonly kalroService: KalroService,
+    private readonly papagoService: PapagoService,
+    private readonly imageService: ImageService,
   ) {}
 
   //파파고 번역
@@ -31,6 +33,7 @@ export class DiaryService {
     if (!context) throw new Error('Bad Request');
 
     const image = await this.kalroService.createImage(context, negativePrompt);
+
     return image;
   }
 
@@ -38,27 +41,31 @@ export class DiaryService {
   async createDiary(
     createDiaryDto: CreateDiaryDto,
     user: UserEntity,
-    //file: Express.Multer.File,
+    input: Express.Multer.File,
   ) {
-    //이미지 생성
     const { title, text, date, emotion, weather, isWrite, isPublic } =
       createDiaryDto;
     if (!text) throw new Error('Bad Request');
 
-    const createDiary = await this.diaryRepository.create({
-      title,
-      contents: text,
-      date,
-      emotion,
-      weather,
-      isPublic,
-      isWrite,
-      user,
-    });
+    //이미지 생성
+    const image = await this.imageService.createImage(input);
+
+    // const createDiary = await this.diaryRepository.create({
+    //   title,
+    //   contents: text,
+    //   date,
+    //   emotion,
+    //   weather,
+    //   isPublic,
+    //   isWrite,
+    //   user,
+    // });
     // console.log(createDiary);
-    const diary = await this.diaryRepository.save(createDiary);
-    return { result: 'success' };
+    // const diary = await this.diaryRepository.save(createDiary);
+    // return { result: 'success' };
   }
+
+  //url to file
 
   //개별 다이어리 가져오기
   async findOne(id: number) {

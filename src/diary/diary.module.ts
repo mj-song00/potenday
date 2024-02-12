@@ -6,10 +6,11 @@ import { Module } from '@nestjs/common';
 import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
 import { Diary } from '../entity/diary.entity';
+import { ImageService } from 'src/image/image.service';
 
 @Module({
   controllers: [DiaryController],
-  providers: [DiaryService, KalroService, PapagoService],
+  providers: [DiaryService, KalroService, PapagoService, ImageService],
   imports: [TypeOrmModule.forFeature([Diary, UserEntity])],
   exports: [TypeOrmModule], //추가
 })
