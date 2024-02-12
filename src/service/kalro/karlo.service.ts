@@ -1,6 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
 import { Injectable } from '@nestjs/common';
-
+import * as fs from 'fs';
+import * as base64 from 'base64-js';
+import * as sharp from 'sharp';
+import * as path from 'path';
 @Injectable()
 export class KalroService {
   private readonly api: AxiosInstance;
@@ -25,6 +28,7 @@ export class KalroService {
 
   async getImage(context: string, negativePrompt: string) {
     //QueryString.stringify 삭제
+
     const url = '/v2/inference/karlo/t2i';
     const data = {
       prompt: context,

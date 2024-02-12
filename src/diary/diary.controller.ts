@@ -9,7 +9,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -37,7 +36,7 @@ export class DiaryController {
   @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
     const negativePrompt = `text, dirty, scared, ugly`;
-    const context = `${input}, by crayon`;
+    const context = `${input}, by crayon, child`;
     try {
       const response = await this.diaryService.createImage(
         context,
@@ -57,6 +56,7 @@ export class DiaryController {
   @Post('create-diary')
   @Roles(ROLE.USER)
   @UseInterceptors(FileInterceptor('file'))
+
   async createDiary(
     @Body() createDiaryDto: CreateDiaryDto,
     @User() user: UserEntity,

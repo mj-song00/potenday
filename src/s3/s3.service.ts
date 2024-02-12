@@ -1,3 +1,4 @@
+
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ReadStream } from 'fs';
@@ -26,6 +27,7 @@ export class S3Service {
     file: Buffer | ReadStream,
     contentType: string,
   ): Promise<boolean> {
+
     try {
       const params: AWS.S3.PutObjectRequest = {
         Bucket: this.bucket,
@@ -47,6 +49,7 @@ export class S3Service {
 
   private get baseURL() {
     return this.configService.get<string>('CLOUD_URL');
+
   }
 
   public getFileURLByKey(key: string): string {

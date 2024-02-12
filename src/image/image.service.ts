@@ -1,3 +1,4 @@
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from 'src/entity/image.entity';
@@ -27,10 +28,12 @@ export class ImageService {
     if (!isSuccess) throw new Error('IMAGE_UPLOAD_FAILED');
 
     const createImage = await this.imageRepository.save({
+
       key,
       url,
     });
-
+    
     return createImage;
+
   }
 }
