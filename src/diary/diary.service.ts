@@ -8,9 +8,6 @@ import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
 import { Image } from 'src/entity/image.entity';
-
-import * as fs from 'fs';
-import * as path from 'path';
 @Injectable()
 export class DiaryService {
   constructor(
@@ -55,7 +52,6 @@ export class DiaryService {
 
     //이미지 저장
     const imageUrl = await this.imageService.createImage(imageFile);
-
 
     const createDiary = await this.diaryRepository.create({
       title,
@@ -149,7 +145,6 @@ export class DiaryService {
   }
 
   //일기 삭제
-
   async deleteDiary(id: number) {
     const diary = await this.diaryRepository.delete(id);
     return { result: 'diary delete success' };
