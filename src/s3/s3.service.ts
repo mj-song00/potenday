@@ -36,7 +36,6 @@ export class S3Service {
         ContentType: contentType,
         ACL: 'public-read',
       };
-
       const result: AWS.S3.PutObjectOutput = await this.S3.upload(
         params,
       ).promise();

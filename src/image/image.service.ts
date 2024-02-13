@@ -14,16 +14,16 @@ export class ImageService {
     private readonly s3Service: S3Service,
   ) {}
 
-  async createImage(image: Express.Multer.File) {
+  async createImage(imageFile: Express.Multer.File) {
     const fileName = uuidv4();
-    const ext = image.originalname.split('.')[0];
+    const ext = imageFile.originalname.split('.')[0];
     const key = `${fileName}.${ext}`;
     const url = this.s3Service.getFileURLByKey(key);
 
     const isSuccess = await this.s3Service.upload(
       key,
-      image.buffer,
-      image.mimetype,
+      imageFile.buffer,
+      imageFile.mimetype,
     );
     if (!isSuccess) throw new Error('IMAGE_UPLOAD_FAILED');
 
