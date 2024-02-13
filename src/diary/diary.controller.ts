@@ -33,7 +33,7 @@ export class DiaryController {
 
   //이미지 생성
   @Post('generate-image')
-  @Roles(ROLE.USER)
+  // @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
     const negativePrompt = `text, dirty, scared, ugly`;
     const context = `${input}, by crayon, child`;
@@ -54,7 +54,7 @@ export class DiaryController {
 
   //번역문, 사진, 기분, 날짜, 날씨 저장
   @Post('create-diary')
-  @Roles(ROLE.USER)
+  // @Roles(ROLE.USER)
   @UseInterceptors(FileInterceptor('file'))
 
   async createDiary(
@@ -67,7 +67,7 @@ export class DiaryController {
 
   // 개별 다이어리 가져오기
   @Get('/get-diary/:id')
-  @Roles(ROLE.USER)
+  //@Roles(ROLE.USER)
   async getDiary(@Param('id') id: string) {
     return this.diaryService.findOne(+id);
   }

@@ -76,22 +76,23 @@ export class DiaryService {
   //url 파일 변환
   async convertURLtoFile(input: string): Promise<Express.Multer.File> {
     const response = await fetch(input);
-    const data = await response.blob();
-    const ext = input.split('.').pop(); // url 구조에 맞게 수정할 것
-    const filename = input.split('/').pop(); // url 구조에 맞게 수정할 것
+    const data = await response.arrayBuffer(); // arrayBuffer 메서드 사용
 
-    // Blob을 ArrayBuffer로 변환
-    const arrayBuffer = await new Response(data).arrayBuffer();
+    // URL에서 파일 이름과 확장자 추출
+    const urlParts = input.split('/');
+    const filenameWithExtension = urlParts[urlParts.length - 1];
+    const filenameParts = filenameWithExtension.split('.');
+    const filename = filenameParts.slice(0, -1).join('.');
+    const ext = filenameParts[filenameParts.length - 1];
 
     // ArrayBuffer를 Buffer로 변환
-    const buffer = Buffer.from(arrayBuffer);
-
+    const buffer = Buffer.from(data);
     // 가상의 추가 속성들 생성
     const file: Express.Multer.File = {
       fieldname: 'file', // 필드 이름
       originalname: filename, // 파일의 원래 이름
       encoding: '', // 인코딩
-      mimetype: `image/${ext}`, // MIME 타입
+      mimetype: `image/png`, // MIME 타입
       buffer: buffer, // 파일 데이터
       size: buffer.length, // 파일 크기
       stream: null, // 가상의 stream 속성
