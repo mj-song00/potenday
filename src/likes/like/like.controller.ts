@@ -16,9 +16,9 @@ export class likeController {
   }
 
   //좋아요 많은 순으로 불러오기
-  @Roles(ROLE.USER)
-  @Get()
-  getByLike() {
-    return this.likeService.getByLike();
-  }
+  // @Roles(ROLE.USER)
+  // @Get('')
+  // getByLike() {
+  //   return this.likeService.getByLike();
+  // }
 }

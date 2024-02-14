@@ -133,7 +133,7 @@ export class UsersService {
     return info;
   }
 
-  async getKakaoNickname(user: UserEntity) {
+  async getNickname(user: UserEntity) {
     return user.nickname;
   }
 
@@ -147,7 +147,7 @@ export class UsersService {
     } else {
       const checkedNickname = await this.userRepository.update(
         { id: user.id },
-        { nickname: nickname }, // nickname이 업데이트하려는 값인 경우
+        { nickname }, // nickname이 업데이트하려는 값인 경우
       );
     }
     return { result: 'sucess' };

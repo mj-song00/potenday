@@ -33,10 +33,11 @@ export class DiaryController {
 
   //이미지 생성
   @Post('generate-image')
-  // @Roles(ROLE.USER)
+  @Roles(ROLE.USER)
   async generateImage(@Body('input') input: string) {
-    const negativePrompt = `text, dirty, scared, ugly`;
-    const context = `${input}, by crayon, child`;
+    const negativePrompt = `text, dirty, scared, ugly,sordid`;
+    const context = `${input}, It looks like it was drawn with crayons by a child under 7 years old, 
+    naturally, only pictures`;
     try {
       const response = await this.diaryService.createImage(
         context,
