@@ -13,7 +13,10 @@ export class LikeService {
   ) {}
 
   async getDiaryLike(diaryId: number, user: UserEntity) {
-    const diary = await this.diaryReposity.findOne({ where: { id: diaryId } });
+    const diary = await this.diaryReposity.findOne({
+      where: { id: diaryId },
+    });
+
     if (!diary) {
       throw new Error('존재하지 않는 다이어리입니다.');
     } else {
@@ -37,9 +40,17 @@ export class LikeService {
     }
   }
 
-  async getByLike() {
-    const diarise = await this.diaryLikeRepository
-      .createQueryBuilder('like')
-      .select();
-  }
+  //좋아요 많은 순으로 불러오기
+  //async getByLike() {
+  // const diarise = await this.diaryLikeRepository
+  //   .createQueryBuilder('like')
+  //   .innerJoin(Diary, 'diary', 'diary.id = like.diaryId')
+  //   .select('like.diaryId AS diaryId')
+  //   .addSelect('diary.*') // Select all columns from diary
+  //   .addSelect('COUNT(*) AS likeCount')
+  //   .groupBy('like.diaryId')
+  //   .orderBy('likeCount', 'DESC')
+  //   .getRawMany();
+  // return diarise;
+  //}
 }

@@ -39,6 +39,7 @@ export class UsersController {
   //리프레시 토큰
   @Get('refresh-token')
   async refreshToken(@Query('refreshToken') refreshToken: string) {
+    console.log(refreshToken);
     if (!refreshToken) return;
 
     const { accessToken, refreshToken: newRefreshToken } =
@@ -79,7 +80,7 @@ export class UsersController {
   @Get()
   @Roles(ROLE.USER)
   checkNickname(@User() user: UserEntity) {
-    return this.usersService.getKakaoNickname(user);
+    return this.usersService.getNickname(user);
   }
 
   //로그아웃
