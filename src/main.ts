@@ -3,16 +3,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as fs from 'fs';
 const port = process.env.PORT;
-const httpsOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/picture-diary.site/privkey.pem'),
-  cert: fs.readFileSync(
-    '/etc/letsencrypt/live/picture-diary.site/fullchain.pem',
-  ),
-};
+// const httpsOptions = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/picture-diary.site/privkey.pem'),
+//   cert: fs.readFileSync(
+//     '/etc/letsencrypt/live/picture-diary.site/fullchain.pem',
+//   ),
+// };
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    httpsOptions,
+    //  httpsOptions,
   });
   app.enableCors({
     credentials: true,
