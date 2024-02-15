@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          working-directory: potenday
+          working-directory: ./potenday
           script: |
             git pull
             npm run build
