@@ -62,7 +62,7 @@ export class DiaryController {
     @User() user: UserEntity,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('controller', createDiaryDto);
+    console.log('controller', CreateDiaryDto);
     // return this.diaryService.createDiary(createDiaryDto, user, file);
   }
 
