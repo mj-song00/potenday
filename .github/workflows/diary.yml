@@ -40,5 +40,4 @@ jobs:
           script: |
             cd potenday
             git pull
-            npm run build
-            nginx -s reload
+            npm run build --force
