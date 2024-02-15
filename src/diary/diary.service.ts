@@ -8,6 +8,7 @@ import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
 import { Image } from 'src/entity/image.entity';
+import axios from 'axios';
 
 @Injectable()
 export class DiaryService {
@@ -75,8 +76,8 @@ export class DiaryService {
 
   //url 파일 변환
   async convertURLtoFile(input: string): Promise<Express.Multer.File> {
-    const response = await fetch(input);
-    const data = await response.arrayBuffer(); // arrayBuffer 메서드 사용
+    const response = await axios.get(input, { responseType: 'arraybuffer' });
+    const data = response.data;
 
     // URL에서 파일 이름과 확장자 추출
     const urlParts = input.split('/');
