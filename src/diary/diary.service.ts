@@ -45,6 +45,7 @@ export class DiaryService {
   ) {
     const { input, title, text, date, emotion, weather, isWrite, isPublic } =
       createDiaryDto;
+    console.log(createDiaryDto);
     if (!text) throw new Error('Bad Request');
 
     //url to file
