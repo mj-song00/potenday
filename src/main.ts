@@ -22,11 +22,12 @@ async function bootstrap() {
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
-      transform: true,
+      // whitelist: true,
+      // transform: true,
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter());
+  app.enableCors();
   await app.listen(port);
 }
 bootstrap();
