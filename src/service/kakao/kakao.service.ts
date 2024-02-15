@@ -27,7 +27,6 @@ export class KakaoService {
 
     const tokens = await this.getTokens(code, redirectUri);
     const decodedToken = jwt.decode(tokens.id_token) as JwtPayload; // as 키워드를 사용하여 강제로 형변환
-    console.log(decodedToken);
     const { sub: kakaoId, picture } = decodedToken;
 
     return { kakaoId, picture };
