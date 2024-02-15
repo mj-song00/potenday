@@ -44,4 +44,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd potenday
+            git pull
             npm run build
+            nginx -s reload
