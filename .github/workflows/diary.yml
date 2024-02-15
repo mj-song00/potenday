@@ -40,4 +40,5 @@ jobs:
           script: |
             cd potenday
             git pull
+            npm install
             npm run build --if-present
