@@ -21,7 +21,7 @@ export class UserEntity {
   @Column({ nullable: true }) // 프로필 이미지
   image: string;
 
-  @Column() // nickname (유저 변경가능 )
+  @Column({ nullable: true }) // nickname (유저 변경가능 )
   nickname: string;
 
   @Column({ nullable: true }) // 성별

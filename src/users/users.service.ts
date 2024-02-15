@@ -40,9 +40,10 @@ export class UsersService {
 
   async createUser(kakaoId: string, picture: string) {
     const user = this.userRepository.create({ kakaoId, image: picture });
+    console.log(user);
     // const saveUser = new UserEntity();
     // (user.kakaoId = kakaoId), (user.image = picture);
-
+    console.log(await this.userRepository.save(user));
     const response = await this.userRepository.save(user);
 
     return response;
