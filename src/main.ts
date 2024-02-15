@@ -6,7 +6,7 @@ const port = process.env.PORT;
 const httpsOptions = {
   key: fs.readFileSync('/etc/letsencrypt/live/picture-diary.site/privkey.pem'),
   cert: fs.readFileSync(
-    '/etc/letsencrypt/live/picture-diary.site/pullchain.pem',
+    '/etc/letsencrypt/live/picture-diary.site/fullchain.pem',
   ),
 };
 
