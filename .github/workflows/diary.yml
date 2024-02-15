@@ -40,5 +40,4 @@ jobs:
           script: |
             cd potenday
             git pull
-            ls
-            npm run build
+            /root/.nvm/versions/node/v17.9.1/bin/npm npm run build
