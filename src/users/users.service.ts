@@ -21,14 +21,14 @@ export class UsersService {
     const { code, redirectUri } = signInKakaoDto;
     if (!code || !redirectUri) throw new Error('Bad Request');
 
-    const { kakaoId, image } = await this.kakaoService.signIn(signInKakaoDto);
+    const { kakaoId, picture } = await this.kakaoService.signIn(signInKakaoDto);
 
     let user = await this.userRepository.findOne({
       where: { kakaoId },
     });
     let isSignUp = false;
     if (!user) {
-      user = await this.createUser(kakaoId, image);
+      user = await this.createUser(kakaoId, picture);
       isSignUp = true;
     }
 
@@ -38,8 +38,8 @@ export class UsersService {
     return { accessToken, refreshToken, isSignUp };
   }
 
-  async createUser(kakaoId: string, image: string) {
-    const user = this.userRepository.create({ kakaoId, image });
+  async createUser(kakaoId: string, picture: string) {
+    const user = this.userRepository.create({ kakaoId, image: picture });
     const response = await this.userRepository.save(user);
     return response;
   }
