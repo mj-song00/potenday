@@ -64,7 +64,9 @@ export class DiaryService {
       user,
       imageUrl: imageUrl.url,
     });
-    // console.log(createDiary);
+    console.log(createDiary);
+
+    console.log(await this.diaryRepository.save(createDiary));
     const diary = await this.diaryRepository.save(createDiary);
     return { result: 'success' };
   }
