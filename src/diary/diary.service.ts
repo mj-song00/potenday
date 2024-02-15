@@ -8,6 +8,7 @@ import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
 import { Image } from 'src/entity/image.entity';
+import fetch from 'node-fetch';
 @Injectable()
 export class DiaryService {
   constructor(
