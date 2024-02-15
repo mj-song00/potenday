@@ -40,4 +40,6 @@ jobs:
           script: |
             cd potenday
             git pull
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh    
             npm run build
