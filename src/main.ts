@@ -1,3 +1,4 @@
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
@@ -8,6 +9,7 @@ const httpsOptions = {
   cert: fs.readFileSync(
     '/etc/letsencrypt/live/picture-diary.site/fullchain.pem',
   ),
+  passphrase: process.env.PASS_KEY,
 };
 
 async function bootstrap() {
@@ -16,14 +18,15 @@ async function bootstrap() {
   });
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost:5173',
+    origin: '*',
   });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      transform: true,
     }),
   );
-
+  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(port);
 }
 bootstrap();
