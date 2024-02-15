@@ -40,4 +40,4 @@ jobs:
           script: |
             cd potenday
             git pull
-            npm run build --force
+            sudo npm run build
