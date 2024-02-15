@@ -42,3 +42,4 @@ jobs:
             git pull
             npm ci
             npm run build
+            nginx -s reload
