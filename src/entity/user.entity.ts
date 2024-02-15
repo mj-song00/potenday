@@ -18,7 +18,7 @@ export class UserEntity {
   @Column() //kakao ID
   kakaoId: string;
 
-  @Column() // 프로필 이미지
+  @Column({ nullable: true }) // 프로필 이미지
   image: string;
 
   @Column() // nickname (유저 변경가능 )
