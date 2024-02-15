@@ -62,8 +62,8 @@ export class DiaryController {
     @User() user: UserEntity,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('controller' + createDiaryDto);
-    return this.diaryService.createDiary(createDiaryDto, user, file);
+    console.log('controller', createDiaryDto);
+    // return this.diaryService.createDiary(createDiaryDto, user, file);
   }
 
   // 개별 다이어리 가져오기
