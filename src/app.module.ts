@@ -15,6 +15,8 @@ import { ImageModule } from './image/image.module';
 import { Image } from './entity/image.entity';
 import { ServiceModule } from './service/service.module';
 import { LikesModule } from './likes/likes.module';
+import { BookmarkModule } from './bookmark/bookmark.module';
+import { BookMark } from './entity/mark.entity';
 
 @Module({
   imports: [
@@ -29,7 +31,7 @@ import { LikesModule } from './likes/likes.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UserEntity, Diary, Emotion, Like, Image],
+      entities: [UserEntity, Diary, Emotion, Like, Image, BookMark],
       synchronize: true,
     }),
     DiaryModule,
@@ -39,6 +41,7 @@ import { LikesModule } from './likes/likes.module';
     S3Module,
     ServiceModule,
     LikesModule,
+    BookmarkModule,
   ],
   controllers: [AppController],
   providers: [AppService],

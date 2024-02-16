@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Image } from './image.entity';
 import { Like } from './like.entity';
+import { BookMark } from './mark.entity';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -53,4 +54,7 @@ export class Diary {
   @OneToOne(() => Image)
   @JoinTable()
   image: Image;
+
+  @OneToMany(() => BookMark, (bookmark) => bookmark.diary)
+  bookmarks: BookMark[];
 }

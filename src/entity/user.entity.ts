@@ -1,9 +1,11 @@
+import { BookMark } from 'src/entity/mark.entity';
 import { Diary } from 'src/entity/diary.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Emotion } from './emotion.like.entity';
@@ -41,4 +43,7 @@ export class UserEntity {
 
   @OneToMany(() => Emotion, (emotion) => emotion.user)
   emotion: Emotion[];
+
+  @OneToMany(() => BookMark, (bookmark) => bookmark.user)
+  bookmarks: BookMark[];
 }
