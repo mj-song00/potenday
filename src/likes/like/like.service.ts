@@ -53,4 +53,10 @@ export class LikeService {
       .getRawMany();
     return diarise;
   }
+
+  async getLikes(diaryId: number) {
+    const emotionsData = await this.diaryLikeRepository.find({
+      where: { diaryId },
+    });
+  }
 }

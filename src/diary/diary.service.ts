@@ -105,39 +105,51 @@ export class DiaryService {
 
   //개별 다이어리 가져오기
   async findOne(id: number) {
-    const diary = await this.diaryRepository.findOne({
-      where: {
-        id,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const diary = await this.diaryRepository
+      .createQueryBuilder('diary') // 다이어리를 기준으로 쿼리를 작성합니다.
+      .leftJoinAndSelect('diary.likes', 'like') // 다이어리와 좋아요를 조인합니다.
+      .select(['diary.*', 'COUNT(like.id) AS likeCount']) // 좋아요 갯수를 세기 위해 like.id를 COUNT합니다.
+      .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
+      .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
+      .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
+      .getRawOne(); // 결과를 하나만 가져옵니다.
+
+    if (!diary) {
+      throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
+    }
+
     return diary;
   }
 
   // type에 따른 다이어리 가져오기
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-  ): Promise<Diary[]> {
+  ): Promise<{ diary: Diary; likeCount: number }[]> {
+    let diaries: Diary[];
+    let diariesWithLikeCount: { diary: Diary; likeCount: number }[] = [];
+
     if (typeof isPublic === 'boolean') {
       if (isPublic) {
-        // 모든 사용자의 공개 다이어리를 가져오는 로직
-        return await this.diaryRepository.find({
+        diaries = await this.diaryRepository.find({
           where: { isPublic: true },
-          relations: { user: true },
+          relations: ['likes'],
         });
       } else {
-        // 비공개 다이어리는 가져오지 않음
         return [];
       }
     } else {
-      // FindOperator<boolean>인 경우에는 해당 조건을 그대로 사용
-      return await this.diaryRepository.find({
+      diaries = await this.diaryRepository.find({
         where: { isPublic },
-        relations: { user: true },
+        relations: ['likes'],
       });
     }
+
+    for (const diary of diaries) {
+      const likeCount = diary.likes.length;
+      diariesWithLikeCount.push({ diary, likeCount });
+    }
+
+    return diariesWithLikeCount;
   }
 
   //일기 수정
@@ -165,8 +177,13 @@ export class DiaryService {
   async findDiaries(user: UserEntity) {
     const diaries = await this.diaryRepository
       .createQueryBuilder('diary')
+      .leftJoinAndSelect('diary.likes', 'like') // 좋아요를 조인합니다.
       .where('diary.userId = :userId', { userId: user.id })
       .getMany();
-    return diaries;
+    const diariesWithLikeCount = diaries.map((diary) => ({
+      diary: diary,
+      likeCount: diary.likes.length,
+    }));
+    return diariesWithLikeCount;
   }
 }
