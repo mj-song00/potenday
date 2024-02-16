@@ -120,15 +120,23 @@ export class DiaryService {
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
   ): Promise<Diary[]> {
-    if (isPublic) {
-      // 모든 사용자의 공개 다이어리를 가져오는 로직
+    if (typeof isPublic === 'boolean') {
+      if (isPublic) {
+        // 모든 사용자의 공개 다이어리를 가져오는 로직
+        return await this.diaryRepository.find({
+          where: { isPublic: true },
+          relations: { user: true },
+        });
+      } else {
+        // 비공개 다이어리는 가져오지 않음
+        return [];
+      }
+    } else {
+      // FindOperator<boolean>인 경우에는 해당 조건을 그대로 사용
       return await this.diaryRepository.find({
-        where: { isPublic: true },
+        where: { isPublic },
         relations: { user: true },
       });
-    } else {
-      // 이 부분은 삭제하여 공개 다이어리가 아닌 경우는 가져오지 않도록 한다.
-      return [];
     }
   }
 
