@@ -15,7 +15,7 @@ export class likeController {
     return this.likeService.getDiaryLike(+diaryId, user);
   }
 
-  //  좋아요 많은 순으로 불러오기
+  //좋아요 많은 순으로 불러오기
   @Get('')
   @Roles(ROLE.USER)
   getByLike() {

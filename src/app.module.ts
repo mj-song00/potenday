@@ -9,13 +9,12 @@ import { Diary } from './entity/diary.entity';
 import { UserEntity } from './entity/user.entity';
 import { UsersModule } from './users/users.module';
 import { InjectAccountMiddleware } from './middlewares/InjectAccount.middleware';
-import { EmotionModule } from './likes/emotion/like/emotion.module';
-import { LikeModule } from './likes/like/like.module';
 import { Emotion } from './entity/emotion.like.entity';
 import { Like } from './entity/like.entity';
 import { ImageModule } from './image/image.module';
 import { Image } from './entity/image.entity';
 import { ServiceModule } from './service/service.module';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
@@ -36,11 +35,10 @@ import { ServiceModule } from './service/service.module';
     DiaryModule,
     UsersModule,
     TypeOrmModule.forFeature([UserEntity]),
-    EmotionModule,
-    LikeModule,
     ImageModule,
     S3Module,
     ServiceModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
