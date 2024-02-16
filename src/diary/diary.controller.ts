@@ -106,6 +106,4 @@ export class DiaryController {
   async diaries(@User() user: UserEntity) {
     return this.diaryService.findDiaries(user);
   }
-
-  // 좋아요 기능 설정
 }

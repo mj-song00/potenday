@@ -169,6 +169,4 @@ export class DiaryService {
       .getMany();
     return diaries;
   }
-
-  // 좋아요
 }
