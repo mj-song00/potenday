@@ -12,6 +12,8 @@ export class BookmarkService {
     @InjectRepository(BookMark)
     private bookmarkRepository: Repository<BookMark>,
   ) {}
+
+  //북마크 추가
   async save(diaryId: number, user: UserEntity) {
     const diary = await this.diaryRepository.findOne({
       where: { id: diaryId },
@@ -40,11 +42,21 @@ export class BookmarkService {
     }
   }
 
+  //북마크 불러오기
   async findAllBookmark(user: UserEntity) {
     const bookmarks = await this.bookmarkRepository.find({
       where: { user: { id: user.id } },
       relations: { diary: true },
     });
     return bookmarks;
+  }
+
+  //북마크 여부 확인
+  async check(diaryId: number, user: UserEntity) {
+    const isChecked = await this.bookmarkRepository.find({
+      where: { user: { id: user.id }, diaryId },
+    });
+    console.log(isChecked);
+    return isChecked.length !== 0;
   }
 }
