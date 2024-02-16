@@ -141,6 +141,7 @@ export class DiaryService {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
         relations: ['likes'],
+        order: { createdAt: 'DESC' },
       });
     }
 
