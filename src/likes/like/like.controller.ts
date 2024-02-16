@@ -9,15 +9,15 @@ import { LikeService } from './like.service';
 export class likeController {
   constructor(private likeService: LikeService) {}
 
-  @Roles(ROLE.USER)
   @Post('/:diaryId')
+  @Roles(ROLE.USER)
   like(@Param('diaryId') diaryId: string, @User() user: UserEntity) {
     return this.likeService.getDiaryLike(+diaryId, user);
   }
 
   //  좋아요 많은 순으로 불러오기
-  @Roles(ROLE.USER)
   @Get('')
+  @Roles(ROLE.USER)
   getByLike() {
     return this.likeService.getByLike();
   }

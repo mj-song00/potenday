@@ -113,10 +113,10 @@ export class UsersService {
   }
 
   async addInfo(infoDto: UpdateInfoDto, user: UserEntity) {
-    const { gender, birth } = infoDto;
+    const { gender, birth, nickname } = infoDto;
     const updateInfo = await this.userRepository.update(
       { id: user.id },
-      { gender, birth },
+      { gender, birth, nickname },
     );
     return { result: 'sucess' };
   }

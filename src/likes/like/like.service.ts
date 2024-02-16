@@ -13,6 +13,7 @@ export class LikeService {
   ) {}
 
   async getDiaryLike(diaryId: number, user: UserEntity) {
+    console.log(user);
     const diary = await this.diaryReposity.findOne({
       where: { id: diaryId },
     });

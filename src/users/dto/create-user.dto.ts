@@ -8,4 +8,5 @@ export class SignInKakaoDto {
 export class UpdateInfoDto {
   gender: string;
   birth: string;
+  nickname: string;
 }
