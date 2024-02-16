@@ -15,10 +15,10 @@ export class likeController {
     return this.likeService.getDiaryLike(+diaryId, user);
   }
 
-  //좋아요 많은 순으로 불러오기
-  // @Roles(ROLE.USER)
-  // @Get('')
-  // getByLike() {
-  //   return this.likeService.getByLike();
-  // }
+  //  좋아요 많은 순으로 불러오기
+  @Roles(ROLE.USER)
+  @Get('')
+  getByLike() {
+    return this.likeService.getByLike();
+  }
 }

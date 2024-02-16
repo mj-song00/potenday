@@ -41,16 +41,16 @@ export class LikeService {
   }
 
   //좋아요 많은 순으로 불러오기
-  //async getByLike() {
-  // const diarise = await this.diaryLikeRepository
-  //   .createQueryBuilder('like')
-  //   .innerJoin(Diary, 'diary', 'diary.id = like.diaryId')
-  //   .select('like.diaryId AS diaryId')
-  //   .addSelect('diary.*') // Select all columns from diary
-  //   .addSelect('COUNT(*) AS likeCount')
-  //   .groupBy('like.diaryId')
-  //   .orderBy('likeCount', 'DESC')
-  //   .getRawMany();
-  // return diarise;
-  //}
+  async getByLike() {
+    const diarise = await this.diaryLikeRepository
+      .createQueryBuilder('like')
+      .innerJoin(Diary, 'diary', 'diary.id = like.diaryId')
+      .select('like.diaryId AS diaryId')
+      .addSelect('diary.*') // Select all columns from diary
+      .addSelect('COUNT(*) AS likeCount')
+      .groupBy('like.diaryId')
+      .orderBy('likeCount', 'DESC')
+      .getRawMany();
+    return diarise;
+  }
 }
