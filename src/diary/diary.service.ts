@@ -133,7 +133,7 @@ export class DiaryService {
         diaries = await this.diaryRepository.find({
           where: { isPublic: true },
           relations: ['likes'],
-          order: { createdAt: 'ASC' },
+          order: { createdAt: 'DESC', id: 'DESC' },
         });
       } else {
         return [];
@@ -142,7 +142,7 @@ export class DiaryService {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
         relations: ['likes'],
-        order: { createdAt: 'ASC' },
+        order: { createdAt: 'DESC', id: 'DESC' },
       });
     }
 
