@@ -35,6 +35,7 @@
 TypeORM
 
 ## 서버 아키텍처 
-![스크린샷 2024-02-18 오후 4 10 05](https://github.com/mj-song00/potenday/assets/104669297/c5f5551e-d39b-459a-8e0c-c5ec5aefccff)
+![스크린샷 2024-02-18 오후 9 29 32](https://github.com/mj-song00/potenday/assets/104669297/54580b46-32be-496c-acb9-9c186d54af21)
+
 
 
