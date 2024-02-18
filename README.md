@@ -33,3 +33,8 @@
 <img src="https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white"> <img src="https://img.shields.io/badge/nodejs-339933?style=for-the-badge&logo=nodejs&logoColor=white"> <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescripts&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"> <br>
 TypeORM
+
+## 서버 아키텍처 
+![스크린샷 2024-02-18 오후 4 10 05](https://github.com/mj-song00/potenday/assets/104669297/c5f5551e-d39b-459a-8e0c-c5ec5aefccff)
+
+
