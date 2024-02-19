@@ -1,3 +1,4 @@
+import { JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -8,6 +9,6 @@ import { KakaoService } from 'src/service/kakao/kakao.service';
 @Module({
   imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UsersController],
-  providers: [UsersService, KakaoService],
+  providers: [UsersService, KakaoService, JwtService],
 })
 export class UsersModule {}

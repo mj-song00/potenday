@@ -1,4 +1,3 @@
-import { Diary } from './../entity/diary.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
@@ -8,6 +7,7 @@ import { KakaoService } from 'src/service/kakao/kakao.service';
 import { JwtPayload, sign } from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from './user.enum';
 import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +15,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
     private kakaoService: KakaoService,
+    private jwtService: JwtService,
   ) {}
 
   async signInKakao(signInKakaoDto: SignInKakaoDto) {
@@ -114,6 +115,25 @@ export class UsersService {
         default:
           throw e;
       }
+    }
+  }
+
+  async checkToken(accessToken: string): Promise<boolean> {
+    if (!accessToken) return;
+    try {
+      const decoded = await this.jwtService.verify(accessToken, {
+        secret: process.env.JWT_SECRET,
+      });
+      if (decoded) {
+        return true;
+      }
+    } catch (error) {
+      // 만료된 토큰인 경우 TokenExpiredError가 발생함
+      if (error.name === 'TokenExpiredError') {
+        return false;
+      }
+      // 그 외의 오류 처리
+      throw error;
     }
   }
 

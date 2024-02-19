@@ -48,6 +48,13 @@ export class UsersController {
     return { accessToken, refreshToken };
   }
 
+  //엑세스 토큰 확인
+  @Post('access-token')
+  @Roles(ROLE.USER)
+  async checkToken(@Query('accessToken') accessToken: string) {
+    return this.usersService.checkToken(accessToken);
+  }
+
   //유저 추가 정보
   @Patch('addInfo')
   @Roles(ROLE.USER)
