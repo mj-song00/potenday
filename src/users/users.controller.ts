@@ -30,10 +30,10 @@ export class UsersController {
       code,
       redirectUri,
     };
-    const { accessToken, refreshToken } = await this.usersService.signInKakao(
-      signInKakaoDto,
-    );
-    return { accessToken, refreshToken };
+    const { accessToken, refreshToken, isNewUser } =
+      await this.usersService.signInKakao(signInKakaoDto);
+
+    return { accessToken, refreshToken, isNewUser };
   }
 
   //리프레시 토큰

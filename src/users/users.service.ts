@@ -23,19 +23,24 @@ export class UsersService {
 
     const { kakaoId, picture } = await this.kakaoService.signIn(signInKakaoDto);
 
+    //카카오 id로 유저 찾기
     let user = await this.userRepository.findOne({
       where: { kakaoId },
     });
-    let isSignUp = false;
-    if (!user) {
+
+    let isNewUser = true;
+    if (user) {
+      // 유저가 이미 존재하는 경우
+      isNewUser = false;
+    } else {
+      // 유저가 없으면 DB에 유저 생성
       user = await this.createUser(kakaoId, picture);
-      isSignUp = true;
     }
 
     const accessToken = await this.createAccessToken(user);
     const refreshToken = await this.createRefreshToken(user);
 
-    return { accessToken, refreshToken, isSignUp };
+    return { accessToken, refreshToken, isNewUser };
   }
 
   async createUser(kakaoId: string, picture: string) {
