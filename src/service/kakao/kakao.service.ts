@@ -27,9 +27,9 @@ export class KakaoService {
 
     const tokens = await this.getTokens(code, redirectUri);
     const decodedToken = jwt.decode(tokens.id_token) as JwtPayload; // as 키워드를 사용하여 강제로 형변환
-    const { sub: kakaoId, picture } = decodedToken;
+    const { sub: kakaoId } = decodedToken;
 
-    return { kakaoId, picture };
+    return { kakaoId };
   }
 
   async getTokens(code: string, redirectUri: string): Promise<GetTokensData> {

@@ -1,3 +1,4 @@
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   Controller,
   Get,
@@ -7,7 +8,8 @@ import {
   Param,
   Delete,
   Query,
-  ConsoleLogger,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateInfoDto, SignInKakaoDto } from './dto/create-user.dto';
@@ -95,5 +97,16 @@ export class UsersController {
   @Roles(ROLE.USER)
   userLogout(@User() user: UserEntity) {
     return this.usersService.logout(user);
+  }
+
+  //이미지 사진 교체
+  @Post('profile-image')
+  @Roles(ROLE.USER)
+  @UseInterceptors(FileInterceptor('imageFile'))
+  changeImage(
+    @User() user: UserEntity,
+    @UploadedFile() imageFile: Express.Multer.File,
+  ) {
+    return this.usersService.changeImage(user, imageFile);
   }
 }

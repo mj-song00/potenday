@@ -8,6 +8,7 @@ import { JwtPayload, sign } from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from './user.enum';
 import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
+import { ImageService } from 'src/image/image.service';
 
 @Injectable()
 export class UsersService {
@@ -16,13 +17,14 @@ export class UsersService {
     private userRepository: Repository<UserEntity>,
     private kakaoService: KakaoService,
     private jwtService: JwtService,
+    private imageService: ImageService,
   ) {}
 
   async signInKakao(signInKakaoDto: SignInKakaoDto) {
     const { code, redirectUri } = signInKakaoDto;
     if (!code || !redirectUri) throw new Error('Bad Request');
 
-    const { kakaoId, picture } = await this.kakaoService.signIn(signInKakaoDto);
+    const { kakaoId } = await this.kakaoService.signIn(signInKakaoDto);
 
     //카카오 id로 유저 찾기
     let user = await this.userRepository.findOne({
@@ -35,7 +37,7 @@ export class UsersService {
       isNewUser = false;
     } else {
       // 유저가 없으면 DB에 유저 생성
-      user = await this.createUser(kakaoId, picture);
+      user = await this.createUser(kakaoId);
     }
 
     const accessToken = await this.createAccessToken(user);
@@ -44,8 +46,8 @@ export class UsersService {
     return { accessToken, refreshToken, isNewUser };
   }
 
-  async createUser(kakaoId: string, picture: string) {
-    const user = this.userRepository.create({ kakaoId, image: picture });
+  async createUser(kakaoId: string) {
+    const user = this.userRepository.create({ kakaoId });
 
     const response = await this.userRepository.save(user);
 
@@ -184,5 +186,12 @@ export class UsersService {
 
     const logout = await this.kakaoService.unlink(kakaoId);
     logout !== user.kakaoId ? new BadRequestException() : { result: 'success' };
+  }
+
+  async changeImage(user: UserEntity, file: Express.Multer.File) {
+    const image = await this.imageService.createImage(file);
+    const createImage = { ...user, image: image.url };
+    const profileImage = await this.userRepository.save(createImage);
+    return profileImage;
   }
 }

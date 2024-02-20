@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from 'src/entity/image.entity';
@@ -15,6 +14,7 @@ export class ImageService {
   ) {}
 
   async createImage(imageFile: Express.Multer.File) {
+    console.log(imageFile);
     const fileName = uuidv4();
     const ext = imageFile.originalname.split('.')[0];
     const key = `${fileName}.${ext}`;
@@ -28,12 +28,10 @@ export class ImageService {
     if (!isSuccess) throw new Error('IMAGE_UPLOAD_FAILED');
 
     const createImage = await this.imageRepository.save({
-
       key,
       url,
     });
-    
-    return createImage;
 
+    return createImage;
   }
 }
