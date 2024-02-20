@@ -37,5 +37,7 @@ TypeORM
 ## 서버 아키텍처 
 ![스크린샷 2024-02-18 오후 9 29 32](https://github.com/mj-song00/potenday/assets/104669297/54580b46-32be-496c-acb9-9c186d54af21)
 
+## API문서
+PostMan : https://documenter.getpostman.com/view/23879843/2s9YyvAKrW#a65a5013-4361-4831-9086-1b51fa7ef6d1
 
 
