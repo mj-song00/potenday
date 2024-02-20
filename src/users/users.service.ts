@@ -9,6 +9,7 @@ import { ROLE, TOKEN_TYPE } from './user.enum';
 import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 import { ImageService } from 'src/image/image.service';
+import { check } from 'prettier';
 
 @Injectable()
 export class UsersService {
@@ -166,20 +167,15 @@ export class UsersService {
     return user.nickname;
   }
 
-  async checkNickname(nickname: string, user: UserEntity) {
-    const userWithNickname = await this.userRepository.findOne({
+  async nicknameDuplication(nickname: string) {
+    const checkNickname = await this.userRepository.findOne({
       where: { nickname },
     });
-
-    if (userWithNickname) {
+    if (checkNickname) {
       throw new BadRequestException('duplication');
     } else {
-      const checkedNickname = await this.userRepository.update(
-        { id: user.id },
-        { nickname }, // nickname이 업데이트하려는 값인 경우
-      );
+      return { result: 'Available' };
     }
-    return { result: 'sucess' };
   }
   async logout(user: UserEntity) {
     const { kakaoId } = user;

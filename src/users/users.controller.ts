@@ -79,10 +79,10 @@ export class UsersController {
   }
 
   //닉네임 중복확인
-  @Patch('/:nickname')
+  @Get('nickname')
   @Roles(ROLE.USER)
-  getNickname(@Param('nickname') nickname: string, @User() user: UserEntity) {
-    return this.usersService.checkNickname(nickname, user);
+  getNickname(@Query('nickname') nickname: string) {
+    return this.usersService.nicknameDuplication(nickname);
   }
 
   // 유저 닉네임 불러오기
