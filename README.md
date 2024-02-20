@@ -3,6 +3,8 @@
 ## 개발기간
 2024.01.26 ~
 
+## 그림일기 <a href="https://drive.google.com/file/d/17UAvE-arVkpbm_UIOePQwC3Vvcc0n1ij/view?usp=sharing"> 기획 의도  </a>
+
 ## Architecture
 - 백엔드 웹 어플리케이션 서버는 Node.js와 Nest.js로 설계
 - Nginx에 SSL인증을 도입하여 보안강화 및 리버스 프록시 설정을 통해 백엔드 서버에 직접적인 접근을 차단
@@ -37,7 +39,7 @@ TypeORM
 ## 서버 아키텍처 
 ![스크린샷 2024-02-18 오후 9 29 32](https://github.com/mj-song00/potenday/assets/104669297/54580b46-32be-496c-acb9-9c186d54af21)
 
-## API문서
-PostMan : https://documenter.getpostman.com/view/23879843/2s9YyvAKrW#a65a5013-4361-4831-9086-1b51fa7ef6d1
+## <a href="https: https://documenter.getpostman.com/view/23879843/2s9YyvAKrW#a65a5013-4361-4831-9086-1b51fa7ef6d1"> API문서 </a>
+
 
 
