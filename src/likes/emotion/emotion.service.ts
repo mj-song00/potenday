@@ -1,4 +1,4 @@
-import { CreateEmotionDto } from './dto/emotion.dto';
+import { CreateEmotionDto, EmotionData } from './dto/emotion.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Emotion } from 'src/entity/emotion.like.entity';
@@ -52,11 +52,39 @@ export class EmotionService {
   }
 
   async chekcEmotions(diaryId: number, user: UserEntity) {
+    const emotionsData: EmotionData = {
+      좋아요: false,
+      괜찮아요: false,
+      슬퍼요: false,
+      화나요: false,
+      기뻐요: false,
+    };
+
     const emotions = await this.emotionRepository
       .createQueryBuilder('emotion')
-      .where('emotion.userId = :userId', { userId: user.id }) // 사용자 ID와 일치하는 감정을 가져오도록 수정
-      .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId }) // 다이어리 ID와 일치하는 감정을 가져오도록 수정
-      .getMany(); // 결과를 배열로 가져옵니다.
+      .where('emotion.userId = :userId', { userId: user.id })
+      .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
+      .getMany();
+
+    emotions.forEach((emotion) => {
+      switch (emotion.emotion) {
+        case '좋아요':
+          emotionsData.좋아요 = true;
+          break;
+        case '괜찮아요':
+          emotionsData.괜찮아요 = true;
+          break;
+        case '슬퍼요':
+          emotionsData.슬퍼요 = true;
+          break;
+        case '화나요':
+          emotionsData.화나요 = true;
+          break;
+        case '기뻐요':
+          emotionsData.기뻐요 = true;
+          break;
+      }
+    });
 
     return emotions;
   }
