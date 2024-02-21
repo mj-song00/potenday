@@ -57,8 +57,8 @@ export class LikeService {
   async checkLike(diaryId: number, user: UserEntity) {
     const isLike = await this.diaryLikeRepository
       .createQueryBuilder('like') // 좋아요 엔터티를 기준으로 쿼리를 작성합니다.
-      .where('like.userId = :userId', { id: user.id }) // 지정된 userId가 있는지 확인합니다.
-      .andWhere('like.diaryId = :diaryId', { diaryId }) // 지정된 diaryId가 있는지 확인합니다.
+      .where('like.userId = :userId', { userId: user.id }) // 지정된 userId가 있는지 확인합니다.
+      .andWhere('like.diaryId = :diaryId', { diaryId: diaryId }) // 지정된 diaryId가 있는지 확인합니다.
       .getCount(); // 결과의 개수를 가져옵니다.
 
     return !isLike ? 'checkable' : 'already checked';
