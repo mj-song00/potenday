@@ -51,22 +51,13 @@ export class EmotionService {
     }
   }
 
-  // async getEmotions(diaryId: number) {
-  //   const emotionsData = await this.emotionRepository.find({
-  //     where: { diaryId },
-  //   });
+  async chekcEmotions(diaryId: number, user: UserEntity) {
+    const emotions = await this.emotionRepository
+      .createQueryBuilder('emotion')
+      .where('emotion.userId = :userId', { userId: user.id }) // 사용자 ID와 일치하는 감정을 가져오도록 수정
+      .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId }) // 다이어리 ID와 일치하는 감정을 가져오도록 수정
+      .getMany(); // 결과를 배열로 가져옵니다.
 
-  //   const emotionCounts = {};
-
-  //   emotionsData.forEach((emotion) => {
-  //     const { emotion: emotionType } = emotion;
-  //     if (emotionCounts[emotionType]) {
-  //       emotionCounts[emotionType]++;
-  //     } else {
-  //       emotionCounts[emotionType] = 1;
-  //     }
-  //   });
-
-  //   return emotionCounts;
-  // }
+    return emotions;
+  }
 }

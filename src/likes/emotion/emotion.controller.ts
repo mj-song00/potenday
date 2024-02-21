@@ -21,10 +21,10 @@ export class EmotionController {
     return this.emotionService.getFineDiary(+diaryId, createEmotionDto, user);
   }
 
-  //다이어리 감정 불러오기
-  // @Roles(ROLE.USER)
-  // @Get('/:diaryId')
-  // getEmotions(@Param('diaryId') diaryId: string) {
-  //   return this.emotionService.getEmotions(+diaryId);
-  // }
+  //다이어리 감정 확인하기
+  @Roles(ROLE.USER)
+  @Get('/:diaryId')
+  chekEmotions(@Param('diaryId') diaryId: string, @User() user: UserEntity) {
+    return this.emotionService.chekcEmotions(+diaryId, user);
+  }
 }
