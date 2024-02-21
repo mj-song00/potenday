@@ -59,6 +59,6 @@ export class Diary {
   @OneToMany(() => BookMark, (bookmark) => bookmark.diary)
   bookmarks: BookMark[];
 
-  @OneToMany(() => Emotion, (emotions) => emotions.diaryId)
+  @OneToMany(() => Emotion, (emotions) => emotions.diary)
   emotions: Emotion[];
 }
