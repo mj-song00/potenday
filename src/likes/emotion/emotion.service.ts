@@ -52,7 +52,13 @@ export class EmotionService {
   }
 
   async chekcEmotions(diaryId: number, user: UserEntity) {
-    const emotionsData: EmotionData = {
+    const emotions = await this.emotionRepository
+      .createQueryBuilder('emotion')
+      .where('emotion.userId = :userId', { userId: user.id })
+      .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
+      .getMany();
+
+    const emotionsData: { [key: string]: boolean } = {
       좋아요: false,
       괜찮아요: false,
       슬퍼요: false,
@@ -60,30 +66,8 @@ export class EmotionService {
       기뻐요: false,
     };
 
-    const emotions = await this.emotionRepository
-      .createQueryBuilder('emotion')
-      .where('emotion.userId = :userId', { userId: user.id })
-      .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
-      .getMany();
-
     emotions.forEach((emotion) => {
-      switch (emotion.emotion) {
-        case '좋아요':
-          emotionsData.좋아요 = true;
-          break;
-        case '괜찮아요':
-          emotionsData.괜찮아요 = true;
-          break;
-        case '슬퍼요':
-          emotionsData.슬퍼요 = true;
-          break;
-        case '화나요':
-          emotionsData.화나요 = true;
-          break;
-        case '기뻐요':
-          emotionsData.기뻐요 = true;
-          break;
-      }
+      emotionsData[emotion.emotion] = true;
     });
 
     return emotions;
