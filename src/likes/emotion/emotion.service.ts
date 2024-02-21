@@ -54,7 +54,7 @@ export class EmotionService {
   async chekcEmotions(diaryId: number, user: UserEntity) {
     const emotions = await this.emotionRepository
       .createQueryBuilder('emotion')
-      .where('user.id = id', { id: user.id })
+      .where('emotion.userId = :userId', { id: user.id })
       .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
       .getMany();
     console.log(emotions);
