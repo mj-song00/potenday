@@ -51,22 +51,22 @@ export class EmotionService {
     }
   }
 
-  async getEmotions(diaryId: number) {
-    const emotionsData = await this.emotionRepository.find({
-      where: { diaryId },
-    });
+  // async getEmotions(diaryId: number) {
+  //   const emotionsData = await this.emotionRepository.find({
+  //     where: { diaryId },
+  //   });
 
-    const emotionCounts = {};
+  //   const emotionCounts = {};
 
-    emotionsData.forEach((emotion) => {
-      const { emotion: emotionType } = emotion;
-      if (emotionCounts[emotionType]) {
-        emotionCounts[emotionType]++;
-      } else {
-        emotionCounts[emotionType] = 1;
-      }
-    });
+  //   emotionsData.forEach((emotion) => {
+  //     const { emotion: emotionType } = emotion;
+  //     if (emotionCounts[emotionType]) {
+  //       emotionCounts[emotionType]++;
+  //     } else {
+  //       emotionCounts[emotionType] = 1;
+  //     }
+  //   });
 
-    return emotionCounts;
-  }
+  //   return emotionCounts;
+  // }
 }

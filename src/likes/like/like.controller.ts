@@ -21,4 +21,11 @@ export class likeController {
   getByLike() {
     return this.likeService.getByLike();
   }
+
+  //좋아요 여부 확인
+  @Get('/:diaryId')
+  @Roles(ROLE.USER)
+  checkLike(@Param('diaryId') diaryId: string, @User() user: UserEntity) {
+    return this.likeService.checkLike(+diaryId, user);
+  }
 }
