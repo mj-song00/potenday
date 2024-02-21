@@ -52,13 +52,11 @@ export class EmotionService {
   }
 
   async chekcEmotions(diaryId: number, user: UserEntity) {
-    const userIdNumber: number = parseInt(user.id, 10);
-    const emotions = await this.emotionRepository.find({
-      where: {
-        userId: userIdNumber,
-        diaryId: diaryId,
-      },
-    });
+    const emotions = await this.emotionRepository
+      .createQueryBuilder('emotion')
+      .where('user.id = id', { id: user.id })
+      .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
+      .getMany();
     console.log(emotions);
 
     // 감정을 나타내는 속성과 해당하는 boolean 값을 설정하기 위한 객체를 정의합니다.
