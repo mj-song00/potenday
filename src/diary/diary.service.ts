@@ -110,6 +110,9 @@ export class DiaryService {
       .leftJoinAndSelect('diary.likes', 'like') // 다이어리와 좋아요를 조인합니다.
       .select(['diary.*', 'COUNT(like.id) AS likeCount']) // 좋아요 갯수를 세기 위해 like.id를 COUNT합니다.
       .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
+      .leftJoinAndSelect('diary.emotions', 'emotion')
+      .select(['diary.*', 'COUNT(emotions.id) AS emotionCount'])
+      .where('diary.id = :id', { id })
       .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
       .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
       .getRawOne(); // 결과를 하나만 가져옵니다.

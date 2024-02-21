@@ -8,6 +8,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Emotion } from './emotion.like.entity';
 import { Image } from './image.entity';
 import { Like } from './like.entity';
 import { BookMark } from './mark.entity';
@@ -57,4 +58,7 @@ export class Diary {
 
   @OneToMany(() => BookMark, (bookmark) => bookmark.diary)
   bookmarks: BookMark[];
+
+  @OneToMany(() => Emotion, (emotions) => emotions.diaryId)
+  emotions: Emotion[];
 }

@@ -8,6 +8,7 @@ import {
   TableInheritance,
   UpdateDateColumn,
 } from 'typeorm';
+import { Diary } from './diary.entity';
 import { UserEntity } from './user.entity';
 
 //일기 감정
@@ -31,4 +32,7 @@ export class Emotion {
 
   @ManyToOne(() => UserEntity, (user) => user.emotion)
   user: UserEntity;
+
+  @ManyToOne(() => Diary, (diaries) => diaries.emotion)
+  diary: Diary;
 }
