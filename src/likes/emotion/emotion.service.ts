@@ -58,6 +58,7 @@ export class EmotionService {
       .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
       .getMany();
 
+    // 감정을 나타내는 속성과 해당하는 boolean 값을 설정하기 위한 객체를 정의합니다.
     const emotionsData: { [key: string]: boolean } = {
       좋아요: false,
       괜찮아요: false,
@@ -66,11 +67,11 @@ export class EmotionService {
       기뻐요: false,
     };
 
+    // 주어진 데이터의 감정 값을 설정합니다.
     emotions.forEach((emotion) => {
-      const emotionType = emotion.emotion;
-      emotionsData[emotionType] = true;
+      emotionsData[emotion.emotion] = true;
     });
 
-    return emotions;
+    return emotionsData;
   }
 }
