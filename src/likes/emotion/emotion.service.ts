@@ -56,7 +56,8 @@ export class EmotionService {
       .createQueryBuilder('emotion')
       .where('emotion.userId = :userId', { userId: user.id })
       .andWhere('emotion.diaryId = :diaryId', { diaryId: diaryId })
-      .getRawMany();
+      .getMany();
+    console.log(emotions);
 
     // 감정을 나타내는 속성과 해당하는 boolean 값을 설정하기 위한 객체를 정의합니다.
     const emotionsData: { [key: string]: boolean } = {
