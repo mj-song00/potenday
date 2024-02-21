@@ -67,7 +67,8 @@ export class EmotionService {
     };
 
     emotions.forEach((emotion) => {
-      emotionsData[emotion.emotion] = true;
+      const emotionType = emotion.emotion;
+      emotionsData[emotionType] = true;
     });
 
     return emotions;
