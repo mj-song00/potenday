@@ -25,6 +25,6 @@ export class EmotionController {
   @Roles(ROLE.USER)
   @Get('/:diaryId')
   chekEmotions(@Param('diaryId') diaryId: string, @User() user: UserEntity) {
-    return this.emotionService.chekcEmotions(+diaryId, user);
+    return this.emotionService.checkEmotions(+diaryId, user);
   }
 }
