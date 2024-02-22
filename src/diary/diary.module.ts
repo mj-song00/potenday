@@ -9,7 +9,7 @@ import { PapagoService } from 'src/service/papgo/papago.service';
 import { Diary } from '../entity/diary.entity';
 import { ImageService } from 'src/image/image.service';
 import { S3Service } from 'src/s3/s3.service';
-import { Image } from 'src/entity/image.entity';
+import { Emotion } from 'src/entity/emotion.like.entity';
 
 @Module({
   controllers: [DiaryController],
@@ -20,7 +20,10 @@ import { Image } from 'src/entity/image.entity';
     ImageService,
     S3Service,
   ],
-  imports: [TypeOrmModule.forFeature([Diary, UserEntity, Image]), ImageModule],
+  imports: [
+    TypeOrmModule.forFeature([Diary, UserEntity, Emotion]),
+    ImageModule,
+  ],
   exports: [TypeOrmModule], //추가
 })
 export class DiaryModule {}

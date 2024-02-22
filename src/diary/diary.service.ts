@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
-import { Image } from 'src/entity/image.entity';
 import axios from 'axios';
 import { Emotion } from 'src/entity/emotion.like.entity';
 
@@ -16,8 +15,8 @@ export class DiaryService {
   constructor(
     @InjectRepository(Diary)
     private diaryRepository: Repository<Diary>,
-    @InjectRepository(Image)
-    private imageRepository: Repository<Image>,
+    @InjectRepository(Emotion)
+    private emotionRepository: Repository<Emotion>,
     private readonly kalroService: KalroService,
     private readonly papagoService: PapagoService,
     private readonly imageService: ImageService,
@@ -164,14 +163,18 @@ export class DiaryService {
         });
       }
 
-      // 계산된 likeCount를 기준으로 내림차순으로 정렬
-      diaries.sort((a, b) => b.likes.length - a.likes.length);
+      const diariesWithCount = await Promise.all(
+        diaries.map(async (diary) => {
+          const likeCount = diary.likes.length;
+          const emotionCount = await this.emotionRepository.count({
+            where: { diary },
+          });
+          return { diary, likeCount, emotionCount };
+        }),
+      );
 
-      // { diary: Diary, likeCount: number } 형태로 변환
-      const diariesWithLikeCount = diaries.map((diary) => ({
-        diary,
-        likeCount: diary.likes.length,
-      }));
+      // 계산된 likeCount를 기준으로 내림차순으로 정렬
+      diariesWithCount.sort((a, b) => b.likeCount - a.likeCount);
 
       return diariesWithLikeCount;
     }
