@@ -9,7 +9,7 @@ import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
 import { Image } from 'src/entity/image.entity';
 import axios from 'axios';
-import { EmotionCounts } from 'src/likes/emotion/dto/emotion.dto';
+import { Emotion } from 'src/entity/emotion.like.entity';
 
 @Injectable()
 export class DiaryService {
@@ -146,21 +146,19 @@ export class DiaryService {
   // type에 따른 다이어리 가져오기
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-  ): Promise<
-    { diary: Diary; likeCount: number; emotionCounts: EmotionCounts }[]
-  > {
+  ): Promise<{ diary: Diary; likeCount: number; emotions: Emotion[] }[]> {
     let diaries: Diary[];
-    let diariesWithLikeAndEmotionCounts: {
+    let diariesWithLikeAndEmotions: {
       diary: Diary;
       likeCount: number;
-      emotionCounts: EmotionCounts;
+      emotions: Emotion[];
     }[] = [];
 
     if (typeof isPublic === 'boolean') {
       if (isPublic) {
         diaries = await this.diaryRepository.find({
           where: { isPublic: true },
-          relations: ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기쁘세요'],
+          relations: ['likes', 'emotions'],
           order: { createdAt: 'DESC', id: 'DESC' },
         });
       } else {
@@ -169,39 +167,18 @@ export class DiaryService {
     } else {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
-        relations: ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'],
+        relations: ['likes', 'emotions'],
         order: { createdAt: 'DESC', id: 'DESC' },
       });
     }
 
     for (const diary of diaries) {
       const likeCount = diary.likes.length;
-      const emotionCounts: EmotionCounts = {
-        좋아요: diary.좋아요.length,
-        슬퍼요: diary.슬퍼요.length,
-        괜찮아요: diary.괜찮아요.length,
-        화나요: diary.화나요.length,
-        기뻐요: diary.기뻐요.length,
-      };
-      diariesWithLikeAndEmotionCounts.push({ diary, likeCount, emotionCounts });
+      const emotions = diary.emotions; // 다이어리의 감정들을 가져옵니다.
+      diariesWithLikeAndEmotions.push({ diary, likeCount, emotions });
     }
 
-    return diariesWithLikeAndEmotionCounts;
-  }
-
-  //일기 수정
-  async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
-    const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
-    const updateDiary = await this.diaryRepository.update(id, {
-      contents: text,
-      //image: imageUrl,
-      date,
-      emotion,
-      weather,
-      isWrite,
-      isPublic,
-    });
-    return { result: 'sucess' };
+    return diariesWithLikeAndEmotions;
   }
 
   //일기 삭제
