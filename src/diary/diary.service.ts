@@ -177,7 +177,7 @@ export class DiaryService {
     // totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
       // totalCount가 0인 경우는 뒤로 정렬
-      if (a.totalCount === 0 || b.totalCount === 0) {
+      if (a.totalCount === 0 && b.totalCount === 0) {
         return b.totalCount - a.totalCount;
       } else {
         // totalCount가 0이 아닌 경우
