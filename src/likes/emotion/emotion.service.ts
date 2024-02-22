@@ -1,4 +1,4 @@
-import { CreateEmotionDto, EmotionData } from './dto/emotion.dto';
+import { CreateEmotionDto } from './dto/emotion.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Emotion } from 'src/entity/emotion.like.entity';

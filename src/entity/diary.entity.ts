@@ -61,4 +61,9 @@ export class Diary {
 
   @OneToMany(() => Emotion, (emotions) => emotions.diary)
   emotions: Emotion[];
+  좋아요: any;
+  슬퍼요: any;
+  괜찮아요: any;
+  화나요: any;
+  기뻐요: any;
 }

@@ -9,6 +9,7 @@ import { UserEntity } from 'src/entity/user.entity';
 import { ImageService } from 'src/image/image.service';
 import { Image } from 'src/entity/image.entity';
 import axios from 'axios';
+import { EmotionCounts } from 'src/likes/emotion/dto/emotion.dto';
 
 @Injectable()
 export class DiaryService {
@@ -145,15 +146,21 @@ export class DiaryService {
   // type에 따른 다이어리 가져오기
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-  ): Promise<{ diary: Diary; likeCount: number }[]> {
+  ): Promise<
+    { diary: Diary; likeCount: number; emotionCounts: EmotionCounts }[]
+  > {
     let diaries: Diary[];
-    let diariesWithLikeCount: { diary: Diary; likeCount: number }[] = [];
+    let diariesWithLikeAndEmotionCounts: {
+      diary: Diary;
+      likeCount: number;
+      emotionCounts: EmotionCounts;
+    }[] = [];
 
     if (typeof isPublic === 'boolean') {
       if (isPublic) {
         diaries = await this.diaryRepository.find({
           where: { isPublic: true },
-          relations: ['likes'],
+          relations: ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기쁘세요'],
           order: { createdAt: 'DESC', id: 'DESC' },
         });
       } else {
@@ -162,17 +169,24 @@ export class DiaryService {
     } else {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
-        relations: ['likes'],
+        relations: ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'],
         order: { createdAt: 'DESC', id: 'DESC' },
       });
     }
 
     for (const diary of diaries) {
       const likeCount = diary.likes.length;
-      diariesWithLikeCount.push({ diary, likeCount });
+      const emotionCounts: EmotionCounts = {
+        좋아요: diary.좋아요.length,
+        슬퍼요: diary.슬퍼요.length,
+        괜찮아요: diary.괜찮아요.length,
+        화나요: diary.화나요.length,
+        기뻐요: diary.기뻐요.length,
+      };
+      diariesWithLikeAndEmotionCounts.push({ diary, likeCount, emotionCounts });
     }
 
-    return diariesWithLikeCount;
+    return diariesWithLikeAndEmotionCounts;
   }
 
   //일기 수정
