@@ -174,11 +174,23 @@ export class DiaryService {
 
     for (const diary of diaries) {
       const likeCount = diary.likes.length;
-      const emotions = diary.emotions; // 다이어리의 감정들을 가져옵니다.
-      diariesWithLikeAndEmotions.push({ diary, likeCount, emotions });
-    }
+      const emotions = diary.emotions; // 다이어리의 감정들을 문자열로 변환합니다.
+      const emotionCounts = {
+        좋아요: 0,
+        기쁘요: 0,
+        괜찮아요: 0,
+        슬퍼요: 0,
+        화나요: 0,
+      }; // 각 감정 종류별로 숫자를 저장할 객체
 
-    return diariesWithLikeAndEmotions;
+      for (const diary of diaries) {
+        const likeCount = diary.likes.length;
+        const emotions: Emotion[] = diary.emotions; // 다이어리의 감정들을 가져옵니다.
+        diariesWithLikeAndEmotions.push({ diary, likeCount, emotions });
+      }
+
+      return diariesWithLikeAndEmotions;
+    }
   }
 
   //일기 수정
