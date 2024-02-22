@@ -156,34 +156,21 @@ export class DiaryService {
       .where({ isPublic })
       .leftJoinAndSelect('diary.likes', 'like')
       .leftJoinAndSelect('diary.emotions', 'emotion')
+      .addSelect('COUNT(like.id)', 'likeCount') // 좋아요 수 카운트
+      .addGroupBy('diary.id') // 다이어리 ID로 그룹화
+      .orderBy('likeCount', 'DESC') // likeCount에 따라 내림차순 정렬
+      .addOrderBy('totalCount', 'DESC') // totalCount에 따라 내림차순 정렬
+      .addOrderBy('emotions', 'DESC') // emotions의 감정 수에 따라 내림차순 정렬
       .skip(offset) // 오프셋 적용
       .take(pageSize); // 페이지 크기 적용
-
-    // 총 항목 수 쿼리
-    const totalCountQuery = this.diaryRepository
-      .createQueryBuilder('diary')
-      .where({ isPublic })
-      .getCount();
-
-    // 총 항목 수 조회
-    const totalCount = await totalCountQuery;
-
-    // 결과 조회
-    const diaries = await queryBuilder.getMany();
+    const diaries = await queryBuilder.getRawMany();
 
     // 결과 가공
     const diariesWithCount = diaries.map((diary) => {
-      // 좋아요 수 계산
-      const likeCount = diary.likes.length;
-      // 감정 수 계산
-      const emotionCount = diary.emotions.length;
-
-      // totalCount 계산 (좋아요 수 + 감정 수)
-      const totalCount = likeCount + emotionCount;
-
+      // diary를 직접 할당
       return {
         diary,
-        totalCount,
+        totalCount: diary.likeCount + diary.emotions.length, // totalCount 계산
       };
     });
 
