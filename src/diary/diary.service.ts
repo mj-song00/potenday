@@ -147,7 +147,6 @@ export class DiaryService {
 
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-    diaryRepository: Repository<Diary>,
   ): Promise<{ diary: Diary; likeCount: number; emotions: Emotion[] }[]> {
     let diaries: Diary[];
     let diariesWithLikeAndEmotions: {
