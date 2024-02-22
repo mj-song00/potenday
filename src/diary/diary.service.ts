@@ -181,6 +181,21 @@ export class DiaryService {
     return diariesWithLikeAndEmotions;
   }
 
+  //일기 수정
+  async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
+    const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
+    const updateDiary = await this.diaryRepository.update(id, {
+      contents: text,
+      //image: imageUrl,
+      date,
+      emotion,
+      weather,
+      isWrite,
+      isPublic,
+    });
+    return { result: 'sucess' };
+  }
+
   //일기 삭제
   async deleteDiary(id: number) {
     const diary = await this.diaryRepository.delete(id);
