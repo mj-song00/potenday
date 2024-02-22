@@ -147,56 +147,34 @@ export class DiaryService {
 
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-  ): Promise<{ diary: Diary; likeCount: number; emotions: Emotion[] }[]> {
-    let diaries: { diary: Diary; likeCount: number }[];
+  ): Promise<{ diary: Diary; likeCount: number }[]> {
+    let diaries: Diary[];
+    let diariesWithLikeCount: { diary: Diary; likeCount: number }[] = [];
 
     if (typeof isPublic === 'boolean') {
       if (isPublic) {
-        diaries = await this.diaryRepository
-          .createQueryBuilder('diary')
-          .leftJoin('diary.likes', 'like')
-          .leftJoinAndSelect('diary.emotions', 'emotion')
-          .where('diary.isPublic = :isPublic', { isPublic: true })
-          .select(['diary', 'COUNT(like.id) AS likeCount'])
-          .groupBy('diary.id')
-          .orderBy('likeCount', 'DESC')
-          .addOrderBy('diary.createdAt', 'DESC')
-          .addOrderBy('diary.id', 'DESC')
-          .getRawMany();
+        diaries = await this.diaryRepository.find({
+          where: { isPublic: true },
+          relations: ['likes'],
+        });
       } else {
-        return [];
+        diaries = await this.diaryRepository.find({
+          where: { isPublic },
+          relations: ['likes'],
+        });
       }
-    } else {
-      diaries = await this.diaryRepository
-        .createQueryBuilder('diary')
-        .leftJoin('diary.likes', 'like')
-        .leftJoinAndSelect('diary.emotions', 'emotion')
-        .where('diary.isPublic = :isPublic', { isPublic })
-        .select(['diary', 'COUNT(like.id) AS likeCount'])
-        .groupBy('diary.id')
-        .orderBy('likeCount', 'DESC')
-        .addOrderBy('diary.createdAt', 'DESC')
-        .addOrderBy('diary.id', 'DESC')
-        .getRawMany();
+
+      // 계산된 likeCount를 기준으로 내림차순으로 정렬
+      diaries.sort((a, b) => b.likes.length - a.likes.length);
+
+      // { diary: Diary, likeCount: number } 형태로 변환
+      const diariesWithLikeCount = diaries.map((diary) => ({
+        diary,
+        likeCount: diary.likes.length,
+      }));
+
+      return diariesWithLikeCount;
     }
-
-    const diariesWithLikeAndEmotionsPromises = diaries.map(
-      async ({ diary, likeCount }) => {
-        if (!diary) return null; // diary 객체가 존재하지 않으면 null 반환
-        const emotions = await this.diaryRepository
-          .createQueryBuilder('diary')
-          .relation('diary.emotions')
-          .of(diary.id)
-          .loadMany();
-        return { diary, likeCount, emotions };
-      },
-    );
-
-    const diariesWithLikeAndEmotions = await Promise.all(
-      diariesWithLikeAndEmotionsPromises,
-    );
-
-    return diariesWithLikeAndEmotions;
   }
 
   //일기 수정
