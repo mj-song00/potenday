@@ -138,6 +138,15 @@ export class DiaryService {
     if (!diary) {
       throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
     }
+    const total = Object.values(diary).reduce((acc: number, cur: unknown) => {
+      if (typeof cur === 'string' && !isNaN(parseInt(cur as string))) {
+        return acc + parseInt(cur as string);
+      }
+      return acc;
+    }, 0);
+
+    // 총합을 diary 객체에 추가합니다.
+    diary.totalCount = total;
 
     return diary;
   }
