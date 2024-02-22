@@ -129,7 +129,16 @@ export class DiaryService {
       .addSelect(
         'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
         '기뻐요',
-      ) // 감정 중 "슬퍼요"인 경우 카운트합니다.
+      ) // 감정 중 "기뻐요"인 경우 카운트합니다.
+      .addSelect(
+        'COUNT(like.id) + ' +
+          'SUM(CASE WHEN emotion.emotion = "좋아요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "슬퍼요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "괜찮아요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "화나요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
+        'totalCount',
+      ) // totalCount를 계산합니다.
       .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
       .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
       .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
@@ -139,6 +148,7 @@ export class DiaryService {
       throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
     }
 
+    return diary;
     return diary;
   }
 
