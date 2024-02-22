@@ -143,7 +143,6 @@ export class DiaryService {
   }
 
   // type에 따른 다이어리 가져오기
-
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
     page: number = 1,
@@ -174,7 +173,7 @@ export class DiaryService {
 
     const diariesWithCount = diaries.map((diary) => ({
       diary,
-      totalCount,
+      totalCount, // 각 다이어리에 대한 totalCount가 아니라, 해당 페이지의 전체 항목 수로 설정
     }));
 
     return diariesWithCount;
