@@ -111,9 +111,25 @@ export class DiaryService {
       .leftJoinAndSelect('diary.emotions', 'emotion') // 다이어리와 감정을 조인합니다.
       .addSelect('COUNT(like.id)', 'likeCount') // 좋아요의 개수를 COUNT하여 likeCount로 선택합니다.
       .addSelect(
-        'SUM(CASE WHEN emotion.emotion IN ("좋아요", "슬퍼요", "괜찮아요", "화나요", "기뻐요") THEN 1 ELSE 0 END)',
-        'totalCount',
-      ) // 좋아요와 감정의 총 수를 구합니다.
+        'SUM(CASE WHEN emotion.emotion = "좋아요" THEN 1 ELSE 0 END)',
+        '좋아요',
+      ) // 감정 중 "좋아요"인 경우 카운트합니다.
+      .addSelect(
+        'SUM(CASE WHEN emotion.emotion = "슬퍼요" THEN 1 ELSE 0 END)',
+        '슬퍼요',
+      ) // 감정 중 "슬퍼요"인 경우 카운트합니다.
+      .addSelect(
+        'SUM(CASE WHEN emotion.emotion = "괜찮아요" THEN 1 ELSE 0 END)',
+        '괜찮아요',
+      ) // 감정 중 "괜찮아요"인 경우 카운트합니다.
+      .addSelect(
+        'SUM(CASE WHEN emotion.emotion = "화나요" THEN 1 ELSE 0 END)',
+        '화나요',
+      ) // 감정 중 "화나요"인 경우 카운트합니다.
+      .addSelect(
+        'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
+        '기뻐요',
+      ) // 감정 중 "기뻐요"인 경우 카운트합니다.
       .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
       .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
       .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
