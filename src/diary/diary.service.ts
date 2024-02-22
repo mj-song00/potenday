@@ -146,12 +146,12 @@ export class DiaryService {
 
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-  ): Promise<{ diary: Diary; likeCount: number }[]> {
+  ): Promise<{ diary: Diary; likeCount: number; emotionCount: number }[]> {
     let diaries: Diary[];
 
     if (typeof isPublic === 'boolean') {
       diaries = await this.diaryRepository.find({
-        where: { isPublic: isPublic },
+        where: { isPublic },
         relations: ['likes', 'emotions'],
       });
     } else {
@@ -164,15 +164,32 @@ export class DiaryService {
     const diariesWithCount = await Promise.all(
       diaries.map(async (diary) => {
         const likeCount = diary.likes.length;
-        const emotionCount = await this.emotionRepository.count({
-          where: { diary },
+        let emotionCount = 0;
+
+        diary.emotions.forEach((emotion) => {
+          // 감정을 문자열로 표현했을 때의 각각의 경우를 비교합니다.
+          const parsedEmotion = emotion.parseEmotion();
+          emotionCount +=
+            (parsedEmotion['좋아요'] ? 5 : 0) +
+            (parsedEmotion['슬퍼요'] ? 4 : 0) +
+            (parsedEmotion['괜찮아요'] ? 3 : 0) +
+            (parsedEmotion['화나요'] ? 2 : 0) +
+            (parsedEmotion['기뻐요'] ? 1 : 0);
         });
+
         return { diary, likeCount, emotionCount };
       }),
     );
 
-    // 계산된 likeCount를 기준으로 내림차순으로 정렬
-    diariesWithCount.sort((a, b) => b.likeCount - a.likeCount);
+    // 1차적으로 likeCount를 기준으로 내림차순으로 정렬,
+    // 2차적으로는 emotionCount를 기준으로 내림차순으로 정렬
+    diariesWithCount.sort((a, b) => {
+      if (b.likeCount !== a.likeCount) {
+        return b.likeCount - a.likeCount;
+      } else {
+        return b.emotionCount - a.emotionCount;
+      }
+    });
 
     return diariesWithCount;
   }
