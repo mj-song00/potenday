@@ -104,7 +104,12 @@ export class DiaryService {
   }
 
   //개별 다이어리 가져오기
-  async findOne(id: number) {
+  async findOne(id: number, page: number, pageSize: number) {
+    const offset = (page - 1) * pageSize; // 오프셋 계산
+    const totalCountQuery = this.diaryRepository
+      .createQueryBuilder('diary') // 다이어리를 기준으로 쿼리를 작성합니다.
+      .select('COUNT(diary.id)', 'totalCount'); // 다이어리의 총 개수를 세기 위한 쿼리
+
     const diary = await this.diaryRepository
       .createQueryBuilder('diary') // 다이어리를 기준으로 쿼리를 작성합니다.
       .leftJoinAndSelect('diary.likes', 'like') // 다이어리와 좋아요를 조인합니다.

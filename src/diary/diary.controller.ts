@@ -9,6 +9,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -68,8 +69,12 @@ export class DiaryController {
   // 개별 다이어리 가져오기
   @Get('/get-diary/:id')
   @Roles(ROLE.USER)
-  async getDiary(@Param('id') id: string) {
-    return this.diaryService.findOne(+id);
+  async getDiary(
+    @Param('id') id: string,
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    return this.diaryService.findOne(+id, +page, +pageSize);
   }
 
   // type 1인 diary가 public
