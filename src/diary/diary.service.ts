@@ -183,8 +183,6 @@ export class DiaryService {
     });
 
     return diariesWithCount;
-
-    return diariesWithCount;
   }
 
   //일기 수정
