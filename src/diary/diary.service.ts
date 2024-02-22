@@ -130,23 +130,22 @@ export class DiaryService {
         'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
         '기뻐요',
       ) // 감정 중 "기뻐요"인 경우 카운트합니다.
+      .addSelect(
+        'COUNT(like.id) + ' +
+          'SUM(CASE WHEN emotion.emotion = "좋아요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "슬퍼요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "괜찮아요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "화나요" THEN 1 ELSE 0 END) + ' +
+          'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
+        'totalCount',
+      ) // totalCount를 계산합니다.
       .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
       .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
       .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
       .getRawOne(); // 결과를 하나만 가져옵니다.
-
     if (!diary) {
       throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
     }
-    const total = Object.values(diary).reduce((acc: number, cur: unknown) => {
-      if (typeof cur === 'string' && !isNaN(parseInt(cur as string))) {
-        return acc + parseInt(cur as string);
-      }
-      return acc;
-    }, 0);
-
-    // 총합을 diary 객체에 추가합니다.
-    diary.totalCount = total;
 
     return diary;
   }
