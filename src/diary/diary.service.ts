@@ -176,10 +176,17 @@ export class DiaryService {
 
     // totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
+      // totalCount를 기준으로 내림차순으로 정렬
       if (b.totalCount !== a.totalCount) {
-        return b.totalCount - a.totalCount; // likeCount가 많은 순으로 정렬
+        return b.totalCount - a.totalCount;
       } else {
-        return b.diary.emotions.length - a.diary.emotions.length; // likeCount가 같을 경우 emotions의 갯수가 많은 순서대로 정렬
+        // totalCount가 같은 경우 likeCount를 비교
+        if (b.diary.likes.length !== a.diary.likes.length) {
+          return b.diary.likes.length - a.diary.likes.length;
+        } else {
+          // likeCount도 같은 경우 emotions의 갯수를 비교하여 정렬
+          return b.diary.emotions.length - a.diary.emotions.length;
+        }
       }
     });
 
