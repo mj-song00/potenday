@@ -157,39 +157,39 @@ export class DiaryService {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
         relations: ['likes', 'emotions'],
-        skip: offset, // 오프셋 설정
-        take: pageSize, // 페이지 크기 설정
+        skip: offset,
+        take: pageSize,
       });
     } else {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
         relations: ['likes', 'emotions'],
-        skip: offset, // 오프셋 설정
-        take: pageSize, // 페이지 크기 설정
+        skip: offset,
+        take: pageSize,
       });
     }
 
     const diariesWithCount = await Promise.all(
       diaries.map(async (diary) => {
         const likeCount = diary.likes.length;
-        const emotionCount = diary.emotions.filter((emotion) =>
-          ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
-            emotion.emotion,
-          ),
-        ).length;
+        const emotionCount = diary.emotions.length;
 
-        // likeCount와 emotionCount를 합쳐서 totalCount로 계산합니다.
-        const totalCount = likeCount + emotionCount;
-
-        // totalCount를 반환합니다.
-        return { diary, totalCount };
+        return { diary, likeCount, emotionCount };
       }),
     );
 
-    // totalCount를 기준으로 내림차순으로 정렬합니다.
-    diariesWithCount.sort((a, b) => b.totalCount - a.totalCount);
+    // likeCount를 우선으로, 그 다음에 emotionCount를 기준으로 내림차순으로 정렬합니다.
+    diariesWithCount.sort((a, b) => {
+      if (b.likeCount !== a.likeCount) {
+        return b.likeCount - a.likeCount;
+      }
+      return b.emotionCount - a.emotionCount;
+    });
 
-    return diariesWithCount;
+    return diariesWithCount.map(({ diary, likeCount, emotionCount }) => ({
+      diary,
+      totalCount: likeCount + emotionCount,
+    }));
   }
 
   //일기 수정
