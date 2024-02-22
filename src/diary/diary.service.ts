@@ -146,45 +146,36 @@ export class DiaryService {
 
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-  ): Promise<{ diary: Diary; likeCount: number; emotionCount: number }[]> {
+    page: number = 1,
+  ): Promise<{ diary: Diary; totalCount: number }[]> {
+    const itemsPerPage = 10; // 페이지당 항목 수
+
     let diaries: Diary[];
 
     if (typeof isPublic === 'boolean') {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
         relations: ['likes', 'emotions'],
+        take: itemsPerPage, // 페이지당 항목 수
+        skip: (page - 1) * itemsPerPage, // 건너뛸 항목 수
       });
     } else {
       diaries = await this.diaryRepository.find({
         where: { isPublic },
         relations: ['likes', 'emotions'],
+        take: itemsPerPage, // 페이지당 항목 수
+        skip: (page - 1) * itemsPerPage, // 건너뛸 항목 수
       });
     }
 
-    const diariesWithCount = await Promise.all(
-      diaries.map(async (diary) => {
-        const likeCount = diary.likes.length;
+    const totalCount = await this.diaryRepository.count({
+      where: { isPublic },
+    }); // 전체 항목 수 가져오기
 
-        // 다이어리의 감정 중에서 좋아요, 슬퍼요, 괜찮아요, 화나요, 기뻐요를 필터링하고 그 수를 세어줍니다.
-        const emotionCount = diary.emotions.filter((emotion) =>
-          ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
-            emotion.emotion,
-          ),
-        ).length;
-
-        return { diary, likeCount, emotionCount };
-      }),
-    );
-
-    // 1차적으로 likeCount를 기준으로 내림차순으로 정렬,
-    // 2차적으로는 emotionCount를 기준으로 내림차순으로 정렬
-    diariesWithCount.sort((a, b) => {
-      if (b.likeCount !== a.likeCount) {
-        return b.likeCount - a.likeCount;
-      } else {
-        return b.emotionCount - a.emotionCount;
-      }
-    });
+    const diariesWithCount = diaries.map((diary) => ({
+      diary,
+      totalCount,
+    }));
 
     return diariesWithCount;
   }
