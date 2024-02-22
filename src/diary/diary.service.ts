@@ -166,17 +166,21 @@ export class DiaryService {
         const likeCount = diary.likes.length;
         let emotionCount = 0;
 
-        diary.emotions.forEach((emotion) => {
-          // 감정을 문자열로 표현했을 때의 각각의 경우를 비교합니다.
-          const parsedEmotion = emotion.parseEmotion();
-          emotionCount +=
-            (parsedEmotion['좋아요'] ? 5 : 0) +
-            (parsedEmotion['슬퍼요'] ? 4 : 0) +
-            (parsedEmotion['괜찮아요'] ? 3 : 0) +
-            (parsedEmotion['화나요'] ? 2 : 0) +
-            (parsedEmotion['기뻐요'] ? 1 : 0);
-        });
+        const uniqueEmotions = new Set(); // 중복된 감정을 방지하기 위한 Set을 사용
 
+        diary.emotions.forEach((emotion) => {
+          const parsedEmotion = emotion.parseEmotion();
+          // 감정을 문자열로 표현했을 때의 각각의 경우를 비교
+          if (!uniqueEmotions.has(parsedEmotion)) {
+            emotionCount +=
+              (parsedEmotion['좋아요'] ? 5 : 0) +
+              (parsedEmotion['슬퍼요'] ? 4 : 0) +
+              (parsedEmotion['괜찮아요'] ? 3 : 0) +
+              (parsedEmotion['화나요'] ? 2 : 0) +
+              (parsedEmotion['기뻐요'] ? 1 : 0);
+            uniqueEmotions.add(parsedEmotion); // 중복된 감정을 추가하지 않도록 합니다.
+          }
+        });
         return { diary, likeCount, emotionCount };
       }),
     );
@@ -219,7 +223,7 @@ export class DiaryService {
   async findDiaries(user: UserEntity) {
     const diaries = await this.diaryRepository
       .createQueryBuilder('diary')
-      .leftJoinAndSelect('diary.likes', 'like') // 좋아요를 조인합니다.
+      .leftJoinAndSelect('diary.likes', 'like') // 좋아요를 조인
       .where('diary.userId = :userId', { userId: user.id })
       .getMany();
     const diariesWithLikeCount = diaries.map((diary) => ({
