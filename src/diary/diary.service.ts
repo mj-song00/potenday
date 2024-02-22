@@ -167,14 +167,22 @@ export class DiaryService {
       });
     }
 
-    const totalCount = await this.diaryRepository.count({
-      where: { isPublic },
-    }); // 전체 항목 수 가져오기
+    const diariesWithCount = diaries.map((diary) => {
+      // 좋아요 수 계산
+      const likeCount = diary.likes.length;
+      // 감정 수 계산
+      const emotionCount = diary.emotions.length;
 
-    const diariesWithCount = diaries.map((diary) => ({
-      diary,
-      totalCount, // 각 다이어리에 대한 totalCount가 아니라, 해당 페이지의 전체 항목 수로 설정
-    }));
+      // totalCount 계산 (좋아요 수 + 감정 수)
+      const totalCount = likeCount + emotionCount;
+
+      return {
+        diary,
+        totalCount,
+      };
+    });
+
+    return diariesWithCount;
 
     return diariesWithCount;
   }
