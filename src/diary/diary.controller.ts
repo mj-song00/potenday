@@ -69,23 +69,23 @@ export class DiaryController {
   // 개별 다이어리 가져오기
   @Get('/get-diary/:id')
   @Roles(ROLE.USER)
-  async getDiary(
-    @Param('id') id: string,
-    @Query('page') page: number,
-    @Query('pageSize') pageSize: number,
-  ) {
-    return this.diaryService.findOne(+id, +page, +pageSize);
+  async getDiary(@Param('id') id: string) {
+    return this.diaryService.findOne(+id);
   }
 
   // type 1인 diary가 public
   @Get('/get-diaries/:type')
   @Roles(ROLE.USER)
-  async getDiaries(@Param('type') type: '0' | '1') {
+  async getDiaries(
+    @Param('type') type: '0' | '1',
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+  ) {
     if (type !== '0' && type !== '1') {
       throw new BadRequestException('Invalid diary type');
     }
     const isPublic: boolean | FindOperator<boolean> = type === '1';
-    return this.diaryService.findDiariesByType(isPublic);
+    return this.diaryService.findDiariesByType(isPublic, +page, +pageSize);
   }
 
   //일기 수정

@@ -104,10 +104,8 @@ export class DiaryService {
   }
 
   //개별 다이어리 가져오기
-  async findOne(id: number, page: number, pageSize: number) {
-    const offset = (page - 1) * pageSize; // 오프셋 계산
-
-    const [diaries, totalCount] = await this.diaryRepository
+  async findOne(id: number) {
+    const diary = await this.diaryRepository
       .createQueryBuilder('diary') // 다이어리를 기준으로 쿼리를 작성합니다.
       .leftJoinAndSelect('diary.likes', 'like') // 다이어리와 좋아요를 조인합니다.
       .leftJoinAndSelect('diary.emotions', 'emotion') // 다이어리와 감정을 조인합니다.
@@ -131,49 +129,49 @@ export class DiaryService {
       .addSelect(
         'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
         '기뻐요',
-      ) // 감정 중 "기뻐요"인 경우 카운트합니다.
-      .where('diary.id = :id', { id })
-      .groupBy('diary.id')
-      .orderBy('likeCount', 'DESC')
-      .offset(offset) // 오프셋 적용
-      .limit(pageSize) // 페이지 크기 적용
-      .getRawMany(); // 모든 결과 가져오기
+      ) // 감정 중 "슬퍼요"인 경우 카운트합니다.
+      .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
+      .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
+      .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
+      .getRawOne(); // 결과를 하나만 가져옵니다.
 
-    if (!diaries || diaries.length === 0) {
+    if (!diary) {
       throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
     }
 
-    return {
-      diaries,
-      totalCount,
-    };
+    return diary;
   }
 
   // type에 따른 다이어리 가져오기
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
-    page: number = 1,
+    page: number,
+    pageSize: number,
   ): Promise<{ diary: Diary; totalCount: number }[]> {
-    const itemsPerPage = 10; // 페이지당 항목 수
+    const offset = (page - 1) * pageSize;
 
-    let diaries: Diary[];
+    // isPublic 여부에 따라 쿼리 구성
+    const queryBuilder = this.diaryRepository
+      .createQueryBuilder('diary')
+      .where({ isPublic })
+      .leftJoinAndSelect('diary.likes', 'like')
+      .leftJoinAndSelect('diary.emotions', 'emotion')
+      .skip(offset) // 오프셋 적용
+      .take(pageSize); // 페이지 크기 적용
 
-    if (typeof isPublic === 'boolean') {
-      diaries = await this.diaryRepository.find({
-        where: { isPublic },
-        relations: ['likes', 'emotions'],
-        take: itemsPerPage, // 페이지당 항목 수
-        skip: (page - 1) * itemsPerPage, // 건너뛸 항목 수
-      });
-    } else {
-      diaries = await this.diaryRepository.find({
-        where: { isPublic },
-        relations: ['likes', 'emotions'],
-        take: itemsPerPage, // 페이지당 항목 수
-        skip: (page - 1) * itemsPerPage, // 건너뛸 항목 수
-      });
-    }
+    // 총 항목 수 쿼리
+    const totalCountQuery = this.diaryRepository
+      .createQueryBuilder('diary')
+      .where({ isPublic })
+      .getCount();
 
+    // 총 항목 수 조회
+    const totalCount = await totalCountQuery;
+
+    // 결과 조회
+    const diaries = await queryBuilder.getMany();
+
+    // 결과 가공
     const diariesWithCount = diaries.map((diary) => {
       // 좋아요 수 계산
       const likeCount = diary.likes.length;
