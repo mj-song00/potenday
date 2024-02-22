@@ -182,6 +182,7 @@ export class DiaryService {
 
     const diariesWithLikeAndEmotionsPromises = diaries.map(
       async ({ diary, likeCount }) => {
+        if (!diary) return null; // diary 객체가 존재하지 않으면 null 반환
         const emotions = await this.diaryRepository
           .createQueryBuilder('diary')
           .relation('diary.emotions')
