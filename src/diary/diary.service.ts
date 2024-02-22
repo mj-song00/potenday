@@ -152,6 +152,14 @@ export class DiaryService {
     if (!diary) {
       throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
     }
+    // 총 개수 쿼리 실행
+    const totalCountResult = await totalCountQuery.getRawOne();
+    const totalCount = totalCountResult ? totalCountResult.totalCount : 0;
+
+    return {
+      diary,
+      totalCount,
+    };
 
     return diary;
   }
