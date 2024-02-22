@@ -148,47 +148,56 @@ export class DiaryService {
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
   ): Promise<{ diary: Diary; likeCount: number; emotions: Emotion[] }[]> {
-    let diaries: Diary[];
-    let diariesWithLikeAndEmotions: {
-      diary: Diary;
-      likeCount: number;
-      emotions: Emotion[];
-    }[] = [];
+    let diaries: { diary: Diary; likeCount: number }[];
 
     if (typeof isPublic === 'boolean') {
       if (isPublic) {
         diaries = await this.diaryRepository
           .createQueryBuilder('diary')
-          .leftJoinAndSelect('diary.likes', 'like')
+          .leftJoin('diary.likes', 'like')
           .leftJoinAndSelect('diary.emotions', 'emotion')
           .where('diary.isPublic = :isPublic', { isPublic: true })
+          .select(['diary', 'COUNT(like.id) AS likeCount'])
+          .groupBy('diary.id')
           .orderBy('likeCount', 'DESC')
           .addOrderBy('diary.createdAt', 'DESC')
           .addOrderBy('diary.id', 'DESC')
-          .getMany();
+          .getRawMany();
       } else {
         return [];
       }
     } else {
       diaries = await this.diaryRepository
         .createQueryBuilder('diary')
-        .leftJoinAndSelect('diary.likes', 'like')
+        .leftJoin('diary.likes', 'like')
         .leftJoinAndSelect('diary.emotions', 'emotion')
         .where('diary.isPublic = :isPublic', { isPublic })
+        .select(['diary', 'COUNT(like.id) AS likeCount'])
+        .groupBy('diary.id')
         .orderBy('likeCount', 'DESC')
         .addOrderBy('diary.createdAt', 'DESC')
         .addOrderBy('diary.id', 'DESC')
-        .getMany();
+        .getRawMany();
     }
 
-    for (const diary of diaries) {
-      const likeCount = diary.likes.length;
-      const emotions = diary.emotions; // 다이어리의 감정들을 가져옵니다.
-      diariesWithLikeAndEmotions.push({ diary, likeCount, emotions });
-    }
+    const diariesWithLikeAndEmotionsPromises = diaries.map(
+      async ({ diary, likeCount }) => {
+        const emotions = await this.diaryRepository
+          .createQueryBuilder('diary')
+          .relation('diary.emotions')
+          .of(diary.id)
+          .loadMany();
+        return { diary, likeCount, emotions };
+      },
+    );
+
+    const diariesWithLikeAndEmotions = await Promise.all(
+      diariesWithLikeAndEmotionsPromises,
+    );
 
     return diariesWithLikeAndEmotions;
   }
+
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
     const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
