@@ -148,48 +148,39 @@ export class DiaryService {
     page: number,
     pageSize: number,
   ): Promise<{ diary: Diary; totalCount: number }[]> {
-    // 오프셋 계산
     const offset = (page - 1) * pageSize;
 
-    let diaries: Diary[];
-
-    if (typeof isPublic === 'boolean') {
-      diaries = await this.diaryRepository.find({
-        where: { isPublic },
-        relations: ['likes', 'emotions'],
-        skip: offset,
-        take: pageSize,
-      });
-    } else {
-      diaries = await this.diaryRepository.find({
-        where: { isPublic },
-        relations: ['likes', 'emotions'],
-        skip: offset,
-        take: pageSize,
-      });
-    }
+    const diaries = await this.diaryRepository.find({
+      where: { isPublic },
+      relations: ['likes', 'emotions'],
+      skip: offset,
+      take: pageSize,
+    });
 
     const diariesWithCount = await Promise.all(
       diaries.map(async (diary) => {
         const likeCount = diary.likes.length;
-        const emotionCount = diary.emotions.length;
+        const emotionCount = diary.emotions.filter((emotion) =>
+          ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
+            emotion.emotion,
+          ),
+        ).length;
 
-        return { diary, likeCount, emotionCount };
+        // totalCount를 반환합니다.
+        return { diary, totalCount: likeCount + emotionCount };
       }),
     );
 
-    // likeCount를 우선으로, 그 다음에 emotionCount를 기준으로 내림차순으로 정렬합니다.
+    // likeCount를 우선으로, 그 다음에 totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
-      if (b.likeCount !== a.likeCount) {
-        return b.likeCount - a.likeCount;
+      if (b.totalCount !== a.totalCount) {
+        return b.totalCount - a.totalCount;
       }
-      return b.likeCount + b.emotionCount - (a.likeCount + a.emotionCount);
+      // likeCount를 우선으로, 그 다음에 totalCount를 기준으로 내림차순으로 정렬합니다.
+      return b.diary.likes.length - a.diary.likes.length;
     });
 
-    return diariesWithCount.map(({ diary, likeCount, emotionCount }) => ({
-      diary,
-      totalCount: likeCount + emotionCount,
-    }));
+    return diariesWithCount;
   }
 
   //일기 수정
