@@ -149,7 +149,6 @@ export class DiaryService {
     }
 
     return diary;
-    return diary;
   }
 
   // type에 따른 다이어리 가져오기
