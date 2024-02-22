@@ -144,8 +144,10 @@ export class DiaryService {
   }
 
   // type에 따른 다이어리 가져오기
+
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
+    diaryRepository: Repository<Diary>,
   ): Promise<{ diary: Diary; likeCount: number; emotions: Emotion[] }[]> {
     let diaries: Diary[];
     let diariesWithLikeAndEmotions: {
@@ -156,43 +158,38 @@ export class DiaryService {
 
     if (typeof isPublic === 'boolean') {
       if (isPublic) {
-        diaries = await this.diaryRepository.find({
-          where: { isPublic: true },
-          relations: ['likes', 'emotions'],
-          order: { createdAt: 'DESC', id: 'DESC' },
-        });
+        diaries = await this.diaryRepository
+          .createQueryBuilder('diary')
+          .leftJoinAndSelect('diary.likes', 'like')
+          .leftJoinAndSelect('diary.emotions', 'emotion')
+          .where('diary.isPublic = :isPublic', { isPublic: true })
+          .orderBy('likeCount', 'DESC')
+          .addOrderBy('diary.createdAt', 'DESC')
+          .addOrderBy('diary.id', 'DESC')
+          .getMany();
       } else {
         return [];
       }
     } else {
-      diaries = await this.diaryRepository.find({
-        where: { isPublic },
-        relations: ['likes', 'emotions'],
-        order: { createdAt: 'DESC', id: 'DESC' },
-      });
+      diaries = await this.diaryRepository
+        .createQueryBuilder('diary')
+        .leftJoinAndSelect('diary.likes', 'like')
+        .leftJoinAndSelect('diary.emotions', 'emotion')
+        .where('diary.isPublic = :isPublic', { isPublic })
+        .orderBy('likeCount', 'DESC')
+        .addOrderBy('diary.createdAt', 'DESC')
+        .addOrderBy('diary.id', 'DESC')
+        .getMany();
     }
 
     for (const diary of diaries) {
       const likeCount = diary.likes.length;
-      const emotions = diary.emotions; // 다이어리의 감정들을 문자열로 변환합니다.
-      const emotionCounts = {
-        좋아요: 0,
-        기쁘요: 0,
-        괜찮아요: 0,
-        슬퍼요: 0,
-        화나요: 0,
-      }; // 각 감정 종류별로 숫자를 저장할 객체
-
-      for (const diary of diaries) {
-        const likeCount = diary.likes.length;
-        const emotions: Emotion[] = diary.emotions; // 다이어리의 감정들을 가져옵니다.
-        diariesWithLikeAndEmotions.push({ diary, likeCount, emotions });
-      }
-
-      return diariesWithLikeAndEmotions;
+      const emotions = diary.emotions; // 다이어리의 감정들을 가져옵니다.
+      diariesWithLikeAndEmotions.push({ diary, likeCount, emotions });
     }
-  }
 
+    return diariesWithLikeAndEmotions;
+  }
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
     const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
