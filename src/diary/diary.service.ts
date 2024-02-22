@@ -147,6 +147,8 @@ export class DiaryService {
       .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
       .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
       .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
+      .skip(offset) // 오프셋 적용
+      .take(pageSize) // 페이지 크기 적용
       .getRawOne(); // 결과를 하나만 가져옵니다.
 
     if (!diary) {
@@ -160,8 +162,6 @@ export class DiaryService {
       diary,
       totalCount,
     };
-
-    return diary;
   }
 
   // type에 따른 다이어리 가져오기
