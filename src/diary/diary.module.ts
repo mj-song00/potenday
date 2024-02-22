@@ -10,6 +10,7 @@ import { Diary } from '../entity/diary.entity';
 import { ImageService } from 'src/image/image.service';
 import { S3Service } from 'src/s3/s3.service';
 import { Emotion } from 'src/entity/emotion.like.entity';
+import { Image } from 'src/entity/image.entity';
 
 @Module({
   controllers: [DiaryController],
@@ -21,7 +22,7 @@ import { Emotion } from 'src/entity/emotion.like.entity';
     S3Service,
   ],
   imports: [
-    TypeOrmModule.forFeature([Diary, UserEntity, Emotion]),
+    TypeOrmModule.forFeature([Diary, UserEntity, Emotion, Image]),
     ImageModule,
   ],
   exports: [TypeOrmModule], //추가
