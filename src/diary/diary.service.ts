@@ -148,31 +148,46 @@ export class DiaryService {
     page: number,
     pageSize: number,
   ): Promise<{ diary: Diary; totalCount: number }[]> {
+    // 오프셋 계산
     const offset = (page - 1) * pageSize;
 
-    // isPublic 여부에 따라 쿼리 구성
-    const queryBuilder = this.diaryRepository
-      .createQueryBuilder('diary')
-      .where({ isPublic })
-      .leftJoinAndSelect('diary.likes', 'like')
-      .leftJoinAndSelect('diary.emotions', 'emotion')
-      .addSelect('COUNT(like.id)', 'likeCount') // 좋아요 수 카운트
-      .addGroupBy('diary.id') // 다이어리 ID로 그룹화
-      .orderBy('likeCount', 'DESC') // likeCount에 따라 내림차순 정렬
-      .addOrderBy('totalCount', 'DESC') // totalCount에 따라 내림차순 정렬
-      .addOrderBy('emotions', 'DESC') // emotions의 감정 수에 따라 내림차순 정렬
-      .skip(offset) // 오프셋 적용
-      .take(pageSize); // 페이지 크기 적용
-    const diaries = await queryBuilder.getRawMany();
+    let diaries: Diary[];
 
-    // 결과 가공
-    const diariesWithCount = diaries.map((diary) => {
-      // diary를 직접 할당
-      return {
-        diary,
-        totalCount: diary.likeCount + diary.emotions.length, // totalCount 계산
-      };
-    });
+    if (typeof isPublic === 'boolean') {
+      diaries = await this.diaryRepository.find({
+        where: { isPublic },
+        relations: ['likes', 'emotions'],
+        skip: offset, // 오프셋 설정
+        take: pageSize, // 페이지 크기 설정
+      });
+    } else {
+      diaries = await this.diaryRepository.find({
+        where: { isPublic },
+        relations: ['likes', 'emotions'],
+        skip: offset, // 오프셋 설정
+        take: pageSize, // 페이지 크기 설정
+      });
+    }
+
+    const diariesWithCount = await Promise.all(
+      diaries.map(async (diary) => {
+        const likeCount = diary.likes.length;
+        const emotionCount = diary.emotions.filter((emotion) =>
+          ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
+            emotion.emotion,
+          ),
+        ).length;
+
+        // likeCount와 emotionCount를 합쳐서 totalCount로 계산합니다.
+        const totalCount = likeCount + emotionCount;
+
+        // totalCount를 반환합니다.
+        return { diary, totalCount };
+      }),
+    );
+
+    // totalCount를 기준으로 내림차순으로 정렬합니다.
+    diariesWithCount.sort((a, b) => b.totalCount - a.totalCount);
 
     return diariesWithCount;
   }
