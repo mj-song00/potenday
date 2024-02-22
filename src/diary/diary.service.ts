@@ -164,23 +164,14 @@ export class DiaryService {
     const diariesWithCount = await Promise.all(
       diaries.map(async (diary) => {
         const likeCount = diary.likes.length;
-        let emotionCount = 0;
 
-        const uniqueEmotions = new Set(); // 중복된 감정을 방지하기 위한 Set을 사용
+        // 다이어리의 감정 중에서 좋아요, 슬퍼요, 괜찮아요, 화나요, 기뻐요를 필터링하고 그 수를 세어줍니다.
+        const emotionCount = diary.emotions.filter((emotion) =>
+          ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
+            emotion.emotion,
+          ),
+        ).length;
 
-        diary.emotions.forEach((emotion) => {
-          const parsedEmotion = emotion.parseEmotion();
-          // 감정을 문자열로 표현했을 때의 각각의 경우를 비교
-          if (!uniqueEmotions.has(parsedEmotion)) {
-            emotionCount +=
-              (parsedEmotion['좋아요'] ? 5 : 0) +
-              (parsedEmotion['슬퍼요'] ? 4 : 0) +
-              (parsedEmotion['괜찮아요'] ? 3 : 0) +
-              (parsedEmotion['화나요'] ? 2 : 0) +
-              (parsedEmotion['기뻐요'] ? 1 : 0);
-            uniqueEmotions.add(parsedEmotion); // 중복된 감정을 추가하지 않도록 합니다.
-          }
-        });
         return { diary, likeCount, emotionCount };
       }),
     );
