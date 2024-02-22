@@ -106,11 +106,8 @@ export class DiaryService {
   //개별 다이어리 가져오기
   async findOne(id: number, page: number, pageSize: number) {
     const offset = (page - 1) * pageSize; // 오프셋 계산
-    const totalCountQuery = this.diaryRepository
-      .createQueryBuilder('diary') // 다이어리를 기준으로 쿼리를 작성합니다.
-      .select('COUNT(diary.id)', 'totalCount'); // 다이어리의 총 개수를 세기 위한 쿼리
 
-    const diary = await this.diaryRepository
+    const [diaries, totalCount] = await this.diaryRepository
       .createQueryBuilder('diary') // 다이어리를 기준으로 쿼리를 작성합니다.
       .leftJoinAndSelect('diary.likes', 'like') // 다이어리와 좋아요를 조인합니다.
       .leftJoinAndSelect('diary.emotions', 'emotion') // 다이어리와 감정을 조인합니다.
@@ -135,31 +132,19 @@ export class DiaryService {
         'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
         '기뻐요',
       ) // 감정 중 "기뻐요"인 경우 카운트합니다.
-      .addSelect(
-        'COUNT(like.id) + ' +
-          'SUM(CASE WHEN emotion.emotion = "좋아요" THEN 1 ELSE 0 END) + ' +
-          'SUM(CASE WHEN emotion.emotion = "슬퍼요" THEN 1 ELSE 0 END) + ' +
-          'SUM(CASE WHEN emotion.emotion = "괜찮아요" THEN 1 ELSE 0 END) + ' +
-          'SUM(CASE WHEN emotion.emotion = "화나요" THEN 1 ELSE 0 END) + ' +
-          'SUM(CASE WHEN emotion.emotion = "기뻐요" THEN 1 ELSE 0 END)',
-        'totalCount',
-      ) // totalCount를 계산합니다.
-      .where('diary.id = :id', { id }) // 지정된 id에 해당하는 다이어리만 선택합니다.
-      .groupBy('diary.id') // 다이어리 id로 그룹화합니다.
-      .orderBy('likeCount', 'DESC') // 좋아요 갯수를 기준으로 내림차순으로 정렬합니다.
-      .skip(offset) // 오프셋 적용
-      .take(pageSize) // 페이지 크기 적용
-      .getRawOne(); // 결과를 하나만 가져옵니다.
+      .where('diary.id = :id', { id })
+      .groupBy('diary.id')
+      .orderBy('likeCount', 'DESC')
+      .offset(offset) // 오프셋 적용
+      .limit(pageSize) // 페이지 크기 적용
+      .getRawMany(); // 모든 결과 가져오기
 
-    if (!diary) {
+    if (!diaries || diaries.length === 0) {
       throw new Error('해당 id에 해당하는 다이어리를 찾을 수 없습니다.');
     }
-    // 총 개수 쿼리 실행
-    const totalCountResult = await totalCountQuery.getRawOne();
-    const totalCount = totalCountResult ? totalCountResult.totalCount : 0;
 
     return {
-      diary,
+      diaries,
       totalCount,
     };
   }
