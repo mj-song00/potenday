@@ -183,7 +183,7 @@ export class DiaryService {
       if (b.likeCount !== a.likeCount) {
         return b.likeCount - a.likeCount;
       }
-      return b.emotionCount - a.emotionCount;
+      return b.likeCount + b.emotionCount - (a.likeCount + a.emotionCount);
     });
 
     return diariesWithCount.map(({ diary, likeCount, emotionCount }) => ({
