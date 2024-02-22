@@ -173,14 +173,16 @@ export class DiaryService {
 
     // likeCount를 우선으로, 그 다음에 totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
-      if (b.totalCount !== a.totalCount) {
-        return b.totalCount - a.totalCount;
+      if (b.diary.likes.length !== a.diary.likes.length) {
+        return b.diary.likes.length - a.diary.likes.length;
       }
-      // likeCount를 우선으로, 그 다음에 totalCount를 기준으로 내림차순으로 정렬합니다.
-      return b.diary.likes.length - a.diary.likes.length;
+      return b.totalCount - a.totalCount;
     });
 
-    return diariesWithCount;
+    return diariesWithCount.map(({ diary, totalCount }) => ({
+      diary,
+      totalCount,
+    }));
   }
 
   //일기 수정
