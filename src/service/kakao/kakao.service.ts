@@ -60,9 +60,9 @@ export class KakaoService {
       'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `KakaoAK ${this.ADMIN_KEY}`,
     };
-    console.log(await this.kapi.post(url, data, { headers }));
-    // await this.kapi.post(url, data, { headers });
 
+    const response = await this.kapi.post(url, data, { headers });
+    console.log(response);
     // return kakaoId;
   }
 
