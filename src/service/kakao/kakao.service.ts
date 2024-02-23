@@ -62,8 +62,8 @@ export class KakaoService {
     };
 
     const response = await this.kapi.post(url, data, { headers });
-    console.log(response);
-    // return kakaoId;
+
+    return response.data;
   }
 
   async getMe(kakaoId: string) {
