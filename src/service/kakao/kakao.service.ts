@@ -15,7 +15,9 @@ export class KakaoService {
 
   constructor() {
     const headers = {
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      'Content-type':
+        'application/x-www-form-urlencoded;charset=utf-8' ||
+        'application/x-www-form-urlencoded',
     };
     this.kauth = axios.create({ baseURL: 'https://kauth.kakao.com', headers });
     this.kapi = axios.create({ baseURL: 'https://kapi.kakao.com' });
@@ -54,7 +56,6 @@ export class KakaoService {
       target_id: kakaoId,
     });
     const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: `KakaoAK ${this.ADMIN_KEY}`,
     };
 
