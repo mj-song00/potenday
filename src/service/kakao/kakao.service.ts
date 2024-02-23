@@ -18,7 +18,7 @@ export class KakaoService {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     };
     this.kauth = axios.create({ baseURL: 'https://kauth.kakao.com', headers });
-    this.kapi = axios.create({ baseURL: 'https://kapi.kakao.com', headers });
+    this.kapi = axios.create({ baseURL: 'https://kapi.kakao.com' });
   }
 
   async signIn(signInArgs: SignInKakaoDto) {
