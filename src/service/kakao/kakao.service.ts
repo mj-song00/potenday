@@ -18,7 +18,7 @@ export class KakaoService {
       'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
     };
     this.kauth = axios.create({ baseURL: 'https://kauth.kakao.com', headers });
-    this.kapi = axios.create({ baseURL: 'https://kapi.kakao.com', headers });
+    this.kapi = axios.create({ baseURL: 'https://kapi.kakao.com' });
   }
 
   async signIn(signInArgs: SignInKakaoDto) {
@@ -58,12 +58,9 @@ export class KakaoService {
       Authorization: `KakaoAK ${this.ADMIN_KEY}`,
     };
 
-    try {
-      const response = await this.kapi.post(url, data, { headers });
-      return response.data;
-    } catch (error) {
-      throw new Error(`Failed to unlink user: ${error.message}`);
-    }
+    await this.kapi.post(url, data, { headers });
+
+    return kakaoId;
   }
 
   async getMe(kakaoId: string) {
