@@ -5,11 +5,11 @@ import {
   Post,
   Body,
   Patch,
-  Param,
-  Delete,
   Query,
   UseInterceptors,
   UploadedFile,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateInfoDto, SignInKakaoDto } from './dto/create-user.dto';
@@ -17,7 +17,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from './user.enum';
 import { User } from 'src/decorators/user.decorators';
 import { UserEntity } from '../entity/user.entity';
-
+import { Response } from 'express';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -64,11 +64,11 @@ export class UsersController {
     return this.usersService.addInfo(infoDto, user);
   }
 
-  //유저 삭제
-  @Delete('delete/:id')
+  // 회원탈퇴 및 유저 삭제
+  @Post('/unlink')
   @Roles(ROLE.USER)
-  deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteUser(id);
+  deleteUser(@User() user: UserEntity) {
+    return this.usersService.deleteUser(user);
   }
 
   //유저 정보 불러오기(profile)
@@ -90,13 +90,6 @@ export class UsersController {
   @Roles(ROLE.USER)
   checkNickname(@User() user: UserEntity) {
     return this.usersService.getNickname(user);
-  }
-
-  //로그아웃
-  @Post('/logout')
-  @Roles(ROLE.USER)
-  userLogout(@User() user: UserEntity) {
-    return this.usersService.logout(user);
   }
 
   //이미지 사진 교체

@@ -149,11 +149,14 @@ export class UsersService {
     return { result: 'sucess' };
   }
 
-  async deleteUser(id: string) {
-    await this.kakaoService.unlink(id);
-    const user = await this.userRepository.delete({ id });
+  async deleteUser(user: UserEntity) {
+    const kakaoId = user.kakaoId;
+    const id = user.id;
+    await this.kakaoService.unlink(kakaoId);
 
-    return user;
+    const deleteuser = await this.userRepository.delete({ id });
+
+    return { result: 'success' };
   }
 
   async getMe(user: UserEntity) {
@@ -176,12 +179,6 @@ export class UsersService {
     } else {
       return { result: 'Available' };
     }
-  }
-  async logout(user: UserEntity) {
-    const { kakaoId } = user;
-
-    const logout = await this.kakaoService.unlink(kakaoId);
-    logout !== user.kakaoId ? new BadRequestException() : { result: 'success' };
   }
 
   async changeImage(user: UserEntity, file: Express.Multer.File) {
