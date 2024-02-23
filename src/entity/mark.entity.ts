@@ -33,6 +33,6 @@ export class BookMark {
   })
   user: UserEntity;
 
-  @ManyToOne(() => Diary, (diary) => diary.bookmarks)
+  @ManyToOne(() => Diary, (diary) => diary.bookmarks, { onDelete: 'CASCADE' })
   diary: Diary;
 }

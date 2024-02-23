@@ -33,6 +33,6 @@ export class Emotion {
   @ManyToOne(() => UserEntity, (user) => user.emotion, { onDelete: 'CASCADE' })
   user: UserEntity;
 
-  @ManyToOne(() => Diary, (diaries) => diaries.emotion)
+  @ManyToOne(() => Diary, (diaries) => diaries.emotion, { onDelete: 'CASCADE' })
   diary: Diary;
 }

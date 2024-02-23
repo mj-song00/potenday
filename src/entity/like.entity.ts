@@ -25,6 +25,6 @@ export class Like {
   @ManyToOne(() => UserEntity, (user) => user.likes, { onDelete: 'CASCADE' })
   user: UserEntity;
 
-  @ManyToOne(() => Diary, (diary) => diary.likes)
+  @ManyToOne(() => Diary, (diary) => diary.likes, { onDelete: 'CASCADE' })
   diary: Diary;
 }

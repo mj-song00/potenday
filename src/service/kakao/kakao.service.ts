@@ -19,7 +19,9 @@ export class KakaoService {
     };
 
     this.kauth = axios.create({ baseURL: 'https://kauth.kakao.com', headers });
-    this.kapi = axios.create({ baseURL: 'https://kapi.kakao.com' });
+    this.kapi = axios.create({
+      baseURL: 'https://kapi.kakao.com',
+    });
   }
 
   async signIn(signInArgs: SignInKakaoDto) {

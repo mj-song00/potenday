@@ -49,17 +49,21 @@ export class Diary {
   @ManyToOne(() => UserEntity, (user) => user.diary, { onDelete: 'CASCADE' })
   user: UserEntity;
 
-  @OneToMany(() => Like, (like) => like.diary)
+  @OneToMany(() => Like, (like) => like.diary, { onDelete: 'CASCADE' })
   likes: Like[];
 
   @OneToOne(() => Image)
   @JoinTable()
   image: Image;
 
-  @OneToMany(() => BookMark, (bookmark) => bookmark.diary)
+  @OneToMany(() => BookMark, (bookmark) => bookmark.diary, {
+    onDelete: 'CASCADE',
+  })
   bookmarks: BookMark[];
 
-  @OneToMany(() => Emotion, (emotions) => emotions.diary)
+  @OneToMany(() => Emotion, (emotions) => emotions.diary, {
+    onDelete: 'CASCADE',
+  })
   emotions: Emotion[];
   // 좋아요: any;
   // 슬퍼요: any;
