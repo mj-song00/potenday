@@ -150,7 +150,6 @@ export class UsersService {
   }
 
   async deleteUser(user: UserEntity) {
-    console.log(user.kakaoId);
     const kakaoId = await this.kakaoService.unlink(user.kakaoId);
 
     const deleteuser = await this.userRepository.delete({ kakaoId });

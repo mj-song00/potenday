@@ -48,6 +48,7 @@ export class KakaoService {
   }
 
   async unlink(kakaoId: string) {
+    console.log(kakaoId);
     const url = '/v1/user/unlink';
     const data = QueryString.stringify({
       target_id_type: 'user_id',
