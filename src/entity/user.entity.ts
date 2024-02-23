@@ -35,15 +35,17 @@ export class UserEntity {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => Like, (like) => like.user)
+  @OneToMany(() => Like, (like) => like.user, { onDelete: 'CASCADE' })
   likes: Like[];
 
-  @OneToMany(() => Diary, (diary) => diary.user)
+  @OneToMany(() => Diary, (diary) => diary.user, { onDelete: 'CASCADE' })
   diary: Diary[];
 
-  @OneToMany(() => Emotion, (emotion) => emotion.user)
+  @OneToMany(() => Emotion, (emotion) => emotion.user, { onDelete: 'CASCADE' })
   emotion: Emotion[];
 
-  @OneToMany(() => BookMark, (bookmark) => bookmark.user)
+  @OneToMany(() => BookMark, (bookmark) => bookmark.user, {
+    onDelete: 'CASCADE',
+  })
   bookmarks: BookMark[];
 }
