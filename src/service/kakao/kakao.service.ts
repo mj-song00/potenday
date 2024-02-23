@@ -59,7 +59,7 @@ export class KakaoService {
       Authorization: `KakaoAK ${this.ADMIN_KEY}`,
     };
 
-    await this.kapi.post({ headers }, url, data);
+    await this.kapi.post(url, data, { headers });
 
     return kakaoId;
   }
