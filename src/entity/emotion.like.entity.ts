@@ -30,7 +30,7 @@ export class Emotion {
   @UpdateDateColumn()
   updateAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.emotion)
+  @ManyToOne(() => UserEntity, (user) => user.emotion, { onDelete: 'CASCADE' })
   user: UserEntity;
 
   @ManyToOne(() => Diary, (diaries) => diaries.emotion)

@@ -28,7 +28,9 @@ export class BookMark {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.bookmarks)
+  @ManyToOne(() => UserEntity, (user) => user.bookmarks, {
+    onDelete: 'CASCADE',
+  })
   user: UserEntity;
 
   @ManyToOne(() => Diary, (diary) => diary.bookmarks)
