@@ -49,15 +49,16 @@ export class KakaoService {
 
   async unlink(kakaoId: string) {
     //QueryString.stringify 삭제
-
     const url = '/v1/user/unlink';
-    const data = {
+    const data = QueryString.stringify({
       target_id_type: 'user_id',
       target_id: kakaoId,
+    });
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `KakaoAK ${this.ADMIN_KEY}`,
     };
-    const headers = { Authorization: `KakaoAK ${this.ADMIN_KEY}` };
 
-    console.log(await this.kapi.post(url, data, { headers }));
     await this.kapi.post(url, data, { headers });
 
     return kakaoId;
