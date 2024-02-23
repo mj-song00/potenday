@@ -48,12 +48,13 @@ export class KakaoService {
   }
 
   async unlink(kakaoId: string) {
-    console.log(kakaoId);
+    //QueryString.stringify 삭제
+
     const url = '/v1/user/unlink';
-    const data = QueryString.stringify({
+    const data = {
       target_id_type: 'user_id',
       target_id: kakaoId,
-    });
+    };
     const headers = { Authorization: `KakaoAK ${this.ADMIN_KEY}` };
 
     await this.kapi.post(url, data, { headers });
