@@ -48,7 +48,6 @@ export class KakaoService {
   }
 
   async unlink(kakaoId: string) {
-    //QueryString.stringify 삭제
     const url = '/v1/user/unlink';
     const data = QueryString.stringify({
       target_id_type: 'user_id',
@@ -59,9 +58,12 @@ export class KakaoService {
       Authorization: `KakaoAK ${this.ADMIN_KEY}`,
     };
 
-    await this.kapi.post(url, data, { headers });
-
-    return kakaoId;
+    try {
+      const response = await this.kapi.post(url, data, { headers });
+      return response.data;
+    } catch (error) {
+      throw new Error(`Failed to unlink user: ${error.message}`);
+    }
   }
 
   async getMe(kakaoId: string) {
