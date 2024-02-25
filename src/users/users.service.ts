@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
 import { UserEntity } from '../entity/user.entity';
@@ -134,10 +138,11 @@ export class UsersService {
         const decodedAccessToken = await this.jwtService.verify(accessToken, {
           secret: process.env.JWT_SECRET,
         });
+        accessTokenValid = true;
         accessTokenValid = !!decodedAccessToken;
       } catch (error) {
         if (error.name === 'TokenExpired') {
-          accessTokenValid = false;
+          throw new UnauthorizedException('Access token expired');
         } else {
           throw error;
         }
@@ -150,10 +155,11 @@ export class UsersService {
         const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
           secret: process.env.JWT_SECRET,
         });
+        accessTokenValid = true;
         refreshTokenValid = !!decodedRefreshToken;
       } catch (error) {
         if (error.name === 'TokenExpired') {
-          refreshTokenValid = false;
+          throw new UnauthorizedException('Refresh token expired');
         } else {
           throw error;
         }
