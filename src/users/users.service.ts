@@ -129,10 +129,8 @@ export class UsersService {
     accessToken: string,
     refreshToken?: string,
   ): Promise<{ accessTokenValid: boolean; refreshTokenValid?: boolean }> {
-    let accessTokenValid = false;
-    let refreshTokenValid = false;
-
     // AccessToken 검사
+    let accessTokenValid = false;
     if (accessToken) {
       try {
         const decodedAccessToken = await this.jwtService.verify(accessToken, {
@@ -142,7 +140,7 @@ export class UsersService {
         accessTokenValid = !!decodedAccessToken;
       } catch (error) {
         if (error.name === 'TokenExpired') {
-          throw new UnauthorizedException('Access token expired');
+          return { accessTokenValid: false, refreshTokenValid: false };
         } else {
           throw error;
         }
@@ -150,6 +148,7 @@ export class UsersService {
     }
 
     // RefreshToken 검사
+    let refreshTokenValid = false;
     if (refreshToken) {
       try {
         const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
@@ -159,7 +158,7 @@ export class UsersService {
         refreshTokenValid = !!decodedRefreshToken;
       } catch (error) {
         if (error.name === 'TokenExpired') {
-          throw new UnauthorizedException('Refresh token expired');
+          return { accessTokenValid: false, refreshTokenValid: false };
         } else {
           throw error;
         }
