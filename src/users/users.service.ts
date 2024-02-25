@@ -78,7 +78,7 @@ export class UsersService {
       type: TOKEN_TYPE.REFRESH_TOKEN,
     };
     const secret = process.env.JWT_SECRET;
-    const expiresIn = '2d';
+    const expiresIn = '7d';
 
     if (!secret) throw new Error();
 
@@ -121,23 +121,48 @@ export class UsersService {
     }
   }
 
-  async checkToken(accessToken: string): Promise<boolean> {
-    if (!accessToken) return;
-    try {
-      const decoded = await this.jwtService.verify(accessToken, {
-        secret: process.env.JWT_SECRET,
-      });
-      if (decoded) {
-        return true;
+  async checkTokens(
+    accessToken: string,
+    refreshToken: string,
+  ): Promise<{ accessTokenValid: boolean; refreshTokenValid: boolean }> {
+    let accessTokenValid = false;
+    let refreshTokenValid = false;
+
+    if (accessToken) {
+      try {
+        await this.jwtService.verify(accessToken, {
+          secret: process.env.JWT_SECRET,
+        });
+        accessTokenValid = true;
+      } catch (error) {
+        // 만료된 토큰인 경우 TokenExpiredError가 발생함
+        if (error.name === 'TokenExpired') {
+          accessTokenValid = false;
+        } else {
+          // 그 외의 오류 처리
+          throw error;
+        }
       }
-    } catch (error) {
-      // 만료된 토큰인 경우 TokenExpiredError가 발생함
-      if (error.name === 'TokenExpiredError') {
-        return false;
-      }
-      // 그 외의 오류 처리
-      throw error;
     }
+
+    if (refreshToken) {
+      try {
+        await this.jwtService.verify(refreshToken, {
+          secret: process.env.JWT_SECRET,
+        });
+        refreshTokenValid = true;
+      } catch (error) {
+        // 만료된 토큰인 경우 TokenExpiredError가 발생함
+        if (error.name === 'TokenExpired') {
+          refreshTokenValid = false;
+        } else {
+          // 그 외의 오류 처리
+          throw error;
+        }
+      }
+    }
+
+    return { accessTokenValid, refreshTokenValid };
   }
 
   async addInfo(infoDto: UpdateInfoDto, user: UserEntity) {

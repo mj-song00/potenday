@@ -8,8 +8,6 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
-  Res,
-  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateInfoDto, SignInKakaoDto } from './dto/create-user.dto';
@@ -17,7 +15,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { ROLE } from './user.enum';
 import { User } from 'src/decorators/user.decorators';
 import { UserEntity } from '../entity/user.entity';
-import { Response } from 'express';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -50,11 +48,14 @@ export class UsersController {
     return { accessToken, refreshToken };
   }
 
-  //엑세스 토큰 확인
-  @Post('access-token')
+  //토큰 만료 확인
+  @Post('checkTokens')
   @Roles(ROLE.USER)
-  async checkToken(@Query('accessToken') accessToken: string) {
-    return this.usersService.checkToken(accessToken);
+  async checkToken(
+    @Query('accessToken') accessToken: string,
+    @Query('refreshToken') refreshToken: string,
+  ) {
+    return this.usersService.checkTokens(accessToken, refreshToken);
   }
 
   //유저 추가 정보
