@@ -125,47 +125,36 @@ export class UsersService {
     }
   }
 
-  async checkTokens(
-    accessToken: string,
-    refreshToken?: string,
-  ): Promise<{ accessTokenValid: boolean; refreshTokenValid?: boolean }> {
-    // AccessToken 검사
-    let accessTokenValid = false;
-    if (accessToken) {
-      try {
-        const decodedAccessToken = await this.jwtService.verify(accessToken, {
-          secret: process.env.JWT_SECRET,
-        });
-        accessTokenValid = true;
-        accessTokenValid = !!decodedAccessToken;
-      } catch (error) {
-        if (error.name === 'TokenExpired') {
-          return { accessTokenValid: false, refreshTokenValid: false };
-        } else {
-          throw error;
-        }
-      }
-    }
+  async checkAccessToken(accessToken: string): Promise<boolean> {
+    if (!accessToken) return false;
 
-    // RefreshToken 검사
-    let refreshTokenValid = false;
-    if (refreshToken) {
-      try {
-        const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
-          secret: process.env.JWT_SECRET,
-        });
-        accessTokenValid = true;
-        refreshTokenValid = !!decodedRefreshToken;
-      } catch (error) {
-        if (error.name === 'TokenExpired') {
-          return { accessTokenValid: false, refreshTokenValid: false };
-        } else {
-          throw error;
-        }
+    try {
+      await this.jwtService.verify(accessToken, {
+        secret: process.env.JWT_SECRET,
+      });
+      return true;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return false;
       }
+      throw error;
     }
+  }
 
-    return { accessTokenValid, refreshTokenValid };
+  async checkRefreshToken(refreshToken: string): Promise<boolean> {
+    if (!refreshToken) return false;
+
+    try {
+      await this.jwtService.verify(refreshToken, {
+        secret: process.env.JWT_SECRET,
+      });
+      return true;
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return false;
+      }
+      throw error;
+    }
   }
 
   async addInfo(infoDto: UpdateInfoDto, user: UserEntity) {
