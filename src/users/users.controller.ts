@@ -49,13 +49,16 @@ export class UsersController {
   }
 
   //토큰 만료 확인
-  @Post('checkTokens')
+  @Post('check-tokens')
   @Roles(ROLE.USER)
-  async checkToken(
+  async checkTokens(
     @Query('accessToken') accessToken: string,
     @Query('refreshToken') refreshToken: string,
   ) {
-    return this.usersService.checkTokens(accessToken, refreshToken);
+    const { accessTokenValid, refreshTokenValid } =
+      await this.usersService.checkTokens(accessToken, refreshToken);
+
+    return { accessTokenValid, refreshTokenValid };
   }
 
   //유저 추가 정보

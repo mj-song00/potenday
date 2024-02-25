@@ -123,40 +123,38 @@ export class UsersService {
 
   async checkTokens(
     accessToken: string,
-    refreshToken: string,
-  ): Promise<{ accessTokenValid: boolean; refreshTokenValid: boolean }> {
+    refreshToken?: string,
+  ): Promise<{ accessTokenValid: boolean; refreshTokenValid?: boolean }> {
     let accessTokenValid = false;
     let refreshTokenValid = false;
 
+    // AccessToken 검사
     if (accessToken) {
       try {
-        await this.jwtService.verify(accessToken, {
+        const decodedAccessToken = await this.jwtService.verify(accessToken, {
           secret: process.env.JWT_SECRET,
         });
-        accessTokenValid = true;
+        accessTokenValid = !!decodedAccessToken;
       } catch (error) {
-        // 만료된 토큰인 경우 TokenExpiredError가 발생함
         if (error.name === 'TokenExpired') {
           accessTokenValid = false;
         } else {
-          // 그 외의 오류 처리
           throw error;
         }
       }
     }
 
+    // RefreshToken 검사
     if (refreshToken) {
       try {
-        await this.jwtService.verify(refreshToken, {
+        const decodedRefreshToken = await this.jwtService.verify(refreshToken, {
           secret: process.env.JWT_SECRET,
         });
-        refreshTokenValid = true;
+        refreshTokenValid = !!decodedRefreshToken;
       } catch (error) {
-        // 만료된 토큰인 경우 TokenExpiredError가 발생함
         if (error.name === 'TokenExpired') {
           refreshTokenValid = false;
         } else {
-          // 그 외의 오류 처리
           throw error;
         }
       }
