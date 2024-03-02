@@ -1,5 +1,33 @@
 version: '3.8'
 services:
+  mysql:
+    container_name: diary-mysql-db
+    # mac m1칩
+    platform: linux/x86_64
+    image: mysql
+    env_file: 
+      - .local.env
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+
+    networks:
+      - diary  
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: always  
+  redis:
+    container_name: diary-redis
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6397"
+    volumes:
+      - redis:/var/lib/redis       
   nginx:
     container_name: diary-nginx
     image: nginx
@@ -30,31 +58,10 @@ services:
     volumes:
       - .:/app   
     restart: always 
-  mysql:
-    container_name: diary-mysql-db
-    # mac m1칩
-    platform: linux/x86_64
-    image: mysql
-    env_file: 
-      - .local.env
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${DB_DATABASE}
-    networks:
-      - diary  
-    volumes:
-      - mysql:/var/lib/mysql
-    restart: always  
-  redis:
-    container_name: diary-redis
-    image: redis:latest
-    restart: always
-    ports:
-      - "6379:6397"
-    volumes:
-      - redis:/var/lib/redis       
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+ 
 #/var/lib/docker/volumes/mysql에 저장
 volumes:
   mysql:
