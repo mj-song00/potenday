@@ -29,7 +29,12 @@ services:
       - mysql
     volumes:
       - .:/app   
-    restart: always  
+    restart: always 
+    env_file: 
+      - .local.env 
+    environment:
+     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+     - MYSQL_DATABASE=${DB_DATABASE}
   mysql:
     container_name: diary-mysql-db
     # mac m1칩
@@ -40,8 +45,8 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
+     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+     - MYSQL_DATABASE=${DB_DATABASE}
     networks:
       - diary  
     volumes:
