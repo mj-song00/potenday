@@ -54,7 +54,6 @@ services:
       - "6379:6397"
     volumes:
       - redis:/var/lib/redis       
-
 #/var/lib/docker/volumes/mysql에 저장
 volumes:
   mysql:
