@@ -68,14 +68,12 @@ export class DiaryController {
 
   // 개별 다이어리 가져오기
   @Get('/get-diary/:id')
-  @Roles(ROLE.USER)
   async getDiary(@Param('id') id: string) {
     return this.diaryService.findOne(+id);
   }
 
   // type 1인 diary가 public
   @Get('/get-diaries/:type')
-  @Roles(ROLE.USER)
   async getDiaries(
     @Param('type') type: '0' | '1',
     @Query('page') page: number,
