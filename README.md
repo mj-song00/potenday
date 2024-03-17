@@ -3,7 +3,7 @@
 ## 개발기간
 2024.01.26 ~
 
-## 그림일기 <a href="https://drive.google.com/file/d/17UAvE-arVkpbm_UIOePQwC3Vvcc0n1ij/view?usp=sharing"> 기획 의도  </a>
+## 여름방학 <a href="https://drive.google.com/file/d/17UAvE-arVkpbm_UIOePQwC3Vvcc0n1ij/view?usp=sharing"> 기획 의도  </a>
 
 ## Architecture
 ![스크린샷 2024-02-18 오후 9 29 32](https://github.com/mj-song00/potenday/assets/104669297/54580b46-32be-496c-acb9-9c186d54af21)
