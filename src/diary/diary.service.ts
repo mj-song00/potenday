@@ -237,4 +237,19 @@ export class DiaryService {
     }));
     return diariesWithLikeCount;
   }
+
+  //다이어리 날짜순으로 정렬하여 가져오기
+  async findByDate(user: UserEntity) {
+    const diaries = await this.diaryRepository
+      .createQueryBuilder('diary')
+      .leftJoinAndSelect('diary.likes', 'like')
+      .where('diary.userId = :userId', { userId: user.id })
+      .orderBy('diary.date', 'DESC')
+      .getMany();
+    const diariesWithLikeCount = diaries.map((diary) => ({
+      diary: diary,
+      likeCount: diary.likes.length,
+    }));
+    return diariesWithLikeCount;
+  }
 }
