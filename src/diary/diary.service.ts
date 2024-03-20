@@ -226,6 +226,7 @@ export class DiaryService {
       .createQueryBuilder('diary')
       .leftJoinAndSelect('diary.likes', 'like') // 좋아요를 조인
       .where('diary.userId = :userId', { userId: user.id })
+      .orderBy('diary.createdAt', 'DESC')
       .getMany();
     const diariesWithLikeCount = diaries.map((diary) => ({
       diary: diary,
