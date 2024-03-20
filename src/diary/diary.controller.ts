@@ -109,4 +109,11 @@ export class DiaryController {
   async diaries(@User() user: UserEntity) {
     return this.diaryService.findDiaries(user);
   }
+
+  //일기 날짜순으로 불러오기
+  @Get('diaryDate')
+  @Roles(ROLE.USER)
+  async diariesByDate(@User() user: UserEntity) {
+    return this.diaryService.findByDate(user);
+  }
 }
