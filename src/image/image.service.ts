@@ -14,8 +14,12 @@ export class ImageService {
   ) {}
 
   async createImage(imageFile: Express.Multer.File) {
+    const allowedExtensions = ['jpg', 'jpeg', 'png'];
     const fileName = uuidv4();
-    const ext = imageFile.originalname.split('.')[0];
+    const ext = imageFile.originalname.split('.').pop().toLowerCase();
+    if (!allowedExtensions.includes(ext)) {
+      throw new Error('Only JPG, JPEG, PNG, and GIF files are allowed.');
+    }
     const key = `${fileName}.${ext}`;
     const url = this.s3Service.getFileURLByKey(key);
 
