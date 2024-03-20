@@ -163,6 +163,9 @@ export class DiaryService {
       relations: ['likes', 'emotions'],
       skip: offset,
       take: pageSize,
+      order: {
+        createdAt: 'DESC',
+      },
     });
 
     const diariesWithCount = await Promise.all(
