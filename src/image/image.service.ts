@@ -17,8 +17,9 @@ export class ImageService {
     const allowedExtensions = ['jpg', 'jpeg', 'png'];
     const fileName = uuidv4();
     const ext = imageFile.originalname.split('.').pop().toLowerCase();
+    console.log(ext);
     if (!allowedExtensions.includes(ext)) {
-      throw new Error('Only JPG, JPEG, PNG, and GIF files are allowed.');
+      throw new Error('Only JPG, JPEG and PNG files are allowed.');
     }
     const key = `${fileName}.${ext}`;
     const url = this.s3Service.getFileURLByKey(key);
