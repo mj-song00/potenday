@@ -61,9 +61,8 @@ export class DiaryController {
   async createDiary(
     @Body() createDiaryDto: CreateDiaryDto,
     @User() user: UserEntity,
-    @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.diaryService.createDiary(createDiaryDto, user, file);
+    return this.diaryService.createDiary(createDiaryDto, user);
   }
 
   // 개별 다이어리 가져오기

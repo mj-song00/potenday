@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Image } from 'src/entity/image.entity';
 import { S3Service } from 'src/s3/s3.service';
@@ -14,23 +14,26 @@ export class ImageService {
   ) {}
 
   async createImage(imageFile: Express.Multer.File) {
+    if (!imageFile || !imageFile.mimetype.startsWith('image/')) {
+      throw new HttpException(
+        'Provided file is not an image',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const fileName = uuidv4();
-    const ext = imageFile.originalname.split('.')[0];
+    const ext = 'png';
     const key = `${fileName}.${ext}`;
     const url = this.s3Service.getFileURLByKey(key);
-
     const isSuccess = await this.s3Service.upload(
       key,
       imageFile.buffer,
       imageFile.mimetype,
     );
     if (!isSuccess) throw new Error('IMAGE_UPLOAD_FAILED');
-
     const createImage = await this.imageRepository.save({
       key,
       url,
     });
-
     return createImage;
   }
 }

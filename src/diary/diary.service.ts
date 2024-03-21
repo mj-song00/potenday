@@ -40,11 +40,7 @@ export class DiaryService {
   }
 
   // 이미지, 번역문, 기분, 날짜, 날씨 저장
-  async createDiary(
-    createDiaryDto: CreateDiaryDto,
-    user: UserEntity,
-    file: Express.Multer.File,
-  ) {
+  async createDiary(createDiaryDto: CreateDiaryDto, user: UserEntity) {
     const { input, title, text, date, emotion, weather, isWrite, isPublic } =
       createDiaryDto;
 
@@ -56,20 +52,20 @@ export class DiaryService {
     //이미지 저장
     const imageUrl = await this.imageService.createImage(imageFile);
 
-    const createDiary = await this.diaryRepository.create({
-      title,
-      contents: text,
-      date,
-      emotion,
-      weather,
-      isPublic,
-      isWrite,
-      user,
-      imageUrl: imageUrl.url,
-    });
+    // const createDiary = await this.diaryRepository.create({
+    //   title,
+    //   contents: text,
+    //   date,
+    //   emotion,
+    //   weather,
+    //   isPublic,
+    //   isWrite,
+    //   user,
+    //   imageUrl: imageUrl.url,
+    // });
 
-    const diary = await this.diaryRepository.save(createDiary);
-    return { result: 'success' };
+    // const diary = await this.diaryRepository.save(createDiary);
+    // return { result: 'success' };
   }
 
   //url 파일 변환
@@ -81,8 +77,7 @@ export class DiaryService {
     const urlParts = input.split('/');
     const filenameWithExtension = urlParts[urlParts.length - 1];
     const filenameParts = filenameWithExtension.split('.');
-    const filename = filenameParts.slice(0, -1).join('.');
-    const ext = filenameParts[filenameParts.length - 1];
+    const filename = filenameWithExtension.split('?')[0];
 
     // ArrayBuffer를 Buffer로 변환
     const buffer = Buffer.from(data);
