@@ -16,7 +16,7 @@ export class ImageService {
   async createImage(imageFile: Express.Multer.File) {
     const allowedExtensions = ['jpg', 'jpeg', 'png'];
     const fileName = uuidv4();
-    const ext = imageFile.originalname.split('.').pop().toLowerCase();
+    const ext = imageFile.originalname.split('.')[0];
     console.log(ext);
     if (!allowedExtensions.includes(ext)) {
       throw new Error('Only JPG, JPEG and PNG files are allowed.');
