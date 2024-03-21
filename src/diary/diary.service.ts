@@ -82,16 +82,26 @@ export class DiaryService {
     const filenameWithExtension = urlParts[urlParts.length - 1];
     const filenameParts = filenameWithExtension.split('.');
     const filename = filenameParts.slice(0, -1).join('.');
-    const ext = filenameParts[filenameParts.length - 1];
+    const imageMimeTypes = {
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      png: 'image/png',
+    };
+    const ext = filenameParts[filenameParts.length - 1].toLowerCase();
 
+    let mimeType = 'application/octet-stream'; // 기본값은 알 수 없는 이진 데이터(binary data)
+    if (imageMimeTypes.hasOwnProperty(ext)) {
+      mimeType = imageMimeTypes[ext];
+    }
     // ArrayBuffer를 Buffer로 변환
     const buffer = Buffer.from(data);
+
     // 가상의 추가 속성들 생성
     const file: Express.Multer.File = {
       fieldname: 'file', // 필드 이름
       originalname: filename, // 파일의 원래 이름
       encoding: '', // 인코딩
-      mimetype: `image/png`, // MIME 타입
+      mimetype: mimeType, // MIME 타입
       buffer: buffer, // 파일 데이터
       size: buffer.length, // 파일 크기
       stream: null, // 가상의 stream 속성
