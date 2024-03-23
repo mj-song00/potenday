@@ -257,8 +257,13 @@ export class DiaryService {
     if (diaries.length === 0) throw new BadRequestException('Not found');
 
     const randomNumber = Math.floor(Math.random() * diaries.length);
+    const randomDiary = diaries[randomNumber];
+    const selectedDiary = await this.findOne(randomDiary.id);
 
-    const ramdonDiary = await this.findOne(randomNumber);
-    return ramdonDiary;
+    if (!selectedDiary) {
+      throw new BadRequestException('Diary not found');
+    }
+
+    return selectedDiary;
   }
 }
