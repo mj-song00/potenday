@@ -52,20 +52,20 @@ export class DiaryService {
     //이미지 저장
     const imageUrl = await this.imageService.createImage(imageFile);
 
-    // const createDiary = await this.diaryRepository.create({
-    //   title,
-    //   contents: text,
-    //   date,
-    //   emotion,
-    //   weather,
-    //   isPublic,
-    //   isWrite,
-    //   user,
-    //   imageUrl: imageUrl.url,
-    // });
+    const createDiary = await this.diaryRepository.create({
+      title,
+      contents: text,
+      date,
+      emotion,
+      weather,
+      isPublic,
+      isWrite,
+      user,
+      imageUrl: imageUrl.url,
+    });
 
-    // const diary = await this.diaryRepository.save(createDiary);
-    // return { result: 'success' };
+    const diary = await this.diaryRepository.save(createDiary);
+    return { result: 'success' };
   }
 
   //url 파일 변환
