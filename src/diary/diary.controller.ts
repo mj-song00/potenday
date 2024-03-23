@@ -115,4 +115,10 @@ export class DiaryController {
   async diariesByDate(@User() user: UserEntity) {
     return this.diaryService.findByDate(user);
   }
+
+  //랜덤 다이어리
+  @Get('/random')
+  async getRandomDiary() {
+    return this.diaryService.randomDiary();
+  }
 }

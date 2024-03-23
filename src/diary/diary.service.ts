@@ -1,6 +1,6 @@
 import { Diary } from './../entity/diary.entity';
 import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { KalroService } from 'src/service/kalro/karlo.service';
 import { PapagoService } from 'src/service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -246,5 +246,19 @@ export class DiaryService {
       likeCount: diary.likes.length,
     }));
     return diariesWithLikeCount;
+  }
+
+  //랜덤 다이어리
+  async randomDiary() {
+    const diaries = await this.diaryRepository
+      .createQueryBuilder('diary')
+      .getMany();
+
+    if (diaries.length === 0) throw new BadRequestException('Not found');
+
+    const randomNumber = Math.floor(Math.random() * diaries.length);
+
+    const ramdonDiary = await this.findOne(randomNumber);
+    return ramdonDiary;
   }
 }
