@@ -256,8 +256,12 @@ export class DiaryService {
 
     if (diaries.length === 0) throw new BadRequestException('Not found');
 
-    const randomNumber = Math.floor(Math.random() * diaries.length);
-    const randomDiary = diaries[randomNumber];
+    let randomDiary;
+    do {
+      const randomNumber = Math.floor(Math.random() * diaries.length);
+      randomDiary = diaries[randomNumber];
+    } while (randomDiary.isPublic === 0); // 공개되지 않은 일기를 선택했을 경우 반복해서 다시 선택
+
     const selectedDiary = await this.findOne(randomDiary.id);
 
     if (!selectedDiary) {
