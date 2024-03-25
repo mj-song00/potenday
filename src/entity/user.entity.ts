@@ -11,6 +11,7 @@ import {
 import { Emotion } from './emotion.like.entity';
 import { Image } from './image.entity';
 import { Like } from './like.entity';
+import { Report } from './report.entity';
 
 @Entity()
 export class UserEntity {
@@ -48,4 +49,7 @@ export class UserEntity {
     onDelete: 'CASCADE',
   })
   bookmarks: BookMark[];
+
+  @OneToMany(() => Report, (report) => report.userId)
+  report: Report[];
 }

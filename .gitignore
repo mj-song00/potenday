@@ -48,5 +48,7 @@ nginx
 #proxy
 proxy
 
-
+#vscode
+.vscode
+tasks.json
 

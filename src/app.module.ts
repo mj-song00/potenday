@@ -17,6 +17,7 @@ import { ServiceModule } from './service/service.module';
 import { LikesModule } from './likes/likes.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { BookMark } from './entity/mark.entity';
+import { Report } from './entity/report.entity';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { BookMark } from './entity/mark.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UserEntity, Diary, Emotion, Like, Image, BookMark],
+      entities: [UserEntity, Diary, Emotion, Like, Image, BookMark, Report],
       synchronize: true,
     }),
     DiaryModule,

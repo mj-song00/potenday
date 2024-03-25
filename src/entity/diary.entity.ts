@@ -12,6 +12,7 @@ import { Emotion } from './emotion.like.entity';
 import { Image } from './image.entity';
 import { Like } from './like.entity';
 import { BookMark } from './mark.entity';
+import { Report } from './report.entity';
 import { UserEntity } from './user.entity';
 
 @Entity()
@@ -65,9 +66,7 @@ export class Diary {
     onDelete: 'CASCADE',
   })
   emotions: Emotion[];
-  // 좋아요: any;
-  // 슬퍼요: any;
-  // 괜찮아요: any;
-  // 화나요: any;
-  // 기뻐요: any;
+
+  @OneToMany(() => Report, (report) => report.diaryId)
+  report: Report[];
 }
