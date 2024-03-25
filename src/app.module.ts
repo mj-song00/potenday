@@ -18,6 +18,7 @@ import { LikesModule } from './likes/likes.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { BookMark } from './entity/mark.entity';
 import { Report } from './entity/report.entity';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { Report } from './entity/report.entity';
     ServiceModule,
     LikesModule,
     BookmarkModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
