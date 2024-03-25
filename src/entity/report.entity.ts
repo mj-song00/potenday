@@ -14,6 +14,9 @@ export class Report {
   id: number;
 
   @Column()
+  title: string;
+
+  @Column()
   details: string;
 
   @CreateDateColumn()
