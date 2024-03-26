@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateDiaryDto {
   @IsString()
@@ -26,10 +26,9 @@ export class CreateDiaryDto {
   @IsNotEmpty()
   weather: string;
 
-  @IsBoolean()
   isWrite: boolean;
 
-  @IsBoolean()
+  @IsNotEmpty()
   isPublic: boolean;
 }
 
