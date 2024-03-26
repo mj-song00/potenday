@@ -8,8 +8,16 @@ export class CreateEmotionDto {
 export class EmotionCounts {
   @IsNumber()
   좋아요: number;
+
+  @IsNumber()
   슬퍼요: number;
+
+  @IsNumber()
   괜찮아요: number;
+
+  @IsNumber()
   화나요: number;
+
+  @IsNumber()
   기뻐요: number;
 }

@@ -4,5 +4,8 @@ export class CreateReportDto {
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @IsString()
+  @IsNotEmpty()
   details: string;
 }
