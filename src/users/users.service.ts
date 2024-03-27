@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
 import { UserEntity } from '../entity/user.entity';
@@ -13,7 +9,6 @@ import { ROLE, TOKEN_TYPE } from './user.enum';
 import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
 import { ImageService } from 'src/image/image.service';
-import { check } from 'prettier';
 
 @Injectable()
 export class UsersService {
