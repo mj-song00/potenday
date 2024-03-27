@@ -27,8 +27,6 @@ export class CreateDiaryDto {
   weather: string;
 
   isWrite: boolean;
-
-  @IsNotEmpty()
   isPublic: boolean;
 }
 
