@@ -50,6 +50,6 @@ export class UserEntity {
   })
   bookmarks: BookMark[];
 
-  @OneToMany(() => Report, (report) => report.userId)
+  @OneToMany(() => Report, (report) => report.user)
   report: Report[];
 }

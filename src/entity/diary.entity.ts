@@ -67,6 +67,6 @@ export class Diary {
   })
   emotions: Emotion[];
 
-  @OneToMany(() => Report, (report) => report.diaryId)
+  @OneToMany(() => Report, (report) => report.diary)
   report: Report[];
 }
