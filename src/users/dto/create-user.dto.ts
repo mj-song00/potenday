@@ -12,14 +12,11 @@ export class SignInKakaoDto {
 
 export class UpdateInfoDto {
   @IsString()
-  @IsNotEmpty()
   gender: string;
 
   @IsString()
-  @IsNotEmpty()
   birth: string;
 
   @IsString()
-  @IsNotEmpty()
   nickname: string;
 }
