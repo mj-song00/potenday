@@ -11,12 +11,7 @@ export class SignInKakaoDto {
 }
 
 export class UpdateInfoDto {
-  @IsString()
   gender: string;
-
-  @IsString()
   birth: string;
-
-  @IsString()
   nickname: string;
 }
