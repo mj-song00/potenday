@@ -111,4 +111,11 @@ export class UsersController {
   ) {
     return this.usersService.changeImage(user, imageFile);
   }
+
+  //유저 닉네임 변경
+  @Patch('/nickname')
+  @Roles(ROLE.USER)
+  updateNickname(@User() user: UserEntity, @Body() body: string) {
+    return this.usersService.updateNickname(body, user);
+  }
 }

@@ -204,4 +204,16 @@ export class UsersService {
     const profileImage = await this.userRepository.save(createImage);
     return profileImage;
   }
+
+  async updateNickname(body: string, user: UserEntity) {
+    try {
+      const updateInfo = await this.userRepository.update(
+        { id: user.id },
+        { nickname: body },
+      );
+      return { result: 'sucess' };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 }
