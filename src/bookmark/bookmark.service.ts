@@ -56,7 +56,6 @@ export class BookmarkService {
     const isChecked = await this.bookmarkRepository.find({
       where: { user: { id: user.id }, diaryId },
     });
-    console.log(isChecked);
     return isChecked.length !== 0;
   }
 }
