@@ -199,8 +199,10 @@ export class DiaryService {
 
   //일기 수정
   async editDiary(id: number, updateDiaryDto: UpdateDiaryDto) {
-    const { text, date, emotion, weather, isPublic, isWrite } = updateDiaryDto;
+    const { title, text, date, emotion, weather, isPublic, isWrite } =
+      updateDiaryDto;
     const updateDiary = await this.diaryRepository.update(id, {
+      title,
       contents: text,
       //image: imageUrl,
       date,
