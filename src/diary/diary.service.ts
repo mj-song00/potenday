@@ -182,7 +182,16 @@ export class DiaryService {
 
     // totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
-      return b.totalCount - a.totalCount;
+      if (b.totalCount !== a.totalCount) {
+        // totalCount가 다른 경우, totalCount를 기준으로 내림차순 정렬합니다.
+        return b.totalCount - a.totalCount;
+      } else if (b.diary.likes.length !== a.diary.likes.length) {
+        // totalCount가 같고 likeCount가 다른 경우, likeCount를 기준으로 내림차순 정렬합니다.
+        return b.diary.likes.length - a.diary.likes.length;
+      } else {
+        // totalCount와 likeCount가 같고, emotions의 갯수가 다른 경우, emotions의 갯수를 기준으로 내림차순 정렬합니다.
+        return b.diary.emotions.length - a.diary.emotions.length;
+      }
     });
 
     // 페이지네이션 적용
