@@ -149,7 +149,7 @@ export class DiaryService {
   async findDiariesByType(
     isPublic: boolean | FindOperator<boolean>,
     page: number,
-    pageSize: number, //: Promise<{ diary: Diary; totalCount: number }[]>
+    pageSize: number,
   ) {
     const offset = (page - 1) * pageSize;
 
@@ -163,7 +163,7 @@ export class DiaryService {
       },
     });
 
-    let diariesWithCount = await Promise.all(
+    const diariesWithCount = await Promise.all(
       diaries.map(async (diary) => {
         const likeCount = diary.likes.length;
         const emotionCount = diary.emotions.filter((emotion) =>
@@ -185,7 +185,10 @@ export class DiaryService {
       return b.totalCount - a.totalCount;
     });
 
-    return diariesWithCount;
+    // 페이지네이션 적용
+    const paginatedDiaries = diariesWithCount.slice(offset, offset + pageSize);
+
+    return paginatedDiaries;
   }
 
   //일기 수정
