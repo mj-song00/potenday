@@ -194,10 +194,7 @@ export class DiaryService {
       }
     });
 
-    // 페이지네이션 적용
-    const paginatedDiaries = diariesWithCount.slice(offset, offset + pageSize);
-
-    return paginatedDiaries;
+    return diariesWithCount;
   }
 
   //일기 수정
