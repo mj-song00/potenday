@@ -182,7 +182,39 @@ export class DiaryService {
 
     // totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
-      return b.totalCount - a.totalCount;
+      if (b.totalCount !== a.totalCount) {
+        return b.totalCount - a.totalCount;
+      }
+      // totalCount가 같은 경우, 좋아요 수를 비교하여 정렬
+      else {
+        const likeCountComparison = b.diary.likes.length - a.diary.likes.length;
+        if (likeCountComparison !== 0) {
+          return likeCountComparison;
+        }
+        // 각각의 감정 종류에 대한 개수를 비교하여 정렬
+        else {
+          const emotionsOrder = [
+            '좋아요',
+            '슬퍼요',
+            '괜찮아요',
+            '화나요',
+            '기뻐요',
+          ];
+          for (const emotion of emotionsOrder) {
+            const emotionCountComparison =
+              b.diary.emotions.filter((e) => e.emotion === emotion).length -
+              a.diary.emotions.filter((e) => e.emotion === emotion).length;
+            if (emotionCountComparison !== 0) {
+              return emotionCountComparison;
+            }
+          }
+          // 모든 감정 종류에 대한 개수가 같으면 createdAt으로 정렬
+          return (
+            new Date(b.diary.createdAt).getTime() -
+            new Date(a.diary.createdAt).getTime()
+          );
+        }
+      }
     });
 
     const paginatedDiaries = diariesWithCount.slice(offset, offset + pageSize);
