@@ -150,7 +150,8 @@ export class DiaryService {
     isPublic: boolean | FindOperator<boolean>,
     page: number,
     pageSize: number,
-  ): Promise<{ diary: Diary; totalCount: number }[]> {
+  ) //: Promise<{ diary: Diary; totalCount: number }[]>
+  {
     const offset = (page - 1) * pageSize;
 
     const diaries = await this.diaryRepository.find({
@@ -181,11 +182,11 @@ export class DiaryService {
     );
 
     // totalCount를 기준으로 내림차순으로 정렬합니다.
-    diariesWithCount.sort((a, b) => {
-      return b.totalCount - a.totalCount;
-    });
+    // diariesWithCount.sort((a, b) => {
+    //   return b.totalCount - a.totalCount;
+    // });
 
-    return diariesWithCount;
+    // return diariesWithCount;
   }
 
   //일기 수정
