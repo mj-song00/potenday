@@ -163,7 +163,7 @@ export class DiaryService {
       },
     });
 
-    const diariesWithCount = await Promise.all(
+    let diariesWithCount = await Promise.all(
       diaries.map(async (diary) => {
         const likeCount = diary.likes.length;
         const emotionCount = diary.emotions.filter((emotion) =>
