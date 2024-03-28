@@ -156,8 +156,8 @@ export class DiaryService {
     const diaries = await this.diaryRepository.find({
       where: { isPublic },
       relations: ['likes', 'emotions'],
-      skip: offset,
-      take: pageSize,
+      // skip: offset,
+      // take: pageSize,
       order: {
         createdAt: 'DESC',
       },
@@ -182,19 +182,12 @@ export class DiaryService {
 
     // totalCount를 기준으로 내림차순으로 정렬합니다.
     diariesWithCount.sort((a, b) => {
-      if (b.totalCount !== a.totalCount) {
-        // totalCount가 다른 경우, totalCount를 기준으로 내림차순 정렬합니다.
-        return b.totalCount - a.totalCount;
-      } else if (b.diary.likes.length !== a.diary.likes.length) {
-        // totalCount가 같고 likeCount가 다른 경우, likeCount를 기준으로 내림차순 정렬합니다.
-        return b.diary.likes.length - a.diary.likes.length;
-      } else {
-        // totalCount와 likeCount가 같고, emotions의 갯수가 다른 경우, emotions의 갯수를 기준으로 내림차순 정렬합니다.
-        return b.diary.emotions.length - a.diary.emotions.length;
-      }
+      return b.totalCount - a.totalCount;
     });
 
-    return diariesWithCount;
+    const paginatedDiaries = diariesWithCount.slice(offset, offset + pageSize);
+
+    return paginatedDiaries;
   }
 
   //일기 수정
