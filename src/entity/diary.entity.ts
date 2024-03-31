@@ -47,6 +47,9 @@ export class Diary {
   @CreateDateColumn() // 게시글 생성일
   createdAt: Date;
 
+  @Column({ default: 0 }) // 일기 신고 건수
+  waringCount: number;
+
   @ManyToOne(() => UserEntity, (user) => user.diary, { onDelete: 'CASCADE' })
   user: UserEntity;
 
