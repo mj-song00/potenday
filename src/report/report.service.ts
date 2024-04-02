@@ -17,6 +17,7 @@ export class ReportService {
   async create(
     createReportDto: CreateReportDto,
     diaryId: number,
+    category: string,
     user: UserEntity,
   ) {
     const diary = await this.diaryRepository.findOne({
@@ -25,13 +26,14 @@ export class ReportService {
     if (!diary) throw new Error('존재하지 않는 다이어리입니다.');
     try {
       const { title, details } = createReportDto;
-      const createReport = this.reportRepository.create({
+
+      const report = await this.reportRepository.save({
         title,
         details,
         user: { id: user.id },
         diaryId,
+        category,
       });
-      const report = await this.reportRepository.save(createReport);
       return {
         statusCode: HttpStatus.OK,
         data: 'success',

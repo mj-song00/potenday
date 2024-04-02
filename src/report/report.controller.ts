@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { CreateReportDto } from './dto/create-report.dto';
@@ -23,8 +24,9 @@ export class ReportController {
   create(
     @Body() createReportDto: CreateReportDto,
     @Param('diaryId') diaryId: string,
+    @Query('category') category: string,
     @User() user: UserEntity,
   ) {
-    return this.reportService.create(createReportDto, +diaryId, user);
+    return this.reportService.create(createReportDto, +diaryId, category, user);
   }
 }

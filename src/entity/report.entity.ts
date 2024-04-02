@@ -23,6 +23,9 @@ export class Report {
   date: Date;
 
   @Column()
+  category: string;
+
+  @Column()
   userId: number;
 
   @Column()

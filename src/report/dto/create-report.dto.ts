@@ -8,4 +8,8 @@ export class CreateReportDto {
   @IsString()
   @IsNotEmpty()
   details: string;
+
+  @IsString()
+  @IsNotEmpty()
+  category: string;
 }
