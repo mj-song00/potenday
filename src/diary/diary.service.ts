@@ -156,68 +156,55 @@ export class DiaryService {
     const diaries = await this.diaryRepository.find({
       where: { isPublic },
       relations: ['likes', 'emotions'],
-      // skip: offset,
-      // take: pageSize,
       order: {
         createdAt: 'DESC',
       },
+      take: pageSize,
+      skip: offset,
     });
 
-    const diariesWithCount = await Promise.all(
-      diaries.map(async (diary) => {
-        const likeCount = diary.likes.length;
-        const emotionCount = diary.emotions.filter((emotion) =>
-          ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
-            emotion.emotion,
-          ),
-        ).length;
+    // 각 다이어리의 totalCount 계산
+    const diariesWithCount = diaries.map((diary) => {
+      const likeCount = diary.likes.length;
+      const emotionCount = diary.emotions.filter((emotion) =>
+        ['좋아요', '슬퍼요', '괜찮아요', '화나요', '기뻐요'].includes(
+          emotion.emotion,
+        ),
+      ).length;
+      const totalCount = likeCount + emotionCount;
+      return { diary, totalCount };
+    });
 
-        // totalCount 계산 (좋아요 수 + 감정 수)
-        const totalCount = likeCount + emotionCount;
-
-        // totalCount를 반환합니다.
-        return { diary, totalCount };
-      }),
-    );
-
-    // totalCount를 기준으로 내림차순으로 정렬합니다.
+    // totalCount, 좋아요 수, 감정 수, 생성일을 기준으로 정렬
     diariesWithCount.sort((a, b) => {
       if (b.totalCount !== a.totalCount) {
         return b.totalCount - a.totalCount;
       }
-      // totalCount가 같은 경우, 좋아요 수를 비교하여 정렬
-      else {
-        const likeCountComparison = b.diary.likes.length - a.diary.likes.length;
-        if (likeCountComparison !== 0) {
-          return likeCountComparison;
-        }
-        // 각각의 감정 종류에 대한 개수를 비교하여 정렬
-        else {
-          const emotionsOrder = [
-            '좋아요',
-            '슬퍼요',
-            '괜찮아요',
-            '화나요',
-            '기뻐요',
-          ];
-          for (const emotion of emotionsOrder) {
-            const emotionCountComparison =
-              b.diary.emotions.filter((e) => e.emotion === emotion).length -
-              a.diary.emotions.filter((e) => e.emotion === emotion).length;
-            if (emotionCountComparison !== 0) {
-              return emotionCountComparison;
-            }
-          }
-          // 모든 감정 종류에 대한 개수가 같으면 createdAt으로 정렬
-          return (
-            new Date(b.diary.createdAt).getTime() -
-            new Date(a.diary.createdAt).getTime()
-          );
+      const likeCountComparison = b.diary.likes.length - a.diary.likes.length;
+      if (likeCountComparison !== 0) {
+        return likeCountComparison;
+      }
+      for (const emotion of [
+        '좋아요',
+        '슬퍼요',
+        '괜찮아요',
+        '화나요',
+        '기뻐요',
+      ]) {
+        const emotionCountComparison =
+          b.diary.emotions.filter((e) => e.emotion === emotion).length -
+          a.diary.emotions.filter((e) => e.emotion === emotion).length;
+        if (emotionCountComparison !== 0) {
+          return emotionCountComparison;
         }
       }
+      return (
+        new Date(b.diary.createdAt).getTime() -
+        new Date(a.diary.createdAt).getTime()
+      );
     });
 
-    const paginatedDiaries = diariesWithCount.slice(offset, offset + pageSize);
+    const paginatedDiaries = diariesWithCount.slice(0, pageSize);
 
     return paginatedDiaries;
   }
