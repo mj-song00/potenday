@@ -37,10 +37,6 @@ lerna-debug.log*
 # env
 .local.env
 
-#docker
-Dockerfile
-docker-compose.yml
-.dockerignore
 
 #nginx
 nginx
@@ -52,3 +48,5 @@ proxy
 .vscode
 tasks.json
 
+#Docker
+Dockerfile

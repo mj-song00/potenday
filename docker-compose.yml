@@ -1,0 +1,76 @@
+version: '3.8'
+services:
+  mysql:
+    container_name: summerVacation-db
+    # mac m1칩
+    platform: linux/x86_64
+    image: mysql
+    env_file: 
+      - .local.env
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - diary  
+    volumes:
+      - mysql:/var/lib/mysql
+    restart: always  
+
+#   redis:
+#     container_name: diary-redis
+#     image: redis:latest
+#     restart: always
+#     ports:
+#       - "6379:6397"
+#     volumes:
+#       - redis:/var/lib/redis
+#     networks:
+#       - diary        
+
+#   nginx:
+#     container_name: diary-nginx
+#     image: nginx
+#     restart: always
+#     networks:
+#       - diary
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx/:/etc/nginx/conf.d/
+#       - ./logs/nginx/:/var/log/nginx/
+#       - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+#     depends_on:
+#       - mysql
+#       - server
+#       - redis       
+      
+  server:
+    container_name: summerVacation-server
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - diary  
+    depends_on:
+      - mysql
+    volumes:
+      - .:/app   
+    restart: always 
+ 
+#/var/lib/docker/volumes/mysql에 저장
+volumes:
+  mysql:
+# #  redis:
+
+networks:
+  diary:    
+              
