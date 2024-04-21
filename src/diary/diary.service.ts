@@ -159,8 +159,8 @@ export class DiaryService {
       order: {
         createdAt: 'DESC',
       },
-      take: pageSize,
-      skip: offset,
+      // take: pageSize,
+      // skip: offset,
     });
 
     // 각 다이어리의 totalCount 계산
@@ -204,7 +204,7 @@ export class DiaryService {
       );
     });
 
-    const paginatedDiaries = diariesWithCount.slice(0, pageSize);
+    const paginatedDiaries = diariesWithCount.slice(offset, offset + pageSize);
 
     return paginatedDiaries;
   }
