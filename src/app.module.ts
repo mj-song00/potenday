@@ -24,7 +24,7 @@ import { ReportModule } from './report/report.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.local.env',
+      envFilePath: '.env.local',
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
