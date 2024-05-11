@@ -33,6 +33,9 @@ export class UserEntity {
   @Column({ nullable: true }) // 탄생년
   birth: string;
 
+  @Column({ default: 0 }) // 경고 횟수
+  waring: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
