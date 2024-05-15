@@ -50,3 +50,5 @@ tasks.json
 
 #Docker
 Dockerfile
+
+.env.local

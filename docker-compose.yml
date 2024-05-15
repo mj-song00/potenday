@@ -23,33 +23,21 @@ services:
       - mysql:/var/lib/mysql
     restart: always  
 
-#   redis:
-#     container_name: diary-redis
-#     image: redis:latest
-#     restart: always
-#     ports:
-#       - "6379:6397"
-#     volumes:
-#       - redis:/var/lib/redis
-#     networks:
-#       - diary        
-
-#   nginx:
-#     container_name: diary-nginx
-#     image: nginx
-#     restart: always
-#     networks:
-#       - diary
-#     ports:
-#       - "80:80"
-#     volumes:
-#       - ./nginx/:/etc/nginx/conf.d/
-#       - ./logs/nginx/:/var/log/nginx/
-#       - ./proxy/nginx.conf:/etc/nginx/nginx.conf
-#     depends_on:
-#       - mysql
-#       - server
-#       - redis       
+  nginx:
+    container_name: diary-nginx
+    image: nginx
+    restart: always
+    networks:
+      - diary
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+      - ./logs/nginx/:/var/log/nginx/
+      - ./proxy/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - mysql
+      - server 
       
   server:
     container_name: summerVacation-server
