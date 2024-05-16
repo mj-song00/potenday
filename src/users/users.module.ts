@@ -6,9 +6,9 @@ import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { UserEntity } from '../entity/user.entity';
-import { KakaoService } from 'src/service/kakao/kakao.service';
-import { ImageService } from 'src/image/image.service';
-import { Image } from 'src/entity/image.entity';
+import { KakaoService } from '../service/kakao/kakao.service';
+import { ImageService } from '../image/image.service';
+import { Image } from '../entity/image.entity';
 
 @Module({
   imports: [

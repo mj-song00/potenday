@@ -1,8 +1,8 @@
 import { Injectable, BadRequestException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Diary } from 'src/entity/diary.entity';
-import { Report } from 'src/entity/report.entity';
-import { UserEntity } from 'src/entity/user.entity';
+import { Diary } from '../entity/diary.entity';
+import { Report } from '../entity/report.entity';
+import { UserEntity } from '../entity/user.entity';
 import { Repository } from 'typeorm';
 import { CreateReportDto } from './dto/create-report.dto';
 

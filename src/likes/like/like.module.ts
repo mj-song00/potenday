@@ -1,7 +1,7 @@
 import { DiaryModule } from './../../diary/diary.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { Like } from 'src/entity/like.entity';
+import { Like } from '../../entity/like.entity';
 import { likeController } from './like.controller';
 import { LikeService } from './like.service';
 

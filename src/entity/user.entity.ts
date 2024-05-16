@@ -1,5 +1,5 @@
-import { BookMark } from 'src/entity/mark.entity';
-import { Diary } from 'src/entity/diary.entity';
+import { BookMark } from '../entity/mark.entity';
+import { Diary } from '../entity/diary.entity';
 import {
   Column,
   CreateDateColumn,

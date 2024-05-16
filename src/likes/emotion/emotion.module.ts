@@ -1,9 +1,9 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
-import { Emotion } from 'src/entity/emotion.like.entity';
+import { Emotion } from '../../entity/emotion.like.entity';
 import { EmotionController } from './emotion.controller';
 import { EmotionService } from './emotion.service';
-import { DiaryModule } from 'src/diary/diary.module';
+import { DiaryModule } from '../../diary/diary.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Emotion]), DiaryModule],

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Diary } from 'src/entity/diary.entity';
-import { BookMark } from 'src/entity/mark.entity';
-import { UserEntity } from 'src/entity/user.entity';
+import { Diary } from '../entity/diary.entity';
+import { BookMark } from '../entity/mark.entity';
+import { UserEntity } from '../entity/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

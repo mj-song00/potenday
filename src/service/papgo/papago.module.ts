@@ -1,4 +1,4 @@
-import { PapagoService } from 'src/service/papgo/papago.service';
+import { PapagoService } from '../papgo/papago.service';
 import { Module } from '@nestjs/common';
 
 @Module({

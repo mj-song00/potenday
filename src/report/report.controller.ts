@@ -11,9 +11,9 @@ import {
 } from '@nestjs/common';
 import { ReportService } from './report.service';
 import { CreateReportDto } from './dto/create-report.dto';
-import { Roles } from 'src/decorators/roles.decorator';
-import { ROLE } from 'src/users/user.enum';
-import { User } from 'src/decorators/user.decorators';
+import { Roles } from '../decorators/roles.decorator';
+import { ROLE } from '../users/user.enum';
+import { User } from '../decorators/user.decorators';
 
 @Controller('report')
 export class ReportController {

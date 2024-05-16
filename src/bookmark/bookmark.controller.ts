@@ -8,10 +8,10 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from '../decorators/roles.decorator';
 import { BookmarkService } from './bookmark.service';
-import { User } from 'src/decorators/user.decorators';
-import { UserEntity } from 'src/entity/user.entity';
+import { User } from '../decorators/user.decorators';
+import { UserEntity } from '../entity/user.entity';
 
 @Controller('bookmark')
 export class BookmarkController {

@@ -1,10 +1,10 @@
 import { CreateEmotionDto } from './dto/emotion.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Emotion } from 'src/entity/emotion.like.entity';
-import { UserEntity } from 'src/entity/user.entity';
+import { Emotion } from '../../entity/emotion.like.entity';
+import { UserEntity } from '../../entity/user.entity';
 import { Repository } from 'typeorm';
-import { Diary } from 'src/entity/diary.entity';
+import { Diary } from '../../entity/diary.entity';
 
 Injectable();
 export class EmotionService {

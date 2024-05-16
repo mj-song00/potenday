@@ -14,10 +14,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { DiaryService } from './diary.service';
-import { Roles } from 'src/decorators/roles.decorator';
-import { ROLE } from 'src/users/user.enum';
-import { UserEntity } from 'src/entity/user.entity';
-import { User } from 'src/decorators/user.decorators';
+import { Roles } from '../decorators/roles.decorator';
+import { ROLE } from '../users/user.enum';
+import { UserEntity } from '../entity/user.entity';
+import { User } from '../decorators/user.decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('diary')

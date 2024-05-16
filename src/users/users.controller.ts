@@ -11,9 +11,9 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateInfoDto, SignInKakaoDto } from './dto/create-user.dto';
-import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from '../decorators/roles.decorator';
 import { ROLE } from './user.enum';
-import { User } from 'src/decorators/user.decorators';
+import { User } from '../decorators/user.decorators';
 import { UserEntity } from '../entity/user.entity';
 
 @Controller('users')

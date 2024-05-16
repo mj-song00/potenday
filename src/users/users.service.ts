@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SignInKakaoDto, UpdateInfoDto } from './dto/create-user.dto';
 import { UserEntity } from '../entity/user.entity';
 import { Repository } from 'typeorm';
-import { KakaoService } from 'src/service/kakao/kakao.service';
+import { KakaoService } from '../service/kakao/kakao.service';
 import { JwtPayload, sign } from 'jsonwebtoken';
 import { ROLE, TOKEN_TYPE } from './user.enum';
 import * as jwt from 'jsonwebtoken';
 import { JwtService } from '@nestjs/jwt';
-import { ImageService } from 'src/image/image.service';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class UsersService {

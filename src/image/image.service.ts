@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Image } from 'src/entity/image.entity';
-import { S3Service } from 'src/s3/s3.service';
+import { Image } from '../entity/image.entity';
+import { S3Service } from '../s3/s3.service';
 import { Repository } from 'typeorm';
 
 import { v4 as uuidv4 } from 'uuid';

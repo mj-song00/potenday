@@ -1,14 +1,14 @@
 import { Diary } from './../entity/diary.entity';
 import { CreateDiaryDto, UpdateDiaryDto } from './dto/diary.dto';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { KalroService } from 'src/service/kalro/karlo.service';
-import { PapagoService } from 'src/service/papgo/papago.service';
+import { KalroService } from '../service/kalro/karlo.service';
+import { PapagoService } from '../service/papgo/papago.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOperator, Repository } from 'typeorm';
-import { UserEntity } from 'src/entity/user.entity';
-import { ImageService } from 'src/image/image.service';
+import { UserEntity } from '../entity/user.entity';
+import { ImageService } from '../image/image.service';
 import axios from 'axios';
-import { Emotion } from 'src/entity/emotion.like.entity';
+import { Emotion } from '../entity/emotion.like.entity';
 
 @Injectable()
 export class DiaryService {
