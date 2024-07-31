@@ -1,7 +1,7 @@
 ![image](https://github.com/mj-song00/potenday/assets/104669297/909552fa-819d-4a48-8c9b-09fd7f6e6c9f)
 
 ## 개발기간
-2024.01.26 ~
+2024.01.26 ~ 2024. 06
 
 ## 여름방학 <a href="https://drive.google.com/file/d/17UAvE-arVkpbm_UIOePQwC3Vvcc0n1ij/view?usp=sharing"> 기획 의도  </a>
 
